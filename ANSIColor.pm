@@ -1,6 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
+# $Id$
 #
-# Copyright 1996, 1997 by Russ Allbery <rra@cs.stanford.edu>
+# Copyright 1996, 1997 by Russ Allbery <rra@stanford.edu>
 #                     and Zenin <zenin@best.com>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -14,21 +15,20 @@ package Term::ANSIColor;
 require 5.001;
 
 use strict;
-use vars qw(@ISA @EXPORT %EXPORT_TAGS $ID $VERSION $AUTOLOAD %attributes
-	    $AUTORESET $EACHLINE);
+use vars qw(@ISA @EXPORT %EXPORT_TAGS $VERSION $AUTOLOAD %attributes
+            $AUTORESET $EACHLINE);
 
-require Exporter;
+use Exporter ();
 @ISA         = qw(Exporter);
 @EXPORT      = qw(color colored);
 %EXPORT_TAGS = (constants => [qw(CLEAR RESET BOLD UNDERLINE UNDERSCORE BLINK
-				 REVERSE CONCEALED BLACK RED GREEN YELLOW
-				 BLUE MAGENTA CYAN WHITE ON_BLACK ON_RED
-				 ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
-				 ON_CYAN ON_WHITE)]);
-Exporter::export_ok_tags('constants');
+                                 REVERSE CONCEALED BLACK RED GREEN YELLOW
+                                 BLUE MAGENTA CYAN WHITE ON_BLACK ON_RED
+                                 ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
+                                 ON_CYAN ON_WHITE)]);
+Exporter::export_ok_tags ('constants');
     
- $ID      = '$Id$';
-($VERSION = (split (' ', $ID))[2]) =~ s/\.(\d)$/.0$1/;
+($VERSION = (split (' ', q$Revision$ ))[1]) =~ s/\.(\d)$/.0$1/;
 
 
 ############################################################################
@@ -37,21 +37,21 @@ Exporter::export_ok_tags('constants');
 
 %attributes = ('clear'      => 0,
                'reset'      => 0,
-	       'bold'       => 1,
+               'bold'       => 1,
                'underline'  => 4,
-	       'underscore' => 4,
-	       'blink'      => 5,
-	       'reverse'    => 7,
-	       'concealed'  => 8,
+               'underscore' => 4,
+               'blink'      => 5,
+               'reverse'    => 7,
+               'concealed'  => 8,
 
-	       'black'      => 30,   'on_black'   => 40, 
-	       'red'        => 31,   'on_red'     => 41, 
-	       'green'      => 32,   'on_green'   => 42, 
-	       'yellow'     => 33,   'on_yellow'  => 43, 
-	       'blue'       => 34,   'on_blue'    => 44, 
-	       'magenta'    => 35,   'on_magenta' => 45, 
-	       'cyan'       => 36,   'on_cyan'    => 46, 
-	       'white'      => 37,   'on_white'   => 47);
+               'black'      => 30,   'on_black'   => 40, 
+               'red'        => 31,   'on_red'     => 41, 
+               'green'      => 32,   'on_green'   => 42, 
+               'yellow'     => 33,   'on_yellow'  => 43, 
+               'blue'       => 34,   'on_blue'    => 44, 
+               'magenta'    => 35,   'on_magenta' => 45, 
+               'cyan'       => 36,   'on_cyan'    => 46, 
+               'white'      => 37,   'on_white'   => 47);
 
 
 ############################################################################
@@ -75,21 +75,20 @@ Exporter::export_ok_tags('constants');
 # sub to define the constant subs on demand.  To do that, we check the name
 # of the called sub against the list of attributes, and if it's an all-caps
 # version of one of them, we define the sub on the fly and then run it.
-
 sub AUTOLOAD {
     my $sub;
     ($sub = $AUTOLOAD) =~ s/^.*:://;
     my $attr = $attributes{lc $sub};
     if ($sub =~ /^[A-Z_]+$/ && defined $attr) {
-	$attr = "\e[" . $attr . 'm';
-	eval qq {
-	    sub $AUTOLOAD {
-		if (\$AUTORESET && \@_) {
-		    '$attr' . "\@_" . "\e[0m";
-		} else {
-		    ('$attr' . "\@_");
-		}
-	    }
+        $attr = "\e[" . $attr . 'm';
+        eval qq {
+            sub $AUTOLOAD {
+                if (\$AUTORESET && \@_) {
+                    '$attr' . "\@_" . "\e[0m";
+                } else {
+                    ('$attr' . "\@_");
+                }
+            }
         };
         goto &$AUTOLOAD;
     } else {
@@ -107,9 +106,12 @@ sub color {
     my @codes = map { split } @_;
     my $attribute = '';
     foreach (@codes) {
-	$_ = lc $_;
-	unless (defined $attributes{$_}) { die "Invalid attribute name $_" }
-	$attribute .= $attributes{$_} . ';';
+        $_ = lc $_;
+        unless (defined $attributes{$_}) {
+            require Carp;
+            Carp::croak "Invalid attribute name $_";
+        }
+        $attribute .= $attributes{$_} . ';';
     }
     chop $attribute;
     ($attribute ne '') ? "\e[${attribute}m" : undef;
@@ -124,12 +126,12 @@ sub color {
 sub colored {
     my $string = shift;
     if (defined $EACHLINE) {
-	my $attr = color (@_);
-	join $EACHLINE,
-	    map { $_ ne "" ? $attr . $_ . "\e[0m" : "" }
-	        split ($EACHLINE, $string);
+        my $attr = color (@_);
+        join '', 
+            map { $_ && $_ ne $EACHLINE ? $attr . $_ . "\e[0m" : $_ }
+                split (/(\Q$EACHLINE\E)/, $string);
     } else {
-	color (@_) . $string . "\e[0m";
+        color (@_) . $string . "\e[0m";
     }
 }
 
@@ -299,7 +301,7 @@ error rather than a warning.
 =head1 AUTHORS
 
 Original idea (using constants) by Zenin (zenin@best.com), reimplemented
-using subs by Russ Allbery (rra@cs.stanford.edu), and then combined with
-the original idea by Russ with input from Zenin.
+using subs by Russ Allbery (rra@stanford.edu), and then combined with the
+original idea by Russ with input from Zenin.
 
 =cut
