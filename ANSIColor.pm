@@ -1,7 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
-# Copyright 1996 by Russ Allbery <rra@cs.stanford.edu>
-#               and Zenin <zenin@best.com>
+# Copyright 1996, 1997 by Russ Allbery <rra@cs.stanford.edu>
+#                     and Zenin <zenin@best.com>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -14,16 +14,17 @@ package Term::ANSIColor;
 require 5.001;
 
 use strict;
-use vars qw(@ISA @EXPORT %EXPORT_TAGS $ID $VERSION %attributes);
+use vars qw(@ISA @EXPORT %EXPORT_TAGS $ID $VERSION $AUTOLOAD $AUTORESET
+	    %attributes);
 
 require Exporter;
 @ISA         = qw(Exporter);
 @EXPORT      = qw(color colored);
-%EXPORT_TAGS = (constants => [qw(RESET CLEAR BOLD UNDERSCORE BLINK REVERSE
-				 CONCEALED BLACK RED GREEN YELLOW BLUE
-				 MAGENTA CYAN WHITE ON_BLACK ON_RED ON_GREEN
-				 ON_YELLOW ON_BLUE ON_MAGENTA ON_CYAN
-				 ON_WHITE)]);
+%EXPORT_TAGS = (constants => [qw(CLEAR RESET BOLD UNDERLINE UNDERSCORE BLINK
+				 REVERSE CONCEALED BLACK RED GREEN YELLOW
+				 BLUE MAGENTA CYAN WHITE ON_BLACK ON_RED
+				 ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
+				 ON_CYAN ON_WHITE)]);
 Exporter::export_ok_tags('constants');
     
 $ID      = '$Id$';
@@ -34,8 +35,8 @@ $VERSION = (split (' ', $ID))[2];
 # Internal data structures
 ############################################################################
 
-%attributes = ('reset'      => 0,
-	       'clear'      => 0,
+%attributes = ('clear'      => 0,
+               'reset'      => 0,
 	       'bold'       => 1,
                'underline'  => 4,
 	       'underscore' => 4,
@@ -57,23 +58,44 @@ $VERSION = (split (' ', $ID))[2];
 # Implementation (constant form)
 ############################################################################
 
-sub RESET      { "\e[00m", @_ }
-sub CLEAR      { "\e[00m", @_ }
-sub BOLD       { "\e[01m", @_ }
-sub UNDERLINE  { "\e[04m", @_ }
-sub UNDERSCORE { "\e[04m", @_ }
-sub BLINK      { "\e[05m", @_ }
-sub REVERSE    { "\e[07m", @_ }
-sub CONCEALED  { "\e[08m", @_ }
+# Time to have fun!  We now want to define the constant subs, which are
+# named the same as the attributes above but in all caps.  Each constant sub
+# needs to act differently depending on whether $AUTORESET is set.  Without
+# autoreset:
+#
+#   BLUE "text\n"  ==>  "\e[34mtext\n"
+#
+# If $AUTORESET is set, we should instead get:
+#
+#   BLUE "text\n"  ==>  "\e[34mtext\n\e[00m"
+#
+# The sub also needs to handle the case where it has no arguments correctly.
+# Maintaining all of this as separate subs would be a major nightmare, as
+# well as duplicate the %attributes hash, so instead we define an AUTOLOAD
+# sub to define the constant subs on demand.  To do that, we check the name
+# of the called sub against the list of attributes, and if it's an all-caps
+# version of one of them, we define the sub on the fly and then run it.
 
-sub BLACK      { "\e[30m", @_ }        sub ON_BLACK   { "\e[40m", @_ }
-sub RED        { "\e[31m", @_ }	       sub ON_RED     { "\e[41m", @_ }
-sub GREEN      { "\e[32m", @_ }	       sub ON_GREEN   { "\e[42m", @_ }
-sub YELLOW     { "\e[33m", @_ }	       sub ON_YELLOW  { "\e[43m", @_ }
-sub BLUE       { "\e[34m", @_ }	       sub ON_BLUE    { "\e[44m", @_ }
-sub MAGENTA    { "\e[35m", @_ }	       sub ON_MAGENTA { "\e[45m", @_ }
-sub CYAN       { "\e[36m", @_ }	       sub ON_CYAN    { "\e[46m", @_ }
-sub WHITE      { "\e[37m", @_ }	       sub ON_WHITE   { "\e[47m", @_ }
+sub AUTOLOAD {
+    my $sub;
+    ($sub = $AUTOLOAD) =~ s/^.*:://;
+    my $attr = $attributes{lc $sub};
+    if ($sub =~ /^[A-Z_]+$/ && defined $attr) {
+	$attr = "\e[" . $attr . 'm';
+	eval qq {
+	    sub $AUTOLOAD {
+		if (\$AUTORESET && \@_) {
+		    '$attr' . "\@_" . "\e[00m";
+		} else {
+		    ('$attr' . "\@_");
+		}
+	    }
+        };
+        goto &$AUTOLOAD;
+    } else {
+        die "undefined subroutine &$AUTOLOAD called";
+    }
+}
 
 
 ############################################################################
@@ -98,12 +120,12 @@ sub color {
 # string.
 sub colored {
     my $string = shift;
-    return color (@_) . $string . color ('reset');
+    return color (@_) . $string . "\e[00m";
 }
 
 
 ############################################################################
-# Module return value
+# Module return value and documentation
 ############################################################################
 
 # Ensure we evaluate to true.
@@ -125,40 +147,42 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
     print "This text is normal.\n";
 
     use Term::ANSIColor qw(:constants);
+    print BOLD BLUE "This text is in bold blue.\n", RESET;
+
+    use Term::ANSIColor qw(:constants);
+    Term::ANSIColor::AUTORESET = 1;
     print BOLD BLUE "This text is in bold blue.\n";
-    print RESET;
+    print "This text is normal.\n";
 
 =head1 DESCRIPTION
 
-C<Term::ANSIColor::color> takes any number of strings as arguments and
-considers them to be space-separated lists of attributes.  It then forms
-and returns the escape sequence to set those attributes.  It doesn't print
-it out, just returns it, so you'll have to print it yourself if you want
-to (this is so that you can save it as a string, pass it to something
-else, send it to a file handle, or do anything else with it that you might
-care to).
+color() takes any number of strings as arguments and considers them to be
+space-separated lists of attributes.  It then forms and returns the escape
+sequence to set those attributes.  It doesn't print it out, just returns
+it, so you'll have to print it yourself if you want to (this is so that
+you can save it as a string, pass it to something else, send it to a file
+handle, or do anything else with it that you might care to).
 
 The recognized attributes (all of which should be fairly intuitive) are
-reset, clear, bold, underline, underscore, blink, reverse, concealed,
+clear, reset, bold, underline, underscore, blink, reverse, concealed,
 black, red, green, yellow, blue, magenta, on_black, on_red, on_green,
 on_yellow, on_blue, on_magenta, on_cyan, and on_white.  Case is not
-significant.  Reset and clear are equivalent, as are underline and
-underscore, so use whichever is the most intuitive to you.  The color
-alone sets the foreground color, and on_color sets the background color.
+significant.  Underline and underscore are equivalent, as are clear and
+reset, so use whichever is the most intuitive to you.  The color alone
+sets the foreground color, and on_color sets the background color.
 
 Note that attributes, once set, last until they are unset (by sending the
-attribute "reset" or "clear").  Be careful to do this, or otherwise your
-attribute will last after your script is done running, and people get very
-annoyed at having their prompt and typing changed to weird colors.
+attribute "reset").  Be careful to do this, or otherwise your attribute will
+last after your script is done running, and people get very annoyed at
+having their prompt and typing changed to weird colors.
 
-As an aid to help with this, C<Term::ANSIColor::colored> takes a scalar as
-the first argument and any number of attribute strings as the second
-argument and returns the scalar wrapped in escape codes so that the
-attributes will be set as requested before the string and reset to normal
-after the string.
+As an aid to help with this, colored() takes a scalar as the first
+argument and any number of attribute strings as the second argument and
+returns the scalar wrapped in escape codes so that the attributes will be
+set as requested before the string and reset to normal after the string.
 
-Alternately, if you import C<:constants>, you can use the constants RESET,
-CLEAR, BOLD, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED, BLACK, RED,
+Alternately, if you import C<:constants>, you can use the constants CLEAR,
+RESET, BOLD, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED, BLACK, RED,
 GREEN, YELLOW, BLUE, MAGENTA, ON_BLACK, ON_RED, ON_GREEN, ON_YELLOW,
 ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.  These are the same
 as C<Term::ANSIColor::color ('attribute')> and are included solely for
@@ -171,6 +195,20 @@ to
     print colored ("Text\n", 'bold blue on_white');
 
 Your choice.  TIMTOWTDI.
+
+When using the constants, if you don't want to have to remember to add the
+C<, RESET> at the end of each print line, you can set
+I<Term::ANSIColor::AUTORESET> to a true value.  Then, the display mode
+will automatically be reset if there is no comma after the constant.  In
+other words, with that variable set:
+
+    print BOLD BLUE "Text\n";
+
+will reset the display mode afterwards, whereas:
+
+    print BOLD, BLUE, "Text\n";
+
+will not.
 
 =head1 DIAGNOSTICS
 
@@ -200,3 +238,5 @@ commas.)
 Original idea (using constants) by Zenin (zenin@best.com), reimplemented
 using subs by Russ Allbery (rra@cs.stanford.edu), and then combined with
 the original idea by Russ with input from Zenin.
+
+=cut
