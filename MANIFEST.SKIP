@@ -1,7 +1,9 @@
-\bRCS\b
+^\.cvsignore$
+\bCVS\b
 ^MANIFEST\.
 ^Makefile$
 ~$
 \.old$
 \.bak$
 ^blib/
+^new/
