@@ -64,3 +64,12 @@ if (colored ("test\n\ntest", 'bold')
 } else {
     print "not ok 6\n";
 }
+
+# Test EACHLINE with multiple trailing delimiters.
+$Term::ANSIColor::EACHLINE = "\n";
+if (colored ("test\ntest\n\n", 'bold')
+    eq "\e[1mtest\e[0m\n\e[1mtest\e[0m\n\n") {
+    print "ok 7\n";
+} else {
+    print "not ok 7\n";
+}
