@@ -14,8 +14,8 @@ package Term::ANSIColor;
 require 5.001;
 
 use strict;
-use vars qw(@ISA @EXPORT %EXPORT_TAGS $ID $VERSION $AUTOLOAD $AUTORESET
-	    %attributes);
+use vars qw(@ISA @EXPORT %EXPORT_TAGS $ID $VERSION $AUTOLOAD %attributes
+	    $AUTORESET $EACHLINE);
 
 require Exporter;
 @ISA         = qw(Exporter);
@@ -112,15 +112,25 @@ sub color {
 	$attribute .= $attributes{$_} . ';';
     }
     chop $attribute;
-    return ($attribute ne '') ? "\e[${attribute}m" : undef;
+    ($attribute ne '') ? "\e[${attribute}m" : undef;
 }
 
 # Given a string and a set of attributes, returns the string surrounded by
 # escape codes to set those attributes and then clear them at the end of the
-# string.
+# string.  If $EACHLINE is set, insert a reset before each occurrence of the
+# string $EACHLINE and the starting attribute code after the string
+# $EACHLINE, so that no attribute crosses line delimiters (this is often
+# desirable if the output is to be piped to a pager or some other program).
 sub colored {
     my $string = shift;
-    return color (@_) . $string . "\e[00m";
+    if (defined $EACHLINE) {
+	my $attr = color (@_);
+	join $EACHLINE,
+	    map { $_ ne "" ? $attr . $_ . "\e[00m" : "" }
+	        split ($EACHLINE, $string);
+    } else {
+	color (@_) . $string . "\e[00m";
+    }
 }
 
 
@@ -180,13 +190,21 @@ As an aid to help with this, colored() takes a scalar as the first
 argument and any number of attribute strings as the second argument and
 returns the scalar wrapped in escape codes so that the attributes will be
 set as requested before the string and reset to normal after the string.
+Normally, colored() just puts attribute codes at the beginning and end of
+the string, but if you set I<Term::ANSIColor::EACHLINE> to some string,
+that string will be considered the line delimiter and the attribute will
+be set at the beginning of each line of the passed string and reset at the
+end of each line.  This is often desirable if the output is being sent to
+a program like a pager that can be confused by attributes that span lines.
+Normally you'll want to set I<Term::ANSIColor::EACHLINE> to C<"\n"> to use
+this feature.
 
 Alternately, if you import C<:constants>, you can use the constants CLEAR,
 RESET, BOLD, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED, BLACK, RED,
 GREEN, YELLOW, BLUE, MAGENTA, ON_BLACK, ON_RED, ON_GREEN, ON_YELLOW,
 ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.  These are the same
-as C<Term::ANSIColor::color ('attribute')> and are included solely for
-convenience if you prefer typing:
+as C<color('attribute')> and are included solely for convenience if you
+prefer typing:
 
     print BOLD BLUE ON_WHITE "Text\n", RESET;
 
