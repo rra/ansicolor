@@ -1,6 +1,7 @@
 ANSIColor.pm
 ChangeLog
-MANIFEST
 Makefile.PL
+MANIFEST
+META.yml
 README
 test.pl
