@@ -1,3 +1,22 @@
+2001-07-10  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Version 1.04 released.
+
+	* ANSIColor.pm: Add documentation, examples, and diagnostics for
+	uncolor.  Document ANSI_COLORS_DISABLED.  Add information about
+	the relevant standards for these escape sequences and the
+	additional ones that aren't supported by this module.  Add a
+	pointer to the relevant standards.  Add a LICENSE section.  Update
+	Zenin's e-mail address.
+
+	* ANSIColor.pm (AUTOLOAD): Add support for ANSI_COLORS_DISABLED.
+	(color): Likewise.
+	(colored): Likewise.
+	* test.pl: Add tests for ANSI_COLORS_DISABLED.
+
+	* ANSIColor.pm (uncolor): New function.
+	* test.pl: Add a test for it.
+
 2000-08-06  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 1.03 released.
