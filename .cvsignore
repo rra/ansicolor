@@ -1,5 +1,6 @@
-new
 Makefile
+META.yml
 PGP-Sign-*.tar.gz
 blib
+new
 pm_to_blib
