@@ -73,11 +73,7 @@ sub color {
 	$attribute .= $attributes{$_} . ';';
     }
     chop $attribute;
-    if (defined $attribute) {
-	"\e[${attribute}m";
-    } else {
-	undef;
-    }
+    return ($attribute ne '') ? "\e[${attribute}m" : undef;
 }
 
 # Given a string and a set of attributes, returns the string surrounded by
