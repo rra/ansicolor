@@ -93,4 +93,7 @@ THANKS
   To Autrijus Tang for noticing a problem with string comparisons in the
   test suite.
 
+  To Daniel Lindsley for the information about what Mac OS X Terminal
+  supports.
+
   To Larry Wall, as always, for Perl.
