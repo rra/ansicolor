@@ -1,0 +1,82 @@
+Tue Apr 14 00:07:18 1998  Russ Allbery  <eagle@windlord.Stanford.EDU>
+
+	* ANSIColor.pm: croak() instead of die() on AUTOLOAD failure to
+ 	get the right error text, fixed a bunch of typos in the
+ 	documentation, added a quote.
+
+Wed Dec 10 12:05:36 1997  Russ Allbery  <eagle@windlord.Stanford.EDU>
+
+	* ANSIColor.pm: Version 1.01 released.
+
+	* ANSIColor.pm (color): Carp::croak() isn't predeclared, so it
+	needs parens around its argument.  This bug will only show up in
+	versions of Perl >5.004_04 since up until then strict.pm imports
+	Carp which predeclares the function.
+
+Sat Nov 29 01:58:44 1997  Russ Allbery  <rra@Stanford.EDU>
+
+	* ANSIColor.pm: Version 1.00 released.
+
+	* Makefile.PL: Now gets version information from the module, has
+	the correct rules to build a distribution.
+
+	* test.pl: Comments trimmed, minor test modifications.
+
+	* ANSIColor.pm: Changed my e-mail address, fixed to deal correctly
+ 	with trailing delimiters when EACHLINE is being used, die()
+ 	changed to croak() if the caller uses an invalid attribute name,
+ 	getting $VERSION from RCS updated to my current method, source
+ 	detabified.
+
+	* test.pl: Added test for EACHLINE with trailing delimiters.
+
+Mon Feb 17 13:54:44 1997  Russ Allbery  <rra@Stanford.EDU>
+
+	* ANSIColor.pm: Version 0.9 released.
+
+	* ANSIColor.pm: Changed the runtime error message to start with an
+ 	uppercase letter, reworked the documentation considerably
+ 	including adding more comparison between the two interfaces,
+ 	fixing some formatting bugs, fixing a typo, adding more
+ 	diagnostics, and generally being more verbose.
+
+Wed Jan  8 11:52:37 1997  Russ Allbery  <eagle@cyclone.Stanford.EDU>
+
+	* ANSIColor.pm: Version 0.8 released.
+
+	* test.pl: Fixed the test numbering in the BEGIN block.
+
+	* test.pl: Reformatted and commented to fit my programming style.
+
+	* ANSIColor.pm: [Revision 0.8] Changed the method by which
+ 	$VERSION is set so that it will always have two digits after the
+ 	decimal point.
+
+	* test.pl: New file.
+
+	* ANSIColor.pm: [Revision 0.7] Changed the codes so that reset is
+ 	always consistantly "\e[0m".
+
+	* ANSIColor.pm: [Revision 0.6] Added $EACHLINE and support to
+ 	colored() for it so that attributes can be reset around every
+ 	newline (or other line delimiter -- we're flexible).  Documented
+ 	this as well.
+
+	* ANSIColor.pm: [Revision 0.5] Changed implementation of the
+ 	constants to autoloaded subs, added the $AUTORESET variable for
+ 	use with the constants, and documented this.
+
+Sat Dec  7 21:46:25 1996  Russ Allbery  <eagle@cyclone.Stanford.EDU>
+
+	* ANSIColor.pm: [Revision 0.4] Added POD documentation.
+
+	* ANSIColor.pm: [Revision 0.3] Added constant forms, modified to
+ 	allow a space-separated string of attributes to be passed to
+ 	color() and colored(), added Zenin to the credits.
+
+Wed Dec  4 12:08:58 1996  Russ Allbery  <eagle@cyclone.Stanford.EDU>
+
+	* ANSIColor.pm: [Revision 0.2] Changed return syntax and check for
+ 	the null attribute string.
+
+	* ANSIColor.pm: New file.
