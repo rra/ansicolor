@@ -6,7 +6,7 @@
 # Ensure module can be loaded
 ############################################################################
 
-BEGIN { $| = 1; print "1..7\n" }
+BEGIN { $| = 1; print "1..8\n" }
 END   { print "not ok 1\n" unless $loaded }
 use Term::ANSIColor qw(:constants color colored);
 $loaded = 1;
@@ -63,4 +63,14 @@ if (colored ("test\ntest\r\r\n\r\n", 'bold')
     print "ok 7\n";
 } else {
     print "not ok 7\n";
+}
+
+# Test the array ref form.
+$Term::ANSIColor::EACHLINE = "\n";
+if (colored (['bold', 'on_green'], "test\n", "\n", "test")
+    eq "\e[1;42mtest\e[0m\n\n\e[1;42mtest\e[0m") {
+    print "ok 8\n";
+} else {
+    print colored (['bold', 'on_green'], "test\n", "\n", "test");
+    print "not ok 8\n";
 }
