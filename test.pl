@@ -12,7 +12,7 @@
 # Ensure module can be loaded
 ############################################################################
 
-BEGIN { $| = 1; print "1..1\n" }
+BEGIN { $| = 1; print "1..6\n" }
 END   { print "not ok 1\n" unless $loaded }
 use Term::ANSIColor qw(:constants color colored);
 $loaded = 1;
