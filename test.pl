@@ -1,18 +1,12 @@
 # Test suite for the Term::ANSIColor Perl module.  Before `make install' is
 # performed this script should be runnable with `make test'.  After `make
 # install' it should work as `perl test.pl'.
-#
-# Copyright 1996, 1997 by Russ Allbery <rra@cs.stanford.edu>
-#                     and Zenin <zenin@best.com>
-#
-# This program is free software; you can redistribute it and/or modify it
-# under the same terms as Perl itself.
 
 ############################################################################
 # Ensure module can be loaded
 ############################################################################
 
-BEGIN { $| = 1; print "1..6\n" }
+BEGIN { $| = 1; print "1..7\n" }
 END   { print "not ok 1\n" unless $loaded }
 use Term::ANSIColor qw(:constants color colored);
 $loaded = 1;
@@ -22,10 +16,6 @@ print "ok 1\n";
 ############################################################################
 # Test suite
 ############################################################################
-
-# Note that all of these tests are really rather trivial, and I would be
-# utterly astonished if any of them failed.  So if you *do* see any of them
-# fail, please let me know about it.
 
 # Test simple color attributes.
 if (color ('blue on_green', 'bold') eq "\e[34;42;1m") {
@@ -48,7 +38,7 @@ if (BLUE BOLD "testing" eq "\e[34m\e[1mtesting") {
     print "not ok 4\n";
 }
 
-# Test autoreset.
+# Test AUTORESET.
 $Term::ANSIColor::AUTORESET = 1;
 if (BLUE BOLD "testing" eq "\e[34m\e[1mtesting\e[0m\e[0m") {
     print "ok 5\n";
@@ -62,13 +52,14 @@ if (colored ("test\n\ntest", 'bold')
     eq "\e[1mtest\e[0m\n\n\e[1mtest\e[0m") {
     print "ok 6\n";
 } else {
+    print colored ("test\n\ntest", 'bold'), "\n";
     print "not ok 6\n";
 }
 
 # Test EACHLINE with multiple trailing delimiters.
-$Term::ANSIColor::EACHLINE = "\n";
-if (colored ("test\ntest\n\n", 'bold')
-    eq "\e[1mtest\e[0m\n\e[1mtest\e[0m\n\n") {
+$Term::ANSIColor::EACHLINE = "\r\n";
+if (colored ("test\ntest\r\r\n\r\n", 'bold')
+    eq "\e[1mtest\ntest\r\e[0m\r\n\r\n") {
     print "ok 7\n";
 } else {
     print "not ok 7\n";
