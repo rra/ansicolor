@@ -108,7 +108,7 @@ sub color {
     my $attribute = '';
     foreach (@codes) {
 	$_ = lc $_;
-	unless (defined $attributes{$_}) { die "invalid attribute name $_" }
+	unless (defined $attributes{$_}) { die "Invalid attribute name $_" }
 	$attribute .= $attributes{$_} . ';';
     }
     chop $attribute;
@@ -157,15 +157,18 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
     print "This text is normal.\n";
 
     use Term::ANSIColor qw(:constants);
-    print BOLD BLUE "This text is in bold blue.\n", RESET;
+    print BOLD, BLUE, "This text is in bold blue.\n", RESET;
 
     use Term::ANSIColor qw(:constants);
-    Term::ANSIColor::AUTORESET = 1;
+    $Term::ANSIColor::AUTORESET = 1;
     print BOLD BLUE "This text is in bold blue.\n";
     print "This text is normal.\n";
 
 =head1 DESCRIPTION
 
+This module has two interfaces, one through color() and colored() and the
+other through constants.
+    
 color() takes any number of strings as arguments and considers them to be
 space-separated lists of attributes.  It then forms and returns the escape
 sequence to set those attributes.  It doesn't print it out, just returns
@@ -191,20 +194,19 @@ argument and any number of attribute strings as the second argument and
 returns the scalar wrapped in escape codes so that the attributes will be
 set as requested before the string and reset to normal after the string.
 Normally, colored() just puts attribute codes at the beginning and end of
-the string, but if you set I<Term::ANSIColor::EACHLINE> to some string,
+the string, but if you set $Term::ANSIColor::EACHLINE to some string,
 that string will be considered the line delimiter and the attribute will
 be set at the beginning of each line of the passed string and reset at the
 end of each line.  This is often desirable if the output is being sent to
 a program like a pager that can be confused by attributes that span lines.
-Normally you'll want to set I<Term::ANSIColor::EACHLINE> to C<"\n"> to use
+Normally you'll want to set $Term::ANSIColor::EACHLINE to C<"\n"> to use
 this feature.
 
 Alternately, if you import C<:constants>, you can use the constants CLEAR,
 RESET, BOLD, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED, BLACK, RED,
 GREEN, YELLOW, BLUE, MAGENTA, ON_BLACK, ON_RED, ON_GREEN, ON_YELLOW,
 ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.  These are the same
-as C<color('attribute')> and are included solely for convenience if you
-prefer typing:
+as color('attribute') and can be used if you prefer typing:
 
     print BOLD BLUE ON_WHITE "Text\n", RESET;
 
@@ -212,13 +214,11 @@ to
 
     print colored ("Text\n", 'bold blue on_white');
 
-Your choice.  TIMTOWTDI.
-
 When using the constants, if you don't want to have to remember to add the
 C<, RESET> at the end of each print line, you can set
-I<Term::ANSIColor::AUTORESET> to a true value.  Then, the display mode
-will automatically be reset if there is no comma after the constant.  In
-other words, with that variable set:
+$Term::ANSIColor::AUTORESET to a true value.  Then, the display mode will
+automatically be reset if there is no comma after the constant.  In other
+words, with that variable set:
 
     print BOLD BLUE "Text\n";
 
@@ -228,14 +228,55 @@ will reset the display mode afterwards, whereas:
 
 will not.
 
+The subroutine interface has the advantage over the constants interface in
+that only 2 soubrutines are exported into your namespace, verses 22 in the
+constants interface.  On the flip side, the constants interface has the
+advantage of better compile time error checking, since misspelled names of
+colors or attributes in calls to color() and colored() won't be caught
+until runtime whereas misspelled names of constants will be caught at
+compile time.  So, polute your namespace with almost two dozen subrutines
+that you may not even use that oftin, or risk a silly bug by mistyping an
+attribute.  Your choice, TMTOWTDI after all.
+
 =head1 DIAGNOSTICS
 
 =over 4
 
-=item invalid attribute name %s
+=item Invalid attribute name %s
 
-You passed an invalid attribute name to either C<Term::ANSIColor::color>
-or C<Term::ANSIColor::colored>.
+You passed an invalid attribute name to either color() or colored().
+
+=item Identifier %s used only once: possible typo
+
+You probably mistyped a constant color name such as:
+
+    print FOOBAR "This text is color FOOBAR\n";
+
+It's probably better to always use commas after constant names in order to
+force the next error.
+
+=item No comma allowed after filehandle
+
+You probably mistyped a constant color name such as:
+
+    print FOOBAR, "This text is color FOOBAR\n";
+
+Generating this fatal compile error is one of the main advantages of using
+the constants interface, since you'll immediately know if you mistype a
+color name.
+
+=item Bareword %s not allowed while "strict subs" in use
+
+You probably mistyped a constant color name such as:
+
+    $Foobar = FOOBAR . "This line should be blue\n";
+
+or:
+
+    @Foobar = FOOBAR, "This line should be blue\n";
+
+This will only show up under use strict (another good reason to run under
+use strict).
 
 =back
 
@@ -249,7 +290,11 @@ entirely and just say:
 but the syntax of Perl doesn't allow this.  You need a comma after the
 string.  (Of course, you may consider it a bug that commas between all the
 constants aren't required, in which case you may feel free to insert
-commas.)
+commas unless you're using $Term::ANSIColor::AUTORESET.)
+
+For easier debuging, you may prefer to always use the commas when not
+setting $Term::ANSIColor::AUTORESET so that you'll get a fatal compile
+error rather than a warning.
 
 =head1 AUTHORS
 
