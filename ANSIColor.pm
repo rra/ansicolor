@@ -27,8 +27,8 @@ require Exporter;
 				 ON_CYAN ON_WHITE)]);
 Exporter::export_ok_tags('constants');
     
-$ID      = '$Id$';
-$VERSION = (split (' ', $ID))[2];
+ $ID      = '$Id$';
+($VERSION = (split (' ', $ID))[2]) =~ s/\.(\d)$/.0$1/;
 
 
 ############################################################################
