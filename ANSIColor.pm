@@ -109,7 +109,7 @@ sub color {
         $_ = lc $_;
         unless (defined $attributes{$_}) {
             require Carp;
-            Carp::croak "Invalid attribute name $_";
+            Carp::croak ("Invalid attribute name $_");
         }
         $attribute .= $attributes{$_} . ';';
     }
