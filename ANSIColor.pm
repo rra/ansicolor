@@ -67,7 +67,7 @@ $VERSION = (split (' ', $ID))[2];
 #
 # If $AUTORESET is set, we should instead get:
 #
-#   BLUE "text\n"  ==>  "\e[34mtext\n\e[00m"
+#   BLUE "text\n"  ==>  "\e[34mtext\n\e[0m"
 #
 # The sub also needs to handle the case where it has no arguments correctly.
 # Maintaining all of this as separate subs would be a major nightmare, as
@@ -85,7 +85,7 @@ sub AUTOLOAD {
 	eval qq {
 	    sub $AUTOLOAD {
 		if (\$AUTORESET && \@_) {
-		    '$attr' . "\@_" . "\e[00m";
+		    '$attr' . "\@_" . "\e[0m";
 		} else {
 		    ('$attr' . "\@_");
 		}
@@ -126,10 +126,10 @@ sub colored {
     if (defined $EACHLINE) {
 	my $attr = color (@_);
 	join $EACHLINE,
-	    map { $_ ne "" ? $attr . $_ . "\e[00m" : "" }
+	    map { $_ ne "" ? $attr . $_ . "\e[0m" : "" }
 	        split ($EACHLINE, $string);
     } else {
-	color (@_) . $string . "\e[00m";
+	color (@_) . $string . "\e[0m";
     }
 }
 
