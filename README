@@ -1,10 +1,10 @@
-                        Term::ANSIColor version 1.02
+                        Term::ANSIColor version 1.03
                (A simple ANSI text attribute control module)
 
-  Copyright 1996, 1997 Russ Allbery <rra@stanford.edu> and Zenin
-  <zenin@best.com>.  All rights reserved.  This program is free software;
-  you can redistribute it and/or modify it under the same terms as Perl
-  itself.
+  Copyright 1996, 1997, 1998, 2000 Russ Allbery <rra@stanford.edu> and
+  Zenin <zenin@best.com>.  All rights reserved.  This program is free
+  software; you can redistribute it and/or modify it under the same terms
+  as Perl itself.
 
 
 INTRODUCTION
@@ -48,6 +48,10 @@ INSTALLATION
   install the module by hand, simply copy it into a directory named Term in
   your Perl library directory.
 
+  Note that make install, for Perl 5.6.0 or later, will replace the
+  Term::ANSIColor that came with Perl.  You may wan to save a backup copy
+  of the standard version first.
+
 
 THANKS
 
@@ -57,6 +61,10 @@ THANKS
   To Jesse Taylor for writing the first significant script to use this
   module (colorized calsplit), thus offering innumerable opportunities to
   test and debug.
+
+  To Jean Delvare for providing documentation of what the various
+  attributes do on various different terminal emluators, and for noting
+  that attribute 2 is dark.
 
   To Larry Wall, as always, for Perl.
 
