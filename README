@@ -1,4 +1,4 @@
-                       Term::ANSIColor version 1.06
+                       Term::ANSIColor version 1.07
               (A simple ANSI text attribute control module)
 
   Copyright 1996, 1997, 1998, 2000, 2001, 2002
@@ -83,5 +83,8 @@ THANKS
 
   To Rani Pinchuk for the idea of ANSI_COLORS_DISABLED and an initial
   implementation.
+
+  To ATricket for the information about what PuTTY, Windows telnet, and
+  OpenSSH under Cygwin support.
 
   To Larry Wall, as always, for Perl.
