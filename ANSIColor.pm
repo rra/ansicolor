@@ -1,11 +1,14 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 # $Id$
 #
-# Copyright 1996, 1997 by Russ Allbery <rra@stanford.edu>
-#                     and Zenin <zenin@best.com>
+# Copyright 1996-1998 by Russ Allbery <rra@stanford.edu>
+#                    and Zenin <zenin@best.com>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the same terms as Perl itself.
+#
+# Ah, September, when the sysadmins turn colors and fall off the trees....
+#                               -- Dave Van Domelen
 
 ############################################################################
 # Modules and declarations
@@ -92,7 +95,8 @@ sub AUTOLOAD {
         };
         goto &$AUTOLOAD;
     } else {
-        die "undefined subroutine &$AUTOLOAD called";
+        require Carp;
+        Carp::croak ("undefined subroutine &$AUTOLOAD called");
     }
 }
 
@@ -231,14 +235,14 @@ will reset the display mode afterwards, whereas:
 will not.
 
 The subroutine interface has the advantage over the constants interface in
-that only 2 soubrutines are exported into your namespace, verses 22 in the
-constants interface.  On the flip side, the constants interface has the
-advantage of better compile time error checking, since misspelled names of
-colors or attributes in calls to color() and colored() won't be caught
-until runtime whereas misspelled names of constants will be caught at
-compile time.  So, polute your namespace with almost two dozen subrutines
-that you may not even use that oftin, or risk a silly bug by mistyping an
-attribute.  Your choice, TMTOWTDI after all.
+that only two subroutines are exported into your namespace, versus
+twenty-two in the constants interface.  On the flip side, the constants
+interface has the advantage of better compile time error checking, since
+misspelled names of colors or attributes in calls to color() and colored()
+won't be caught until runtime whereas misspelled names of constants will
+be caught at compile time.  So, polute your namespace with almost two
+dozen subroutines that you may not even use that often, or risk a silly
+bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
 
 =head1 DIAGNOSTICS
 
