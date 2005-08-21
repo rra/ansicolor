@@ -1,0 +1,8 @@
+The files in this directory were written by Joe Smith to test terminals
+for support of various VT100 escape sequences.  ansicolor is of the most
+interest in developing this package, but vt100-torture also tests some of
+the other attributes this module supports.
+
+To use one of these files, you should be able to display it in your
+terminal with cat.  These tests may be useful in expanding the table of
+supported terminal emulators in the Term::ANSIColor documentation.
