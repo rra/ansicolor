@@ -1,5 +1,7 @@
 2005-08-21  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 1.10 released.
+
 	* ANSIColor.pm (colored): Fix the $EACHLINE support to work
 	properly with a line consisting solely of "0".  Remove Zenin's
 	now-defunct e-mail address from the documentation.
