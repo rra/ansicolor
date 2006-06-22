@@ -98,4 +98,7 @@ THANKS
   To James Bowlin for catching a bug in colored when $EACHLINE is set that
   caused it to not color lines consisting solely of 0.
 
+  To Helge Kreutzmann for pointing out the need for warnings in the
+  documentation about background colors that span newlines.
+
   To Larry Wall, as always, for Perl.
