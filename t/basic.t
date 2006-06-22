@@ -1,10 +1,7 @@
 #!/usr/bin/perl
 # $Id$
 #
-# test.pl -- Test suite for the Term::ANSIColor Perl module.
-#
-# Before "make install" is performed this script should be runnable with "make
-# test".  After "make install" it should work as "perl test.pl".
+# t/basic.t -- Test suite for the Term::ANSIColor Perl module.
 
 ##############################################################################
 # Ensure module can be loaded
