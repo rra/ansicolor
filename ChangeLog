@@ -1,3 +1,7 @@
+2006-07-12  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Version 1.11 released.
+
 2006-06-22  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Clarify in the documentation the behavior of
