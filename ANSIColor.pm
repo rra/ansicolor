@@ -1,7 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 # $Id$
 #
-# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005
+# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006
 #   by Russ Allbery <rra@stanford.edu> and Zenin
 #
 # This program is free software; you may redistribute it and/or modify it
@@ -32,8 +32,6 @@ use Exporter ();
                                  ON_CYAN ON_WHITE)]);
 Exporter::export_ok_tags ('constants');
 
-# Don't use the CVS revision as the version, since this module is also in Perl
-# core and too many things could munge CVS magic revision strings.
 $VERSION = '1.11';
 
 ##############################################################################
@@ -473,7 +471,7 @@ with input from Zenin.  Russ Allbery now maintains this module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2006 Russ Allbery
+Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006 Russ Allbery
 <rra@stanford.edu> and Zenin.  This program is free software; you may
 redistribute it and/or modify it under the same terms as Perl itself.
 
