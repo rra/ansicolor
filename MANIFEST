@@ -2,11 +2,9 @@ ANSIColor.pm
 ChangeLog
 Makefile.PL
 MANIFEST
-META.yml
 README
 t/basic.t
 t/pod.t
-test.pl
 tests/ansicolor
 tests/README
 tests/vt100-torture
