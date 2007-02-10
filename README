@@ -101,4 +101,7 @@ THANKS
   To Helge Kreutzmann for pointing out the need for warnings in the
   documentation about background colors that span newlines.
 
+  To Baron Schwartz for pointing out that cyan and white were missing from
+  the documentation.
+
   To Larry Wall, as always, for Perl.

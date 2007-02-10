@@ -1,3 +1,8 @@
+2007-02-10  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Add cyan and white to the list of supported
+	attributes.  Not sure how I managed to omit them before.
+
 2006-07-12  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 1.11 released.
