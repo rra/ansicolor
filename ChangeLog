@@ -1,3 +1,7 @@
+2007-04-22  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Version 1.12 released.
+
 2007-03-23  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Use the right syntax for internal POD links.
