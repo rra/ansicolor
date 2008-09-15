@@ -1,0 +1,8 @@
+META.yml
+Makefile
+Makefile.old
+ANSIColor-*.tar.gz
+ANSIColor-*.tar.gz.asc
+ANSIColor-*.tar.gz.md5
+blib/
+pm_to_blib
