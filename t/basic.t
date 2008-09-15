@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# $Id$
 #
 # t/basic.t -- Test suite for the Term::ANSIColor Perl module.
 

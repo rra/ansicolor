@@ -1,5 +1,4 @@
-# Makefile.PL for Term::ANSIColor module  -*- perl -*-
-# $Id$
+# Makefile.PL for Term::ANSIColor.
 
 use ExtUtils::MakeMaker;
 

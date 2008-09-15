@@ -1,5 +1,4 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
-# $Id$
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006
 #   by Russ Allbery <rra@stanford.edu> and Zenin
