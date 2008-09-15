@@ -138,4 +138,7 @@ THANKS
   To Baron Schwartz for pointing out that cyan and white were missing from
   the documentation.
 
+  To Michael R. Wolf for pointing out that Wikipedia and the ECMA standard
+  use faint instead of dark as the name of attribute 2.
+
   To Larry Wall, as always, for Perl.

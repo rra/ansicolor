@@ -1,5 +1,8 @@
 2008-09-14  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Add faint as a synonym for dark and improve the
+	documentation of text attributes.
+
 	* t/pod-spelling.t: New check to spell-check POD documentation
 	using ispell with Pod::Spell.
 	* ANSIColor.pm: Fix spelling and markup errors in documentation

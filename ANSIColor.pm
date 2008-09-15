@@ -41,6 +41,7 @@ $VERSION = '1.12';
                'reset'      => 0,
                'bold'       => 1,
                'dark'       => 2,
+               'faint'      => 2,
                'underline'  => 4,
                'underscore' => 4,
                'blink'      => 5,
@@ -243,22 +244,23 @@ do anything else with it that you might care to).
 uncolor() performs the opposite translation, turning escape sequences
 into a list of strings.
 
-The recognized attributes (all of which should be fairly intuitive) are clear,
-reset, dark, bold, underline, underscore, blink, reverse, concealed, black,
-red, green, yellow, blue, magenta, cyan, white, on_black, on_red, on_green,
-on_yellow, on_blue, on_magenta, on_cyan, and on_white.  Case is not
-significant.  Underline and underscore are equivalent, as are clear and reset,
-so use whichever is the most intuitive to you.  The color alone sets the
-foreground color, and on_color sets the background color.
+The recognized non-color attributes are clear, reset, bold, dark, faint,
+underline, underscore, blink, reverse, and concealed.  Clear and reset
+(reset to default attributes), dark and faint (dim and saturated), and
+underline and underscore are equivalent, so use whichever is the most
+intuitive to you.  The recognized foregrond color attributes are black,
+red, green, yellow, blue, magenta, cyan, and white.  The recognized
+background color attributes are on_black, on_red, on_green, on_yellow,
+on_blue, on_magenta, on_cyan, and on_white.  Case is not significant.
 
 Note that not all attributes are supported by all terminal types, and some
-terminals may not support any of these sequences.  Dark, blink, and
-concealed in particular are frequently not implemented.
+terminals may not support any of these sequences.  Dark and faint, blink,
+and concealed in particular are frequently not implemented.
 
 Attributes, once set, last until they are unset (by sending the attribute
-"reset").  Be careful to do this, or otherwise your attribute will last
-after your script is done running, and people get very annoyed at having
-their prompt and typing changed to weird colors.
+C<clear> or C<reset>).  Be careful to do this, or otherwise your attribute
+will last after your script is done running, and people get very annoyed
+at having their prompt and typing changed to weird colors.
 
 As an aid to help with this, colored() takes a scalar as the first argument
 and any number of attribute strings as the second argument and returns the
@@ -424,7 +426,7 @@ Jean Delvare provided the following table of different common terminal
 emulators and their support for the various attributes and others have helped
 me flesh it out:
 
-              clear    bold     dark    under    blink   reverse  conceal
+              clear    bold     faint   under    blink   reverse  conceal
  ------------------------------------------------------------------------
  xterm         yes      yes      no      yes     bold      yes      yes
  linux         yes      yes      yes    bold      yes      yes      no
