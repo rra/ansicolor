@@ -1,11 +1,10 @@
 ^ANSIColor-.*\.tar\.gz$
-^\.cvsignore$
 ^MANIFEST\.
 ^Makefile$
+^blib/
+^pm_to_blib$
 ~$
 \.old$
 \.bak$
-^blib/
-^new/
-^pm_to_blib$
-(^|/)\.svn(/|\z)
+^\.
+/\.
