@@ -4,6 +4,7 @@ Makefile.PL
 MANIFEST
 README
 t/basic.t
+t/pod-spelling.t
 t/pod.t
 tests/ansicolor
 tests/README
