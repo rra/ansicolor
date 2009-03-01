@@ -1,5 +1,9 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Add explicit return statements instead of relying
+	on the implicit return of the last expression.  Use all caps for
+	all global variables.
+
 	* ANSIColor.pm: Add the new functions to a :pushpop export tag.
 	(PUSHCOLOR): New function that stores in an internal stack the
 	attributes that are being set.

@@ -21,8 +21,8 @@ $VERSION = '2.0';
 
 use strict;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
-            @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION %attributes
-            %attributes_r);
+            @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION %ATTRIBUTES
+            %ATTRIBUTES_R);
 
 use Exporter ();
 BEGIN {
@@ -43,7 +43,7 @@ BEGIN {
 # Internal data structures
 ##############################################################################
 
-%attributes = ('clear'      => 0,
+%ATTRIBUTES = ('clear'      => 0,
                'reset'      => 0,
                'bold'       => 1,
                'dark'       => 2,
@@ -64,8 +64,8 @@ BEGIN {
                'white'      => 37,   'on_white'   => 47);
 
 # Reverse lookup.  Alphabetically first name for a sequence is preferred.
-for (reverse sort keys %attributes) {
-    $attributes_r{$attributes{$_}} = $_;
+for (reverse sort keys %ATTRIBUTES) {
+    $ATTRIBUTES_R{$ATTRIBUTES{$_}} = $_;
 }
 
 ##############################################################################
@@ -85,7 +85,7 @@ for (reverse sort keys %attributes) {
 #
 # The sub also needs to handle the case where it has no arguments correctly.
 # Maintaining all of this as separate subs would be a major nightmare, as well
-# as duplicate the %attributes hash, so instead we define an AUTOLOAD sub to
+# as duplicate the %ATTRIBUTES hash, so instead we define an AUTOLOAD sub to
 # define the constant subs on demand.  To do that, we check the name of the
 # called sub against the list of attributes, and if it's an all-caps version
 # of one of them, we define the sub on the fly and then run it.
@@ -96,11 +96,11 @@ for (reverse sort keys %attributes) {
 # Windows consoles.
 sub AUTOLOAD {
     if (defined $ENV{ANSI_COLORS_DISABLED}) {
-        return "@_";
+        return join ('', @_);
     }
     my $sub;
     ($sub = $AUTOLOAD) =~ s/^.*:://;
-    my $attr = $attributes{lc $sub};
+    my $attr = $ATTRIBUTES{lc $sub};
     if ($sub =~ /^[A-Z_]+$/ && defined $attr) {
         $attr = "\e[" . $attr . 'm';
         eval qq {
@@ -160,14 +160,14 @@ sub color {
     my $attribute = '';
     foreach (@codes) {
         $_ = lc $_;
-        unless (defined $attributes{$_}) {
+        unless (defined $ATTRIBUTES{$_}) {
             require Carp;
             Carp::croak ("Invalid attribute name $_");
         }
-        $attribute .= $attributes{$_} . ';';
+        $attribute .= $ATTRIBUTES{$_} . ';';
     }
     chop $attribute;
-    ($attribute ne '') ? "\e[${attribute}m" : undef;
+    return ($attribute ne '') ? "\e[${attribute}m" : undef;
 }
 
 # Return a list of named color attributes for a given set of escape codes.
@@ -187,14 +187,14 @@ sub uncolor {
     }
     for (@nums) {
 	$_ += 0; # Strip leading zeroes
-	my $name = $attributes_r{$_};
+	my $name = $ATTRIBUTES_R{$_};
 	if (!defined $name) {
 	    require Carp;
 	    Carp::croak ("No name for escape sequence $_" );
 	}
 	push (@result, $name);
     }
-    @result;
+    return @result;
 }
 
 # Given a string and a set of attributes, returns the string surrounded by
@@ -217,12 +217,12 @@ sub colored {
     return $string if defined $ENV{ANSI_COLORS_DISABLED};
     if (defined $EACHLINE) {
         my $attr = color (@codes);
-        join '',
-            map { $_ ne $EACHLINE ? $attr . $_ . "\e[0m" : $_ }
+        return join '',
+            map { ($_ ne $EACHLINE) ? $attr . $_ . "\e[0m" : $_ }
                 grep { length ($_) > 0 }
                     split (/(\Q$EACHLINE\E)/, $string);
     } else {
-        color (@codes) . $string . "\e[0m";
+        return color (@codes) . $string . "\e[0m";
     }
 }
 
