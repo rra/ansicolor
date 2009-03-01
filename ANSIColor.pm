@@ -84,17 +84,19 @@ for (reverse sort keys %attributes) {
 # called sub against the list of attributes, and if it's an all-caps version
 # of one of them, we define the sub on the fly and then run it.
 #
-# If the environment variable ANSI_COLORS_DISABLED is set, turn all of the
-# generated subs into pass-through functions that don't add any escape
-# sequences.  This is to make it easier to write scripts that also work on
-# systems without any ANSI support, like Windows consoles.
+# If the environment variable ANSI_COLORS_DISABLED is set, just return the
+# arguments without adding any escape sequences.  This is to make it easier to
+# write scripts that also work on systems without any ANSI support, like
+# Windows consoles.
 sub AUTOLOAD {
-    my $enable_colors = !defined $ENV{ANSI_COLORS_DISABLED};
+    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+        return "@_";
+    }
     my $sub;
     ($sub = $AUTOLOAD) =~ s/^.*:://;
     my $attr = $attributes{lc $sub};
     if ($sub =~ /^[A-Z_]+$/ && defined $attr) {
-        $attr = $enable_colors ? "\e[" . $attr . 'm' : '';
+        $attr = "\e[" . $attr . 'm';
         eval qq {
             sub $AUTOLOAD {
                 if (\$AUTORESET && \@_) {
