@@ -1,5 +1,7 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 2.0 released.
+
 	* Makefile.PL: Add LICENSE to the distribution metadata for Perl
 	5.10 and later.
 
