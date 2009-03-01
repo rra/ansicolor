@@ -1,5 +1,8 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Fix additional spelling errors and rewrap the POD
+	documentation to a 74-character margin.
+
 	* t/basic.t: Rewrite to use Test::More.
 	* t/pod.t: Likewise.
 

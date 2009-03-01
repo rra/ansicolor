@@ -1,6 +1,6 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
-# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006
+# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009
 #   by Russ Allbery <rra@stanford.edu> and Zenin
 #
 # This program is free software; you may redistribute it and/or modify it
@@ -203,8 +203,8 @@ __END__
 Term::ANSIColor - Color screen output using ANSI escape sequences
 
 =for stopwords
-cyan colorize namespace TMTOWTDI cmd.exe 4nt.exe command.com NT ESC
-Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
+cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
+ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery
 
 =head1 SYNOPSIS
@@ -238,10 +238,10 @@ which has to be explicitly imported to be used (see L</SYNOPSIS>).
 
 color() takes any number of strings as arguments and considers them to be
 space-separated lists of attributes.  It then forms and returns the escape
-sequence to set those attributes.  It doesn't print it out, just returns it,
-so you'll have to print it yourself if you want to (this is so that you can
-save it as a string, pass it to something else, send it to a file handle, or
-do anything else with it that you might care to).
+sequence to set those attributes.  It doesn't print it out, just returns
+it, so you'll have to print it yourself if you want to (this is so that
+you can save it as a string, pass it to something else, send it to a file
+handle, or do anything else with it that you might care to).
 
 uncolor() performs the opposite translation, turning escape sequences
 into a list of strings.
@@ -250,7 +250,7 @@ The recognized non-color attributes are clear, reset, bold, dark, faint,
 underline, underscore, blink, reverse, and concealed.  Clear and reset
 (reset to default attributes), dark and faint (dim and saturated), and
 underline and underscore are equivalent, so use whichever is the most
-intuitive to you.  The recognized foregrond color attributes are black,
+intuitive to you.  The recognized foreground color attributes are black,
 red, green, yellow, blue, magenta, cyan, and white.  The recognized
 background color attributes are on_black, on_red, on_green, on_yellow,
 on_blue, on_magenta, on_cyan, and on_white.  Case is not significant.
@@ -264,13 +264,13 @@ C<clear> or C<reset>).  Be careful to do this, or otherwise your attribute
 will last after your script is done running, and people get very annoyed
 at having their prompt and typing changed to weird colors.
 
-As an aid to help with this, colored() takes a scalar as the first argument
-and any number of attribute strings as the second argument and returns the
-scalar wrapped in escape codes so that the attributes will be set as
-requested before the string and reset to normal after the string.
-Alternately, you can pass a reference to an array as the first argument, and
-then the contents of that array will be taken as attributes and color codes
-and the remainder of the arguments as text to colorize.
+As an aid to help with this, colored() takes a scalar as the first
+argument and any number of attribute strings as the second argument and
+returns the scalar wrapped in escape codes so that the attributes will be
+set as requested before the string and reset to normal after the string.
+Alternately, you can pass a reference to an array as the first argument,
+and then the contents of that array will be taken as attributes and color
+codes and the remainder of the arguments as text to colorize.
 
 Normally, colored() just puts attribute codes at the beginning and end of
 the string, but if you set $Term::ANSIColor::EACHLINE to some string, that
@@ -284,10 +284,11 @@ be confused by attributes that span lines.  Normally you'll want to set
 $Term::ANSIColor::EACHLINE to C<"\n"> to use this feature.
 
 Alternately, if you import C<:constants>, you can use the constants CLEAR,
-RESET, BOLD, DARK, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED, BLACK,
-RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ON_BLACK, ON_RED, ON_GREEN,
-ON_YELLOW, ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.  These are
-the same as color('attribute') and can be used if you prefer typing:
+RESET, BOLD, DARK, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED,
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ON_BLACK, ON_RED,
+ON_GREEN, ON_YELLOW, ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.
+These are the same as color('attribute') and can be used if you prefer
+typing:
 
     print BOLD BLUE ON_WHITE "Text", RESET, "\n";
 
@@ -306,7 +307,7 @@ words, with that variable set:
 
     print BOLD BLUE "Text\n";
 
-will reset the display mode afterwards, whereas:
+will reset the display mode afterward, whereas:
 
     print BOLD, BLUE, "Text\n";
 
@@ -319,10 +320,10 @@ that only two subroutines are exported into your namespace, versus
 twenty-two in the constants interface.  On the flip side, the constants
 interface has the advantage of better compile time error checking, since
 misspelled names of colors or attributes in calls to color() and colored()
-won't be caught until runtime whereas misspelled names of constants will be
-caught at compile time.  So, pollute your namespace with almost two dozen
-subroutines that you may not even use that often, or risk a silly bug by
-mistyping an attribute.  Your choice, TMTOWTDI after all.
+won't be caught until runtime whereas misspelled names of constants will
+be caught at compile time.  So, pollute your namespace with almost two
+dozen subroutines that you may not even use that often, or risk a silly
+bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
 
 =head1 DIAGNOSTICS
 
@@ -382,8 +383,8 @@ aren't recognized and can't be translated to names.
 =item ANSI_COLORS_DISABLED
 
 If this environment variable is set, all of the functions defined by this
-module (color(), colored(), and all of the constants not previously used in
-the program) will not output any escape sequences and instead will just
+module (color(), colored(), and all of the constants not previously used
+in the program) will not output any escape sequences and instead will just
 return the empty string or pass through the original text as appropriate.
 This is intended to support easy use of scripts using this module on
 platforms that don't support ANSI escape sequences.
@@ -402,12 +403,12 @@ entirely and just say:
 
 but the syntax of Perl doesn't allow this.  You need a comma after the
 string.  (Of course, you may consider it a bug that commas between all the
-constants aren't required, in which case you may feel free to insert commas
-unless you're using $Term::ANSIColor::AUTORESET.)
+constants aren't required, in which case you may feel free to insert
+commas unless you're using $Term::ANSIColor::AUTORESET.)
 
 For easier debugging, you may prefer to always use the commas when not
-setting $Term::ANSIColor::AUTORESET so that you'll get a fatal compile error
-rather than a warning.
+setting $Term::ANSIColor::AUTORESET so that you'll get a fatal compile
+error rather than a warning.
 
 =head1 NOTES
 
@@ -418,15 +419,15 @@ italic, underline, and reverse) are part of the earlier ANSI X3.64
 standard for control sequences for video terminals and peripherals.
 
 Note that not all displays are ISO 6429-compliant, or even X3.64-compliant
-(or are even attempting to be so).  This module will not work as expected on
-displays that do not honor these escape sequences, such as cmd.exe, 4nt.exe,
-and command.com under either Windows NT or Windows 2000.  They may just be
-ignored, or they may display as an ESC character followed by some apparent
-garbage.
+(or are even attempting to be so).  This module will not work as expected
+on displays that do not honor these escape sequences, such as cmd.exe,
+4nt.exe, and command.com under either Windows NT or Windows 2000.  They
+may just be ignored, or they may display as an ESC character followed by
+some apparent garbage.
 
 Jean Delvare provided the following table of different common terminal
-emulators and their support for the various attributes and others have helped
-me flesh it out:
+emulators and their support for the various attributes and others have
+helped me flesh it out:
 
               clear    bold     faint   under    blink   reverse  conceal
  ------------------------------------------------------------------------
@@ -442,11 +443,11 @@ me flesh it out:
  Mac Terminal  yes      yes      no      yes      yes      yes      yes
 
 Windows is Windows telnet, Cygwin SSH is the OpenSSH implementation under
-Cygwin on Windows NT, and Mac Terminal is the Terminal application in Mac OS
-X.  Where the entry is other than yes or no, that emulator displays the
+Cygwin on Windows NT, and Mac Terminal is the Terminal application in Mac
+OS X.  Where the entry is other than yes or no, that emulator displays the
 given attribute as something else instead.  Note that on an aixterm, clear
-doesn't reset colors; you have to explicitly set the colors back to what you
-want.  More entries in this table are welcome.
+doesn't reset colors; you have to explicitly set the colors back to what
+you want.  More entries in this table are welcome.
 
 Note that codes 3 (italic), 6 (rapid blink), and 9 (strike-through) are
 specified in ANSI X3.64 and ECMA-048 but are not commonly supported by
@@ -462,25 +463,25 @@ currently supported by this module.
 ECMA-048 is available on-line (at least at the time of this writing) at
 L<http://www.ecma-international.org/publications/standards/ECMA-048.HTM>.
 
-ISO 6429 is available from ISO for a charge; the author of this module does
-not own a copy of it.  Since the source material for ISO 6429 was ECMA-048
-and the latter is available for free, there seems little reason to obtain
-the ISO standard.
+ISO 6429 is available from ISO for a charge; the author of this module
+does not own a copy of it.  Since the source material for ISO 6429 was
+ECMA-048 and the latter is available for free, there seems little reason
+to obtain the ISO standard.
 
-The current version of this module is always available from its web site at
-L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of the
-Perl core distribution as of 5.6.0.
+The current version of this module is always available from its web site
+at L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of
+the Perl core distribution as of 5.6.0.
 
 =head1 AUTHORS
 
 Original idea (using constants) by Zenin, reimplemented using subs by Russ
-Allbery <rra@stanford.edu>, and then combined with the original idea by Russ
-with input from Zenin.  Russ Allbery now maintains this module.
+Allbery <rra@stanford.edu>, and then combined with the original idea by
+Russ with input from Zenin.  Russ Allbery now maintains this module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006 Russ Allbery
-<rra@stanford.edu> and Zenin.  This program is free software; you may
-redistribute it and/or modify it under the same terms as Perl itself.
+Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009 Russ
+Allbery <rra@stanford.edu> and Zenin.  This program is free software; you
+may redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut
