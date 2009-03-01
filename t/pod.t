@@ -2,10 +2,8 @@
 #
 # t/pod.t -- Test POD formatting for Term::ANSIColor.
 
+use strict;
+use Test::More;
 eval 'use Test::Pod 1.00';
-if ($@) {
-    print "1..1\n";
-    print "ok 1 # skip - Test::Pod 1.00 required for testing POD\n";
-    exit;
-}
+plan skip_all => "Test::Pod 1.00 required for testing POD" if $@;
 all_pod_files_ok ();

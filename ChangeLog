@@ -1,5 +1,8 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/basic.t: Rewrite to use Test::More.
+	* t/pod.t: Likewise.
+
 	* ANSIColor.pm (AUTOLOAD): If ANSI_COLORS_DISABLED is set, return
 	the stringified arguments rather than creating a sub.  This allows
 	colors to work later if ANSI_COLORS_DISABLED is unset rather than
