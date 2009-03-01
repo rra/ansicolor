@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 #
 # t/pod.t -- Test POD formatting for Term::ANSIColor.
+#
+# Taken essentially verbatim from the examples in the Test::Pod documentation.
 
 use strict;
 use Test::More;
