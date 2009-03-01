@@ -1,5 +1,8 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* Makefile.PL: Add LICENSE to the distribution metadata for Perl
+	5.10 and later.
+
 	* ANSIColor.pm: Add explicit return statements instead of relying
 	on the implicit return of the last expression.  Use all caps for
 	all global variables.
