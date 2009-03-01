@@ -9,11 +9,11 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 16;
+use Test::More tests => 29;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
-    use_ok ('Term::ANSIColor', qw/:constants color colored uncolor/);
+    use_ok ('Term::ANSIColor', qw/:pushpop color colored uncolor/);
 }
 
 # Various basic tests.
@@ -57,3 +57,30 @@ is (colored ("0\n0\n\n", 'blue', 'bold'), "\e[34;1m0\e[0m\n\e[34;1m0\e[0m\n\n",
 # Test colored with the empty string and EACHLINE.
 is (colored ('', 'blue', 'bold'), '',
     'colored with an empty string and EACHLINE');
+
+# Test push and pop support.
+$Term::ANSIColor::AUTORESET = 0;
+is ((PUSHCOLOR RED ON_GREEN "text"), "\e[31m\e[42mtext",
+    'PUSHCOLOR does not break constants');
+is ((PUSHCOLOR BLUE "text"), "\e[34mtext", '...and adding another level');
+is ((RESET BLUE "text"), "\e[0m\e[34mtext", '...and using reset');
+is ((POPCOLOR "text"), "\e[31m\e[42mtext", '...and POPCOLOR works');
+is ((LOCALCOLOR GREEN ON_BLUE "text"), "\e[32m\e[44mtext\e[31m\e[42m",
+    'LOCALCOLOR');
+$Term::ANSIColor::AUTOLOCAL = 1;
+is ((ON_BLUE "text"), "\e[44mtext\e[31m\e[42m", 'AUTOLOCAL');
+$Term::ANSIColor::AUTOLOCAL = 0;
+is ((POPCOLOR "text"), "\e[0mtext", 'POPCOLOR with empty stack');
+
+# Test push and pop support with the syntax from the original openmethods.com
+# submission, which uses a different coding style.
+is (PUSHCOLOR (RED ON_GREEN), "\e[31m\e[42m",
+    'PUSHCOLOR with explict argument');
+is (PUSHCOLOR (BLUE), "\e[34m", '...and another explicit argument');
+is (RESET . BLUE . "text", "\e[0m\e[34mtext",
+    '...and constants with concatenation');
+is (POPCOLOR . "text", "\e[31m\e[42mtext",
+    '...and POPCOLOR works without an argument');
+is (LOCALCOLOR(GREEN . ON_BLUE . "text"), "\e[32m\e[44mtext\e[31m\e[42m",
+    'LOCALCOLOR with two arguments');
+is (POPCOLOR . "text", "\e[0mtext", 'POPCOLOR with no arguments');

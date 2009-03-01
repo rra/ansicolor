@@ -1,5 +1,16 @@
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Add the new functions to a :pushpop export tag.
+	(PUSHCOLOR): New function that stores in an internal stack the
+	attributes that are being set.
+	(POPCOLOR): New function that pops the attributes being set and
+	sets the attributes previously found on the stack.
+	(LOCALCOLOR): New function that surrounds its argument in
+	PUSHCOLOR and POPCOLOR.
+	(AUTOLOAD): If $AUTOLOCAL is set, surround all color constants
+	with an implicit LOCALCOLOR.
+	* t/basic.t: Test PUSHCOLOR, POPCOLOR, and LOCALCOLOR.
+
 	* t/pod-spelling.t: Rewrite to use Test::More.  Support and prefer
 	aspell.
 

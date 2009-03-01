@@ -1,7 +1,8 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009
-#   by Russ Allbery <rra@stanford.edu> and Zenin
+#     Russ Allbery <rra@stanford.edu> and Zenin
+# PUSH/POP support submitted 2007 by openmethods.com voice solutions
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -16,22 +17,27 @@
 package Term::ANSIColor;
 require 5.001;
 
+$VERSION = '2.0';
+
 use strict;
-use vars qw($AUTOLOAD $AUTORESET $EACHLINE @ISA @EXPORT @EXPORT_OK
-            %EXPORT_TAGS $VERSION %attributes %attributes_r);
+use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
+            @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION %attributes
+            %attributes_r);
 
 use Exporter ();
-@ISA         = qw(Exporter);
-@EXPORT      = qw(color colored);
-@EXPORT_OK   = qw(uncolor);
-%EXPORT_TAGS = (constants => [qw(CLEAR RESET BOLD DARK UNDERLINE UNDERSCORE
-                                 BLINK REVERSE CONCEALED BLACK RED GREEN
-                                 YELLOW BLUE MAGENTA CYAN WHITE ON_BLACK
-                                 ON_RED ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
-                                 ON_CYAN ON_WHITE)]);
-Exporter::export_ok_tags ('constants');
-
-$VERSION = '1.12';
+BEGIN {
+    @COLORLIST   = qw(CLEAR RESET BOLD DARK UNDERLINE UNDERSCORE BLINK REVERSE
+                      CONCEALED BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE
+                      ON_BLACK ON_RED ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
+                      ON_CYAN ON_WHITE);
+    @ISA         = qw(Exporter);
+    @EXPORT      = qw(color colored);
+    @EXPORT_OK   = qw(uncolor);
+    %EXPORT_TAGS = (constants => \@COLORLIST,
+                    pushpop   => [ @COLORLIST,
+                                   qw(PUSHCOLOR POPCOLOR LOCALCOLOR) ]);
+    Exporter::export_ok_tags ('pushpop');
+}
 
 ##############################################################################
 # Internal data structures
@@ -100,9 +106,11 @@ sub AUTOLOAD {
         eval qq {
             sub $AUTOLOAD {
                 if (\$AUTORESET && \@_) {
-                    '$attr' . "\@_" . "\e[0m";
+                    return '$attr' . join ('', \@_) . "\e[0m";
+                } elsif (\$AUTOLOCAL && \@_) {
+                    return PUSHCOLOR ('$attr') . join ('', \@_) . POPCOLOR;
                 } else {
-                    ('$attr' . "\@_");
+                    return '$attr' . join ('', \@_);
                 }
             }
         };
@@ -111,6 +119,34 @@ sub AUTOLOAD {
         require Carp;
         Carp::croak ("undefined subroutine &$AUTOLOAD called");
     }
+}
+
+# Append a new color to the top of the color stack and return the top of
+# the stack.
+sub PUSHCOLOR {
+    my ($text) = @_;
+    my ($color) = ($text =~ m/^((?:\e\[[\d;]+m)+)/);
+    if (@COLORSTACK) {
+        $color = $COLORSTACK[-1] . $color;
+    }
+    push (@COLORSTACK, $color);
+    return $text;
+}
+
+# Pop the color stack and return the new top of the stack (or reset, if
+# the stack is empty).
+sub POPCOLOR {
+    pop @COLORSTACK;
+    if (@COLORSTACK) {
+        return $COLORSTACK[-1] . join ('', @_);
+    } else {
+        return RESET (@_);
+    }
+}
+
+# Surround arguments with a push and a pop.
+sub LOCALCOLOR {
+    return PUSHCOLOR (join ('', @_)) . POPCOLOR ();
 }
 
 ##############################################################################
@@ -205,7 +241,7 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
 =for stopwords
 cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
-reimplemented Allbery
+reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 
 =head1 SYNOPSIS
 
@@ -226,9 +262,25 @@ reimplemented Allbery
     print BOLD, BLUE, "This text is in bold blue.\n", RESET;
 
     use Term::ANSIColor qw(:constants);
-    $Term::ANSIColor::AUTORESET = 1;
-    print BOLD BLUE "This text is in bold blue.\n";
-    print "This text is normal.\n";
+    {
+        local $Term::ANSIColor::AUTORESET = 1;
+        print BOLD BLUE "This text is in bold blue.\n";
+        print "This text is normal.\n";
+    }
+
+    use Term::ANSIColor qw(:pushpop);
+    print PUSHCOLOR RED ON_GREEN "This text is red on green.\n";
+    print PUSHCOLOR BLUE "This text is blue on green.\n";
+    print RESET BLUE "This text is just blue.\n";
+    print POPCOLOR "Back to red on green.\n";
+    print LOCALCOLOR GREEN ON_BLUE "This text is green on blue.\n";
+    print "This text is red on green.\n";
+    {
+        local $Term::ANSIColor::AUTOLOCAL = 1;
+        print ON_BLUE "This text is red on blue.\n";
+        print "This text is red on green.\n";
+    }
+    print POPCOLOR "Back to whatever we started as.\n";
 
 =head1 DESCRIPTION
 
@@ -325,6 +377,28 @@ be caught at compile time.  So, pollute your namespace with almost two
 dozen subroutines that you may not even use that often, or risk a silly
 bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
 
+As of Term::ANSIColor 2.0, you can import C<:pushpop> and maintain a stack
+of colors using PUSHCOLOR, POPCOLOR, and LOCALCOLOR.  PUSHCOLOR takes the
+attribute string that starts its argument and pushes it onto a stack of
+attributes.  POPCOLOR removes the top of the stack and restores the
+previous attributes set by the argument of a prior PUSHCOLOR.  LOCALCOLOR
+surrounds its argument in a PUSHCOLOR and POPCOLOR so that the color
+resets afterward.
+
+When using PUSHCOLOR, POPCOLOR, and LOCALCOLOR, it's particularly
+important to not put commas between the constants.
+
+    print PUSHCOLOR BLUE "Text\n";
+
+will correctly push BLUE onto the top of the stack.
+
+    print PUSHCOLOR, BLUE, "Text\n";    # wrong!
+
+will not, and a subsequent pop won't restore the correct attributes.
+PUSHCOLOR pushes the attributes set by its argument, which is normally a
+string of color constants.  It can't ask the terminal what the current
+attributes are.
+
 =head1 DIAGNOSTICS
 
 =over 4
@@ -404,11 +478,12 @@ entirely and just say:
 but the syntax of Perl doesn't allow this.  You need a comma after the
 string.  (Of course, you may consider it a bug that commas between all the
 constants aren't required, in which case you may feel free to insert
-commas unless you're using $Term::ANSIColor::AUTORESET.)
+commas unless you're using $Term::ANSIColor::AUTORESET or
+PUSHCOLOR/POPCOLOR.)
 
 For easier debugging, you may prefer to always use the commas when not
-setting $Term::ANSIColor::AUTORESET so that you'll get a fatal compile
-error rather than a warning.
+setting $Term::ANSIColor::AUTORESET or PUSHCOLOR/POPCOLOR so that you'll
+get a fatal compile error rather than a warning.
 
 =head1 NOTES
 
@@ -483,5 +558,8 @@ Russ with input from Zenin.  Russ Allbery now maintains this module.
 Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009 Russ
 Allbery <rra@stanford.edu> and Zenin.  This program is free software; you
 may redistribute it and/or modify it under the same terms as Perl itself.
+
+PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
+voice solutions.
 
 =cut
