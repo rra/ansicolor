@@ -1,5 +1,7 @@
 2009-07-04  Russ Allbery  <rra@stanford.edu>
 
+	* t/basic.t: Test error handling in color, colored, and uncolor.
+
 	* ANSIColor.pm (uncolor): When reporting errors for bad escape
 	sequences, don't include the leading \e[ or trailing m in the
 	error message.
