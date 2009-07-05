@@ -308,7 +308,9 @@ space-separated lists of attributes.  It then forms and returns the escape
 sequence to set those attributes.  It doesn't print it out, just returns
 it, so you'll have to print it yourself if you want to (this is so that
 you can save it as a string, pass it to something else, send it to a file
-handle, or do anything else with it that you might care to).
+handle, or do anything else with it that you might care to).  color()
+throws an exception if given an invalid attribute, so you can also use it
+to check attribute names for validity (see L</EXAMPLES>).
 
 uncolor() performs the opposite translation, turning escape sequences
 into a list of strings.
@@ -490,6 +492,18 @@ For it to have its proper effect, this environment variable must be set
 before any color constants are used in the program.
 
 =back
+
+=head1 EXAMPLES
+
+It's sometimes useful to check attributes for validity in one place, such
+as when reading a configuration file that specifies colors.  To do that,
+run color on a possible attribute, catching any exceptions.  If it throws
+an exception, the attribute name isn't valid.
+
+    for my $attr (@attributes) {
+        eval { color ($attr) };
+        warn "$attr is not valid\n" if $@;
+    }
 
 =head1 RESTRICTIONS
 
