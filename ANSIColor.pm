@@ -179,7 +179,7 @@ sub uncolor {
         $escape =~ s/m$//;
         unless ($escape =~ /^((?:\d+;)*\d*)$/) {
             require Carp;
-            Carp::croak ("Bad escape sequence $_");
+            Carp::croak ("Bad escape sequence $escape");
         }
         push (@nums, split (/;/, $1));
     }
