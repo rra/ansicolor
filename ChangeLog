@@ -2,7 +2,8 @@
 
 	* ANSIColor.pm (AUTOLOAD): Untaint $AUTOLOAD, required by Perl
 	5.10 when running in taint mode.  Thanks, Tim Bellinghausen.
-	* t/basic.t: Two new tests for AUTOLOAD error handling.
+	* t/basic.t: Two new tests for AUTOLOAD error handling.  Enable
+	warnings and taint mode.
 
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
