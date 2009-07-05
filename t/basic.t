@@ -9,11 +9,11 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 31;
+use Test::More tests => 35;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
-    use_ok ('Term::ANSIColor', qw/:pushpop color colored uncolor/);
+    use_ok ('Term::ANSIColor', qw/:pushpop color colored uncolor colorstrip/);
 }
 
 # Various basic tests.
@@ -93,3 +93,14 @@ like ($@, qr/^undefined subroutine \&Term::ANSIColor::RSET called at /,
 eval { Term::ANSIColor::reset () };
 like ($@, qr/^undefined subroutine \&Term::ANSIColor::reset called at /,
       'Correct error from a lowercase attribute');
+
+# Test colorstrip.
+is (colorstrip ("\e[1mBold \e[31;42mon green\e[0m\e[m"), 'Bold on green',
+    'Basic color stripping');
+is (colorstrip ("\e[1m", 'bold', "\e[0m"), 'bold',
+    'Color stripping across multiple strings');
+is_deeply ([ colorstrip ("\e[1m", 'bold', "\e[0m") ],
+           [ '', 'bold', '' ], '...and in an array context');
+is (colorstrip ("\e[2cSome other code\e and stray [0m stuff"),
+    "\e[2cSome other code\e and stray [0m stuff",
+    'colorstrip does not remove non-color stuff');

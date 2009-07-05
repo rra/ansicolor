@@ -150,4 +150,6 @@ THANKS
 
   To Tim Bellinghausen for the AUTOLOAD taint fix for Perl 5.10.
 
+  To Paul Miller for the idea and initial implementation of colorstrip.
+
   To Larry Wall, as always, for Perl.
