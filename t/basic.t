@@ -9,7 +9,7 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 29;
+use Test::More tests => 31;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
@@ -84,3 +84,12 @@ is (POPCOLOR . "text", "\e[31m\e[42mtext",
 is (LOCALCOLOR(GREEN . ON_BLUE . "text"), "\e[32m\e[44mtext\e[31m\e[42m",
     'LOCALCOLOR with two arguments');
 is (POPCOLOR . "text", "\e[0mtext", 'POPCOLOR with no arguments');
+
+# Test error reporting when calling unrecognized Term::ANSIColor subs that go
+# through AUTOLOAD.
+eval { Term::ANSIColor::RSET () };
+like ($@, qr/^undefined subroutine \&Term::ANSIColor::RSET called at /,
+      'Correct error from an attribute that is not defined');
+eval { Term::ANSIColor::reset () };
+like ($@, qr/^undefined subroutine \&Term::ANSIColor::reset called at /,
+      'Correct error from a lowercase attribute');

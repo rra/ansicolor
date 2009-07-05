@@ -17,7 +17,7 @@
 package Term::ANSIColor;
 require 5.001;
 
-$VERSION = '2.00';
+$VERSION = '2.01';
 
 use strict;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
@@ -98,11 +98,9 @@ sub AUTOLOAD {
     if (defined $ENV{ANSI_COLORS_DISABLED}) {
         return join ('', @_);
     }
-    my $sub;
-    ($sub = $AUTOLOAD) =~ s/^.*:://;
-    my $attr = $ATTRIBUTES{lc $sub};
-    if ($sub =~ /^[A-Z_]+$/ && defined $attr) {
-        $attr = "\e[" . $attr . 'm';
+    if ($AUTOLOAD =~ /^([\w:]*::([A-Z_]+))$/ and defined $ATTRIBUTES{lc $2}) {
+        $AUTOLOAD = $1;
+        my $attr = "\e[" . $ATTRIBUTES{lc $2} . 'm';
         eval qq {
             sub $AUTOLOAD {
                 if (\$AUTORESET && \@_) {

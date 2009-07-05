@@ -148,4 +148,6 @@ THANKS
   To openmethods.com voice solutions for contributing PUSHCOLOR, POPCOLOR,
   and LOCALCOLOR support.
 
+  To Tim Bellinghausen for the AUTOLOAD taint fix for Perl 5.10.
+
   To Larry Wall, as always, for Perl.

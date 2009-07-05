@@ -1,3 +1,9 @@
+2009-07-04  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm (AUTOLOAD): Untaint $AUTOLOAD, required by Perl
+	5.10 when running in taint mode.  Thanks, Tim Bellinghausen.
+	* t/basic.t: Two new tests for AUTOLOAD error handling.
+
 2009-02-28  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 2.00 released.
