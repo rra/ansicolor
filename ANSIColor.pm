@@ -314,8 +314,8 @@ uncolor() performs the opposite translation, turning escape sequences
 into a list of strings.
 
 colorstrip() removes all color escape sequences from the provided strings,
-returning the strings stripped of color separately in array context or
-joined together in scalar context.
+returning the modified strings separately in array context or joined
+together in scalar context.  Its arguments are not modified.
 
 The recognized non-color attributes are clear, reset, bold, dark, faint,
 underline, underscore, blink, reverse, and concealed.  Clear and reset
