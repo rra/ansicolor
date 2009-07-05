@@ -10,7 +10,6 @@
 	the module since it's getting rather long.
 	(colorstrip): New function to remove ANSI color codes from
 	strings.  Thanks, Paul Miller.
-
 	* t/basic.t: New tests for colorstrip.
 
 	* ANSIColor.pm (AUTOLOAD): Untaint $AUTOLOAD, required by Perl
