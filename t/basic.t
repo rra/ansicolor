@@ -9,7 +9,7 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 43;
+use Test::More tests => 45;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
@@ -46,6 +46,10 @@ delete $ENV{ANSI_COLORS_DISABLED};
 
 # Make sure DARK is exported.  This was omitted in versions prior to 1.07.
 is ((DARK "testing"), "\e[2mtesting\e[0m", 'DARK');
+
+# Check faint as a synonym for dark.
+is (colored ('test', 'faint'), "\e[2mtest\e[0m", 'colored supports faint');
+is ((FAINT "test"), "\e[2mtest\e[0m", '...and the FAINT constant works');
 
 # Test colored with 0 and EACHLINE.
 $Term::ANSIColor::EACHLINE = "\n";

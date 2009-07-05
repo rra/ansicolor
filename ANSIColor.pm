@@ -17,7 +17,7 @@
 package Term::ANSIColor;
 require 5.001;
 
-$VERSION = '2.01';
+$VERSION = '2.02';
 
 use strict;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
@@ -26,10 +26,10 @@ use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
 
 use Exporter ();
 BEGIN {
-    @COLORLIST   = qw(CLEAR RESET BOLD DARK UNDERLINE UNDERSCORE BLINK REVERSE
-                      CONCEALED BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE
-                      ON_BLACK ON_RED ON_GREEN ON_YELLOW ON_BLUE ON_MAGENTA
-                      ON_CYAN ON_WHITE);
+    @COLORLIST   = qw(CLEAR RESET BOLD DARK FAINT UNDERLINE UNDERSCORE BLINK
+                      REVERSE CONCEALED BLACK RED GREEN YELLOW BLUE MAGENTA
+                      CYAN WHITE ON_BLACK ON_RED ON_GREEN ON_YELLOW ON_BLUE
+                      ON_MAGENTA ON_CYAN ON_WHITE);
     @ISA         = qw(Exporter);
     @EXPORT      = qw(color colored);
     @EXPORT_OK   = qw(uncolor colorstrip);
@@ -357,11 +357,11 @@ $Term::ANSIColor::EACHLINE to C<"\n"> to use this feature.
 =head2 Constant Interface
 
 Alternately, if you import C<:constants>, you can use the constants CLEAR,
-RESET, BOLD, DARK, UNDERLINE, UNDERSCORE, BLINK, REVERSE, CONCEALED,
-BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ON_BLACK, ON_RED,
-ON_GREEN, ON_YELLOW, ON_BLUE, ON_MAGENTA, ON_CYAN, and ON_WHITE directly.
-These are the same as color('attribute') and can be used if you prefer
-typing:
+RESET, BOLD, DARK, FAINT, UNDERLINE, UNDERSCORE, BLINK, REVERSE,
+CONCEALED, BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE,
+ON_BLACK, ON_RED, ON_GREEN, ON_YELLOW, ON_BLUE, ON_MAGENTA, ON_CYAN, and
+ON_WHITE directly.  These are the same as color('attribute') and can be
+used if you prefer typing:
 
     print BOLD BLUE ON_WHITE "Text", RESET, "\n";
 
