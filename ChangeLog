@@ -1,5 +1,7 @@
 2009-07-04  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 2.01 released.
+
 	* t/basic.t: Test error handling in color, colored, and uncolor.
 
 	* ANSIColor.pm (uncolor): When reporting errors for bad escape
