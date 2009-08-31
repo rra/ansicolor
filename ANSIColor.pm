@@ -512,18 +512,6 @@ before any color constants are used in the program.
 
 =back
 
-=head1 EXAMPLES
-
-It's sometimes useful to check attributes for validity in one place, such
-as when reading a configuration file that specifies colors.  To do that,
-run color on a possible attribute, catching any exceptions.  If it throws
-an exception, the attribute name isn't valid.
-
-    for my $attr (@attributes) {
-        eval { color ($attr) };
-        warn "$attr is not valid\n" if $@;
-    }
-
 =head1 RESTRICTIONS
 
 It would be nice if one could leave off the commas around the constants
