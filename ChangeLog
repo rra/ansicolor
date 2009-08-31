@@ -1,5 +1,7 @@
 2009-08-30  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 2.02 released.
+
 	* ANSIColor.pm: Update compatibility matrix to reflect that xterm
 	now supports blink.
 
