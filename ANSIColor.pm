@@ -562,7 +562,7 @@ helped me flesh it out:
 
               clear    bold     faint   under    blink   reverse  conceal
  ------------------------------------------------------------------------
- xterm         yes      yes      no      yes     bold      yes      yes
+ xterm         yes      yes      no      yes      yes      yes      yes
  linux         yes      yes      yes    bold      yes      yes      no
  rxvt          yes      yes      no      yes  bold/black   yes      no
  dtterm        yes      yes      yes     yes    reverse    yes      yes

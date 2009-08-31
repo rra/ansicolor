@@ -1,5 +1,8 @@
 2009-08-30  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Update compatibility matrix to reflect that xterm
+	now supports blink.
+
 	* ANSIColor.pm (colorvalid): New function to check whether an
 	attribute is known.
 	* t/basic.t: Test colorvalid.
