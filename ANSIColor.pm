@@ -32,7 +32,7 @@ BEGIN {
                       ON_MAGENTA ON_CYAN ON_WHITE);
     @ISA         = qw(Exporter);
     @EXPORT      = qw(color colored);
-    @EXPORT_OK   = qw(uncolor colorstrip);
+    @EXPORT_OK   = qw(uncolor colorstrip colorvalid);
     %EXPORT_TAGS = (constants => \@COLORLIST,
                     pushpop   => [ @COLORLIST,
                                    qw(PUSHCOLOR POPCOLOR LOCALCOLOR) ]);
@@ -235,6 +235,18 @@ sub colorstrip {
     return wantarray ? @string : join ('', @string);
 }
 
+# Given a list of color attributes (arguments for color, for instance), return
+# true if they're all valid or false if any of them are invalid.
+sub colorvalid {
+    my @codes = map { split } @_;
+    for (@codes) {
+        unless (defined $ATTRIBUTES{lc $_}) {
+            return;
+        }
+    }
+    return 1;
+}
+
 ##############################################################################
 # Module return value and documentation
 ##############################################################################
@@ -270,6 +282,10 @@ reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
     use Term::ANSIColor qw(colorstrip);
     print colorstrip '\e[1mThis is bold\e[0m', "\n";
 
+    use Term::ANSIColor qw(colorvalid);
+    my $valid = colorvalid ('blue bold', 'on_magenta');
+    print "Color string is ", $valid ? "valid\n" : "invalid\n";
+
     use Term::ANSIColor qw(:constants);
     print BOLD, BLUE, "This text is in bold blue.\n", RESET;
 
@@ -297,9 +313,9 @@ reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 =head1 DESCRIPTION
 
 This module has two interfaces, one through color() and colored() and the
-other through constants.  It also offers the utility functions uncolor()
-and colorstrip(), which have to be explicitly imported to be used (see
-L</SYNOPSIS>).
+other through constants.  It also offers the utility functions uncolor(),
+colorstrip(), and colorvalid(), which have to be explicitly imported to be
+used (see L</SYNOPSIS>).
 
 =head2 Function Interface
 
@@ -318,6 +334,9 @@ into a list of strings.
 colorstrip() removes all color escape sequences from the provided strings,
 returning the modified strings separately in array context or joined
 together in scalar context.  Its arguments are not modified.
+
+colorvalid() takes attribute strings the same as color() and returns true
+if all attributes are known and false otherwise.
 
 The recognized non-color attributes are clear, reset, bold, dark, faint,
 underline, underscore, blink, reverse, and concealed.  Clear and reset

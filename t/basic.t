@@ -9,11 +9,12 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 45;
+use Test::More tests => 47;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
-    use_ok ('Term::ANSIColor', qw/:pushpop color colored uncolor colorstrip/);
+    use_ok ('Term::ANSIColor',
+            qw/:pushpop color colored uncolor colorstrip colorvalid/);
 }
 
 # Various basic tests.
@@ -99,6 +100,12 @@ is_deeply ([ colorstrip ("\e[1m", 'bold', "\e[0m") ],
 is (colorstrip ("\e[2cSome other code\e and stray [0m stuff"),
     "\e[2cSome other code\e and stray [0m stuff",
     'colorstrip does not remove non-color stuff');
+
+# Test colorvalid.
+is (colorvalid ("blue bold dark", "blink on_green"), 1,
+    'colorvalid returns true for valid attributes');
+is (colorvalid ("green orange"), undef,
+    '...and false for invalid attributes');
 
 # Test error handling.
 my $output = eval { color 'chartreuse' };
