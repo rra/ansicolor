@@ -1,3 +1,9 @@
+2010-01-24  Jakob Ilves <illvilja@gmail.com>
+
+	* ANSIColor.pm: Add bright versions of the basic eight foreground
+	and background colors using the 9x and 10x codes, supported by
+	emulators with 16 color support.
+
 2009-08-30  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 2.02 released.
