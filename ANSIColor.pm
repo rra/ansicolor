@@ -284,6 +284,7 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
 cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
+grey ATTR
 
 =head1 SYNOPSIS
 
@@ -376,7 +377,7 @@ difficult.  The most conservative choice is to use only the regular
 colors, which are at least displayed on all emulators.  However, they will
 appear dark in sixteen-color terminal emulators, including most common
 emulators in UNIX X environments.  If you know the display is one of those
-emulators, you may wish to use the bright varients instead.  Even better,
+emulators, you may wish to use the bright variants instead.  Even better,
 offer the user a way to configure the colors for a given application to
 fit their terminal emulator.
 
@@ -415,7 +416,7 @@ The recognized bright background color attributes (colors 8 to 15) are:
   on_bright_black  on_bright_red      on_bright_green  on_bright_yellow
   on_bright_blue   on_bright_magenta  on_bright_cyan   on_bright_white
 
-For any of the above lised attributes, case is not significant.
+For any of the above listed attributes, case is not significant.
 
 Attributes, once set, last until they are unset (by printing the attribute
 C<clear> or C<reset>).  Be careful to do this, or otherwise your attribute
