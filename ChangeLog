@@ -1,3 +1,10 @@
+2010-01-24  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Reorganize the documentation and be clearer about
+	the function interface parameters.  Reword the explanation of
+	bright and regular colors, and provide some advice about which to
+	use.
+
 2010-01-24  Jakob Ilves <illvilja@gmail.com>
 
 	* ANSIColor.pm: Add bright versions of the basic eight foreground

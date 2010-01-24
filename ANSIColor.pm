@@ -17,7 +17,7 @@
 package Term::ANSIColor;
 require 5.001;
 
-$VERSION = '2.02';
+$VERSION = '3.00';
 
 use strict;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
@@ -296,7 +296,7 @@ reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
     print "This text is normal.\n";
     print colored ['yellow on_magenta'], 'Yellow on magenta.', "\n";
     print colored ['red on_bright_yellow'] 'Red on bright yellow.', "\n";
-    print colored ['bright_green on_black], 'Bright green on black.', "\n";
+    print colored ['bright_red on_black], 'Bright red on black.', "\n";
     print "\n";
 
     use Term::ANSIColor qw(uncolor);
@@ -342,91 +342,103 @@ used (see L</SYNOPSIS>).
 
 =head2 Supported Colors
 
-This module supports ANSI escape codes for both the "normal" ANSI colors
-as well as the corresponding bright colors.  These colors are sometimes
-referred to as ANSI colors 0 through 7 (normal) and 8 through 15 (bright).
+Terminal emulators that support color divide into two types: ones that
+support only eight colors, and ones that support sixteen.  This module
+provides both the ANSI escape codes for the "normal" colors, supported by
+both types, as well as the additional colors supported by sixteen-color
+emulators.  These colors are referred to as ANSI colors 0 through 7
+(normal) and 8 through 15.
 
-Even if this module supports creating escape codes for these 16 colors,
-it is worth discussing how terminal emulators tend to support them as well.
-
-In spite of being referred to as "normal" or "default", colors 0 through 7
-often are displayed in rather dark hues in most terminal emulators while
-the bright colors 8 through 15 are the ones which actually look normal.
-The "normal" white (color 7) usually is shown as pale grey, requiring
+Unfortunately, interpretation of colors 0 through 7 often depends on
+whether the emulator supports eight colors or sixteen colors.  Emulators
+that only support eight colors (such as the Linux console) will display
+colors 0 through 7 with normal brightness and ignore colors 8 through 15,
+treating them the same as white.  Emulators that support 16 colors, such
+as gnome-terminal, normally display colors 0 through 7 as dim or darker
+versions and colors 8 through 15 as normal brightness.  On such emulators,
+the "normal" white (color 7) usually is shown as pale grey, requiring
 bright white (15) to be used to get a real white color.  Bright black
-usually is a dark grey color even if some terminals display it as pure
-black.
+usually is a dark grey color, although some terminals display it as pure
+black.  Some sixteen-color terminal emulators also treat normal yellow
+(color 3) as orange or brown, and bright yellow (color 11) as yellow.
 
-There are reported to exist terminal emulators that handle yellow in an odd
-way.  In these terminal emulators the bright yellow color (ANSI color 11)
-is shown as clear yellow, while the normal yellow color (ANSI color 3) is
-not dark yellow but instead orange or brown.
+Following the normal convention of sixteen-color emulators, this module
+provides a pair of attributes for each color.  For every normal color (0
+through 7), the corresponding bright color (8 through 15) is obtained by
+prepending the string C<bright_> to the normal color name.  For example,
+C<red> is color 1 and C<bright_red> is color 9.  The same applies for
+background colors: C<on_red> is the normal color and C<on_bright_red> is
+the bright color.  Capitalize these strings for the constant interface.
 
-For every normal color attribute, the corresponding bright color attribute
-is obtained by prepending the string 'bright_' to the normal color name.
-E.g there is a dark red color with the attribute 'red' and a clear red
-variant with the attribute 'bright_red'.  The same applies for background
-colors: dark red background is obained with 'on_red' and clear red is
-obtained with 'on_bright_red'.
+There is unfortunately no way to know whether the current emulator
+supports sixteen colors or not, which makes the choice of colors
+difficult.  The most conservative choice is to use only the regular
+colors, which are at least displayed on all emulators.  However, they will
+appear dark in sixteen-color terminal emulators, including most common
+emulators in UNIX X environments.  If you know the display is one of those
+emulators, you may wish to use the bright varients instead.  Even better,
+offer the user a way to configure the colors for a given application to
+fit their terminal emulator.
+
+Support for colors 8 through 15 (the C<bright_> variants) was added in
+Term::ANSIColor 3.0.
 
 =head2 Function Interface
 
-color() takes any number of strings as arguments and considers them to be
-space-separated lists of attributes.  It then forms and returns the escape
-sequence to set those attributes.  It doesn't print it out, just returns
-it, so you'll have to print it yourself if you want to (this is so that
-you can save it as a string, pass it to something else, send it to a file
-handle, or do anything else with it that you might care to).  color()
-throws an exception if given an invalid attribute, so you can also use it
-to check attribute names for validity (see L</EXAMPLES>).
-
-uncolor() performs the opposite translation, turning escape sequences
-into a list of strings.
-
-colorstrip() removes all color escape sequences from the provided strings,
-returning the modified strings separately in array context or joined
-together in scalar context.  Its arguments are not modified.
-
-colorvalid() takes attribute strings the same as color() and returns true
-if all attributes are known and false otherwise.
-
-The recognized non-color attributes are clear, reset, bold, dark, faint,
-underline, underscore, blink, reverse, and concealed.  Clear and reset
-(reset to default attributes), dark and faint (dim and saturated), and
-underline and underscore are equivalent, so use whichever is the most
-intuitive to you.
-
-The recognized normal foreground color attributes (color 0 to 7) are:
-
-  black, red, green, yellow, blue, magenta, cyan and white.
-
-The corresponding bright foreground color attributes (color 8 to 15) are:
-
-  bright_black, bright_red,     bright_green, bright_yellow,
-  bright_blue,  bright_magenta, bright_cyan,  bright_white,
-
-The recognized normal background color attributes (color 0 to 7) are:
-
-  on_black, on_red,     on_green, on yellow,
-  on_blue,  on_magenta, on_cyan,  on_white,
-
-The recognized bright background color attributes (color 8 to 15) are:
-
-  on_bright_black, on_bright_red,     on_bright_green, on_bright_yellow,
-  on_bright_blue,  on_bright_magenta, on_bright_cyan,  on_bright_white.
-
-For any of the above lised attributes, case is not significant.
+The function interface uses attribute strings to describe the colors and
+text attributes to assign to text.  The recognized non-color attributes
+are clear, reset, bold, dark, faint, underline, underscore, blink,
+reverse, and concealed.  Clear and reset (reset to default attributes),
+dark and faint (dim and saturated), and underline and underscore are
+equivalent, so use whichever is the most intuitive to you.
 
 Note that not all attributes are supported by all terminal types, and some
 terminals may not support any of these sequences.  Dark and faint, blink,
 and concealed in particular are frequently not implemented.
 
-Attributes, once set, last until they are unset (by sending the attribute
+The recognized normal foreground color attributes (colors 0 to 7) are:
+
+  black  red  green  yellow  blue  magenta  cyan  white
+
+The corresponding bright foreground color attributes (colors 8 to 15) are:
+
+  bright_black  bright_red      bright_green  bright_yellow
+  bright_blue   bright_magenta  bright_cyan   bright_white
+
+The recognized normal background color attributes (colors 0 to 7) are:
+
+  on_black  on_red      on_green  on yellow
+  on_blue   on_magenta  on_cyan   on_white
+
+The recognized bright background color attributes (colors 8 to 15) are:
+
+  on_bright_black  on_bright_red      on_bright_green  on_bright_yellow
+  on_bright_blue   on_bright_magenta  on_bright_cyan   on_bright_white
+
+For any of the above lised attributes, case is not significant.
+
+Attributes, once set, last until they are unset (by printing the attribute
 C<clear> or C<reset>).  Be careful to do this, or otherwise your attribute
 will last after your script is done running, and people get very annoyed
 at having their prompt and typing changed to weird colors.
 
-As an aid to help with this, colored() takes a scalar as the first
+=over 4
+
+=item color(ATTR[, ATTR ...])
+
+color() takes any number of strings as arguments and considers them to be
+space-separated lists of attributes.  It then forms and returns the escape
+sequence to set those attributes.  It doesn't print it out, just returns
+it, so you'll have to print it yourself if you want to.  This is so that
+you can save it as a string, pass it to something else, send it to a file
+handle, or do anything else with it that you might care to.  color()
+throws an exception if given an invalid attribute.
+
+=item colored(STRING, ATTRIBUTES)
+
+=item colored(ATTR-REF, STRING[, STRING...])
+
+As an aid in resetting colors, colored() takes a scalar as the first
 argument and any number of attribute strings as the second argument and
 returns the scalar wrapped in escape codes so that the attributes will be
 set as requested before the string and reset to normal after the string.
@@ -445,6 +457,25 @@ default background color for the next line.  Programs like pagers can also
 be confused by attributes that span lines.  Normally you'll want to set
 $Term::ANSIColor::EACHLINE to C<"\n"> to use this feature.
 
+=item uncolor(ESCAPE)
+
+uncolor() performs the opposite translation as color(), turning escape
+sequences into a list of strings corresponding to the attributes being set
+by those sequences.
+
+=item colorstrip(STRING[, STRING ...])
+
+colorstrip() removes all color escape sequences from the provided strings,
+returning the modified strings separately in array context or joined
+together in scalar context.  Its arguments are not modified.
+
+=item colorvalid(ATTR[, ATTR ...])
+
+colorvalid() takes attribute strings the same as color() and returns true
+if all attributes are known and false otherwise.
+
+=back
+
 =head2 Constant Interface
 
 Alternately, if you import C<:constants>, you can use the following
@@ -453,10 +484,12 @@ constants directly:
   CLEAR           RESET             BOLD            DARK
   FAINT           UNDERLINE         UNDERSCORE      BLINK
   REVERSE         CONCEALED
+
   BLACK           RED               GREEN           YELLOW
   BLUE            MAGENTA           CYAN            WHITE
   BRIGHT_BLACK    BRIGHT_RED        BRIGHT_GREEN    BRIGHT_YELLOW
   BRIGHT_BLUE     BRIGHT_MAGENTA    BRIGHT_CYAN     BRIGHT_WHITE
+
   ON_BLACK        ON_RED            ON_GREEN        ON_YELLOW
   ON_BLUE         ON_MAGENTA        ON_CYAN         ON_WHITE
   ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
