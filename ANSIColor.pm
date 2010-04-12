@@ -695,7 +695,7 @@ currently supported by this module.
 =head1 SEE ALSO
 
 ECMA-048 is available on-line (at least at the time of this writing) at
-L<http://www.ecma-international.org/publications/standards/ECMA-048.HTM>.
+L<http://www.ecma-international.org/publications/standards/Ecma-048.htm>.
 
 ISO 6429 is available from ISO for a charge; the author of this module
 does not own a copy of it.  Since the source material for ISO 6429 was
