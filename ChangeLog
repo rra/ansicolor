@@ -1,3 +1,8 @@
+2010-10-08  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Warn in the documentation that attributes are not
+	supported in and will not work with Perl formats.
+
 2010-04-11  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Update the URL for ECMA-048 in the documentation.
