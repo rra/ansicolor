@@ -1,3 +1,8 @@
+2011-03-13  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Fix two syntax errors in the SYNOPSIS.  Thanks,
+	Jan Hartung.
+
 2010-10-08  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Warn in the documentation that attributes are not
