@@ -1,5 +1,7 @@
 2011-07-20  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 3.01 released.
+
 	* Makefile.PL: Change the DISTNAME to Term-ANSIColor.
 
 	* ANSIColor.pm (colored): Only interpret an initial array
