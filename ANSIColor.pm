@@ -226,7 +226,7 @@ sub uncolor {
 # piped to a pager or some other program).
 sub colored {
     my ($string, @codes);
-    if (ref $_[0]) {
+    if (ref ($_[0]) && ref ($_[0]) eq 'ARRAY') {
         @codes = @{+shift};
         $string = join ('', @_);
     } else {

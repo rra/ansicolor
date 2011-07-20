@@ -155,4 +155,8 @@ THANKS
   To Jakob Ilves for sixteen-color support and the initial documentation
   of bright color issues.
 
+  To Revilo Reegiles for reporting problems with the colored function and
+  non-array references with stringification defined, and providing a test
+  case.
+
   To Larry Wall, as always, for Perl.

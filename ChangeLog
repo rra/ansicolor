@@ -1,3 +1,12 @@
+2011-07-20  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm (colored): Only interpret an initial array
+	reference as a list of colors, not any initial reference, allowing
+	the colored function to work properly on objects with
+	stringification defined.  Thanks, Revilo Reegiles.
+	* t/stringify.t: New test for proper behavior with non-array
+	references in colored.
+
 2011-03-13  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Fix two syntax errors in the SYNOPSIS.  Thanks,
