@@ -1,5 +1,7 @@
 2011-07-20  Russ Allbery  <rra@stanford.edu>
 
+	* Makefile.PL: Change the DISTNAME to Term-ANSIColor.
+
 	* ANSIColor.pm (colored): Only interpret an initial array
 	reference as a list of colors, not any initial reference, allowing
 	the colored function to work properly on objects with
