@@ -1,4 +1,5 @@
 ^ANSIColor-.*\.tar\.gz$
+^ANSIColor-.*\.tar\.gz.asc$
 ^MANIFEST\.
 ^Makefile$
 ^blib/
