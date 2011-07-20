@@ -1,7 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
-# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010
-#     Russ Allbery <rra@stanford.edu> and Zenin
+# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
+#     2011 Russ Allbery <rra@stanford.edu> and Zenin
 # PUSH/POP support submitted 2007 by openmethods.com voice solutions
 #
 # This program is free software; you may redistribute it and/or modify it
@@ -17,7 +17,7 @@
 package Term::ANSIColor;
 require 5.001;
 
-$VERSION = '3.00';
+$VERSION = '3.01';
 
 use strict;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
@@ -724,10 +724,10 @@ Russ with input from Zenin.  Russ Allbery now maintains this module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010
-Russ Allbery <rra@stanford.edu> and Zenin.  This program is free software;
-you may redistribute it and/or modify it under the same terms as Perl
-itself.
+Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
+2011 Russ Allbery <rra@stanford.edu> and Zenin.  This program is free
+software; you may redistribute it and/or modify it under the same terms as
+Perl itself.
 
 PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
 voice solutions.

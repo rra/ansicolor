@@ -6,6 +6,7 @@ README
 t/basic.t
 t/pod-spelling.t
 t/pod.t
+t/stringify.t
 tests/ansicolor
 tests/README
 tests/vt100-torture
