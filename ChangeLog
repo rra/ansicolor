@@ -1,6 +1,12 @@
 2012-03-18  Russ Allbery  <rra@stanford.edu>
 
-	* ANSIColor.pm	(AUTOLOAD): Preserve an existing value of $@ when
+	* ANSIColor.pm (AUTOLOAD): Only return pass-through behavior if
+	the function that was called was one of our constants, rather than
+	turning every unknown function in the Term::ANSIColor namespace
+	into a passthrough join function when colors are disabled.
+	* t/basic.t: Test proper error reporting with colors disabled.
+
+	* ANSIColor.pm (AUTOLOAD): Preserve an existing value of $@ when
 	generating a constant sub and restore it afterwards.  Diagnose
 	errors in creating the constant sub and die instead of ignoring
 	them.

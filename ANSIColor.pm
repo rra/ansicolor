@@ -117,10 +117,10 @@ for (reverse sort keys %ATTRIBUTES) {
 # write scripts that also work on systems without any ANSI support, like
 # Windows consoles.
 sub AUTOLOAD {
-    if (defined $ENV{ANSI_COLORS_DISABLED}) {
-        return join ('', @_);
-    }
     if ($AUTOLOAD =~ /^([\w:]*::([A-Z_]+))$/ and defined $ATTRIBUTES{lc $2}) {
+        if (defined $ENV{ANSI_COLORS_DISABLED}) {
+            return join ('', @_);
+        }
         $AUTOLOAD = $1;
         my $attr = "\e[" . $ATTRIBUTES{lc $2} . 'm';
         my $saved = $@;

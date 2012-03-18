@@ -9,7 +9,7 @@
 # under the same terms as Perl itself.
 
 use strict;
-use Test::More tests => 53;
+use Test::More tests => 54;
 
 BEGIN {
     delete $ENV{ANSI_COLORS_DISABLED};
@@ -141,3 +141,11 @@ like ($@, qr/^undefined subroutine \&Term::ANSIColor::RSET called at /,
 eval { Term::ANSIColor::reset () };
 like ($@, qr/^undefined subroutine \&Term::ANSIColor::reset called at /,
       'Correct error from a lowercase attribute');
+
+# Ensure that we still get proper error reporting for unknown constants when
+# when colors are disabled.
+$ENV{ANSI_COLORS_DISABLED} = 1;
+eval { Term::ANSIColor::RSET () };
+like ($@, qr/^undefined subroutine \&Term::ANSIColor::RSET called at /,
+      'Correct error from undefined attribute with disabled colors');
+delete $ENV{ANSI_COLORS_DISABLED};
