@@ -2,8 +2,10 @@ ANSIColor.pm
 ChangeLog
 Makefile.PL
 MANIFEST
+MYMETA.yml
 README
 t/basic.t
+t/eval.t
 t/pod-spelling.t
 t/pod.t
 t/stringify.t

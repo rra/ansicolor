@@ -1,5 +1,7 @@
 2012-03-18  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 3.02 released.
+
 	* ANSIColor.pm (AUTOLOAD): Only return pass-through behavior if
 	the function that was called was one of our constants, rather than
 	turning every unknown function in the Term::ANSIColor namespace
