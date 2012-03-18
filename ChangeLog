@@ -1,3 +1,12 @@
+2012-03-18  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Add italic and the ITALIC constant.  Document that
+	the support for it is rare.
+	* t/basic.t: Test italic and ITALIC support.
+
+	* ANSIColor.pm: Add "mistyped" as a stopword, required by the
+	latest aspell on Debian.
+
 2011-07-20  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 3.01 released.
