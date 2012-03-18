@@ -159,4 +159,10 @@ THANKS
   non-array references with stringification defined, and providing a test
   case.
 
+  To Kent Fredric for the request for italic and the report of a terminal
+  emulator that supports it.
+
+  To Simon Wistow for reporting that Term::ANSIColor was inadvertantly
+  clobbering $@ when generating constant subs.
+
   To Larry Wall, as always, for Perl.
