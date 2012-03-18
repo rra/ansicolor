@@ -2,6 +2,7 @@
 ^Term-ANSIColor-.*\.tar\.gz.asc$
 ^MANIFEST\.
 ^Makefile$
+^MYMETA\.yml$
 ^blib/
 ^pm_to_blib$
 ~$

@@ -2,7 +2,6 @@ ANSIColor.pm
 ChangeLog
 Makefile.PL
 MANIFEST
-MYMETA.yml
 README
 t/basic.t
 t/eval.t
