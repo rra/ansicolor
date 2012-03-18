@@ -123,6 +123,7 @@ sub AUTOLOAD {
     if ($AUTOLOAD =~ /^([\w:]*::([A-Z_]+))$/ and defined $ATTRIBUTES{lc $2}) {
         $AUTOLOAD = $1;
         my $attr = "\e[" . $ATTRIBUTES{lc $2} . 'm';
+        my $saved = $@;
         eval qq {
             sub $AUTOLOAD {
                 if (\$AUTORESET && \@_) {
@@ -134,6 +135,8 @@ sub AUTOLOAD {
                 }
             }
         };
+        die "failed to generate constant $1" if $@;
+        $@ = $saved;
         goto &$AUTOLOAD;
     } else {
         require Carp;

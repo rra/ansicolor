@@ -1,5 +1,11 @@
 2012-03-18  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm	(AUTOLOAD): Preserve an existing value of $@ when
+	generating a constant sub and restore it afterwards.  Diagnose
+	errors in creating the constant sub and die instead of ignoring
+	them.
+	* t/eval.t: New test for $@ preservation.
+
 	* ANSIColor.pm: Add italic and the ITALIC constant.  Document that
 	the support for it is rare.
 	* t/basic.t: Test italic and ITALIC support.
