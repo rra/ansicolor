@@ -1,5 +1,12 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm (AUTOLOAD): Support ANSI_COLORS_DISABLED in the
+	generated constant subs.  Fixes a bug where the environment
+	variable would be ignored if the constant were used before it was
+	set.
+	* t/basic.t: Test for properl ANSI_COLORS_DISABLED support in
+	generated constant subs.
+
 	* t/critic.t: New test that runs perlcritic (and perltidy) on all
 	source files and checks for violations.
 	* t/data/perlcriticrc: New file.

@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 56;
+use Test::More tests => 57;
 
 # Load the module.
 BEGIN {
@@ -56,6 +56,12 @@ is(color('blue'), q{}, 'color support for ANSI_COLORS_DISABLED');
 is(colored('testing', 'blue', 'on_red'),
     'testing', 'colored support for ANSI_COLORS_DISABLED');
 is((GREEN 'testing'), 'testing', 'Constant support for ANSI_COLORS_DISABLED');
+delete $ENV{ANSI_COLORS_DISABLED};
+
+# Earlier versions of Term::ANSIColor didn't support ANSI_COLORS_DISABLED if
+# the constant had been created before the environment variable was set.
+local $ENV{ANSI_COLORS_DISABLED} = 1;
+is((BLUE 'testing'), 'testing', 'ANSI_COLORS_DISABLED with existing constant');
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Make sure DARK is exported.  This was omitted in versions prior to 1.07.

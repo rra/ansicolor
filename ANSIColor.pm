@@ -190,7 +190,9 @@ sub AUTOLOAD {
     ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
     my $eval_result = eval qq{
         sub $AUTOLOAD {
-            if (\$AUTORESET && \@_) {
+            if (defined \$ENV{ANSI_COLORS_DISABLED}) {
+                return join q{}, \@_;
+            } elsif (\$AUTORESET && \@_) {
                 return '$escape' . join(q{}, \@_) . "\e[0m";
             } elsif (\$AUTOLOCAL && \@_) {
                 return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
