@@ -53,25 +53,39 @@ REQUIREMENTS
 
   Term::ANSIColor is written in pure Perl and has no module dependencies
   that aren't found in Perl core.  It should work with any version of Perl
-  after 5.001, although it hasn't been tested with old versions in some
+  after 5.6, although it hasn't been tested with old versions in some
   time.
 
-  The test suite requires Perl 5.6 or later and the Test::More module.  To
-  check the POD documentation, Test::Pod and Test::Pod::Coverage are also
-  required.  To check for use strict and use warnings, Test::Strict is
-  also required.  To check the minimum required version of Perl,
-  Test::MinimumVersion is also required.  To check spelling,
-  Test::Spelling and its dependencies, including a spell-checking program,
-  are required.  Spelling tests are disabled by default since spelling
-  dictionaries differ too much between systems.  To enable those tests,
-  set RRA_MAINTAINER_TESTS to a true value.
+  The test suite requires Perl and Test::More (part of Perl since 5.6.2).
+  It also makes use of additional Perl modules for some tests.  These
+  tests will be skipped automatically if the modules aren't available.  To
+  run the full set of default tests, you will need the Perl modules:
+
+      Test::MinimumVersion
+      Test::Pod
+      Test::Pod::Coverage
+      Test::Strict
+
+  and their dependencies.  These modules are all available from CPAN.
+
+  Some parts of the test suite are suppressed by default because those
+  tests are normally only useful for the maintainer.  This includes tests
+  of POD spelling and Perl coding style.  To enable those tests, set the
+  environment variable RRA_MAINTAINER_TESTS to a true value.  For these
+  tests, the additional Perl modules:
+
+      Test::Perl::Critic
+      Test::Spelling
+
+  and their dependencies as well as a spell-checking program (several are
+  supported by Test::Spelling) are required.  These modules are all
+  available from CPAN.
 
 INSTALLATION
 
   WARNING: Installation of this package will replace the Term::ANSIColor
-  that came with Perl for Perl 5.6.0 or later.  Term::ANSIColor that came
-  with Perl.  You may want to save a backup copy of the standard version
-  first.
+  that came with Perl.  You may want to save a backup copy of the standard
+  version first.
 
   Follow the standard installation procedure for Perl modules, which is to
   type the following commands:

@@ -15,81 +15,121 @@
 ##############################################################################
 
 package Term::ANSIColor;
-require 5.001;
 
-$VERSION = '3.02';
-
+use 5.006;
 use strict;
 use warnings;
-use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
-            @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION %ATTRIBUTES
-            %ATTRIBUTES_R);
 
+use Carp qw(croak);
 use Exporter ();
+
+# use Exporter plus @ISA instead of use base for 5.6 compatibility.
+## no critic (ClassHierarchies::ProhibitExplicitISA)
+
+# Declare variables that should be set in BEGIN for robustness.
+## no critic (Modules::ProhibitAutomaticExportation)
+our (@COLORLIST, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA, $VERSION);
+
+# We use autoloading, which sets this variable to the name of the called sub.
+our $AUTOLOAD;
+
+# Set $VERSION and everything export-related in a BEGIN block for robustness
+# against circular module loading (not that we load any modules, but
+# consistency is good).
 BEGIN {
+    $VERSION = '3.02';
+
+    # All of the supported constants, used in %EXPORT_TAGS.
     @COLORLIST = qw(
-        CLEAR           RESET             BOLD            DARK
-        FAINT           ITALIC            UNDERLINE       UNDERSCORE
-        BLINK           REVERSE           CONCEALED
+      CLEAR           RESET             BOLD            DARK
+      FAINT           ITALIC            UNDERLINE       UNDERSCORE
+      BLINK           REVERSE           CONCEALED
 
-        BLACK           RED               GREEN           YELLOW
-        BLUE            MAGENTA           CYAN            WHITE
-        ON_BLACK        ON_RED            ON_GREEN        ON_YELLOW
-        ON_BLUE         ON_MAGENTA        ON_CYAN         ON_WHITE
+      BLACK           RED               GREEN           YELLOW
+      BLUE            MAGENTA           CYAN            WHITE
+      ON_BLACK        ON_RED            ON_GREEN        ON_YELLOW
+      ON_BLUE         ON_MAGENTA        ON_CYAN         ON_WHITE
 
-        BRIGHT_BLACK    BRIGHT_RED        BRIGHT_GREEN    BRIGHT_YELLOW
-        BRIGHT_BLUE     BRIGHT_MAGENTA    BRIGHT_CYAN     BRIGHT_WHITE
-        ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
-        ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
+      BRIGHT_BLACK    BRIGHT_RED        BRIGHT_GREEN    BRIGHT_YELLOW
+      BRIGHT_BLUE     BRIGHT_MAGENTA    BRIGHT_CYAN     BRIGHT_WHITE
+      ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
+      ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
     );
+
+    # Exported symbol configuration.
     @ISA         = qw(Exporter);
     @EXPORT      = qw(color colored);
     @EXPORT_OK   = qw(uncolor colorstrip colorvalid);
-    %EXPORT_TAGS = (constants => \@COLORLIST,
-                    pushpop   => [ @COLORLIST,
-                                   qw(PUSHCOLOR POPCOLOR LOCALCOLOR) ]);
-    Exporter::export_ok_tags ('pushpop');
+    %EXPORT_TAGS = (
+        constants => \@COLORLIST,
+        pushpop   => [@COLORLIST, qw(PUSHCOLOR POPCOLOR LOCALCOLOR)]
+    );
+    Exporter::export_ok_tags('pushpop');
 }
+
+##############################################################################
+# Package variables
+##############################################################################
+
+# If this is set, any color changes will implicitly push the current color
+# onto the stack and then pop it at the end of the constant sequence, just as
+# if LOCALCOLOR were used.
+our $AUTOLOCAL;
+
+# Caller sets this to force a reset at the end of each constant sequence.
+our $AUTORESET;
+
+# Caller sets this to force colors to be reset at the end of each line.
+our $EACHLINE;
 
 ##############################################################################
 # Internal data structures
 ##############################################################################
 
-%ATTRIBUTES = ('clear'          => 0,
-               'reset'          => 0,
-               'bold'           => 1,
-               'dark'           => 2,
-               'faint'          => 2,
-               'italic'         => 3,
-               'underline'      => 4,
-               'underscore'     => 4,
-               'blink'          => 5,
-               'reverse'        => 7,
-               'concealed'      => 8,
+# All supported attributes, including aliases.
+#<<<
+our %ATTRIBUTES = (
+    'clear'          => 0,
+    'reset'          => 0,
+    'bold'           => 1,
+    'dark'           => 2,
+    'faint'          => 2,
+    'italic'         => 3,
+    'underline'      => 4,
+    'underscore'     => 4,
+    'blink'          => 5,
+    'reverse'        => 7,
+    'concealed'      => 8,
 
-               'black'          => 30,   'on_black'          => 40,
-               'red'            => 31,   'on_red'            => 41,
-               'green'          => 32,   'on_green'          => 42,
-               'yellow'         => 33,   'on_yellow'         => 43,
-               'blue'           => 34,   'on_blue'           => 44,
-               'magenta'        => 35,   'on_magenta'        => 45,
-               'cyan'           => 36,   'on_cyan'           => 46,
-               'white'          => 37,   'on_white'          => 47,
+    'black'          => 30,   'on_black'          => 40,
+    'red'            => 31,   'on_red'            => 41,
+    'green'          => 32,   'on_green'          => 42,
+    'yellow'         => 33,   'on_yellow'         => 43,
+    'blue'           => 34,   'on_blue'           => 44,
+    'magenta'        => 35,   'on_magenta'        => 45,
+    'cyan'           => 36,   'on_cyan'           => 46,
+    'white'          => 37,   'on_white'          => 47,
 
-               'bright_black'   => 90,   'on_bright_black'   => 100,
-               'bright_red'     => 91,   'on_bright_red'     => 101,
-               'bright_green'   => 92,   'on_bright_green'   => 102,
-               'bright_yellow'  => 93,   'on_bright_yellow'  => 103,
-               'bright_blue'    => 94,   'on_bright_blue'    => 104,
-               'bright_magenta' => 95,   'on_bright_magenta' => 105,
-               'bright_cyan'    => 96,   'on_bright_cyan'    => 106,
-               'bright_white'   => 97,   'on_bright_white'   => 107,
-               );
+    'bright_black'   => 90,   'on_bright_black'   => 100,
+    'bright_red'     => 91,   'on_bright_red'     => 101,
+    'bright_green'   => 92,   'on_bright_green'   => 102,
+    'bright_yellow'  => 93,   'on_bright_yellow'  => 103,
+    'bright_blue'    => 94,   'on_bright_blue'    => 104,
+    'bright_magenta' => 95,   'on_bright_magenta' => 105,
+    'bright_cyan'    => 96,   'on_bright_cyan'    => 106,
+    'bright_white'   => 97,   'on_bright_white'   => 107,
+);
+#>>>
 
 # Reverse lookup.  Alphabetically first name for a sequence is preferred.
-for (reverse sort keys %ATTRIBUTES) {
-    $ATTRIBUTES_R{$ATTRIBUTES{$_}} = $_;
+our %ATTRIBUTES_R;
+for my $attr (reverse sort keys %ATTRIBUTES) {
+    $ATTRIBUTES_R{ $ATTRIBUTES{$attr} } = $attr;
 }
+
+# Stores the current color stack maintained by PUSHCOLOR and POPCOLOR.  This
+# is global and therefore not threadsafe.
+our @COLORSTACK;
 
 ##############################################################################
 # Implementation (constant form)
@@ -117,60 +157,104 @@ for (reverse sort keys %ATTRIBUTES) {
 # arguments without adding any escape sequences.  This is to make it easier to
 # write scripts that also work on systems without any ANSI support, like
 # Windows consoles.
+#
+## no critic (ClassHierarchies::ProhibitAutoloading)
+## no critic (Subroutines::RequireArgUnpacking)
 sub AUTOLOAD {
-    if ($AUTOLOAD =~ /^([\w:]*::([A-Z_]+))$/ and defined $ATTRIBUTES{lc $2}) {
-        if (defined $ENV{ANSI_COLORS_DISABLED}) {
-            return join ('', @_);
-        }
-        $AUTOLOAD = $1;
-        my $attr = "\e[" . $ATTRIBUTES{lc $2} . 'm';
-        my $saved = $@;
-        eval qq {
-            sub $AUTOLOAD {
-                if (\$AUTORESET && \@_) {
-                    return '$attr' . join ('', \@_) . "\e[0m";
-                } elsif (\$AUTOLOCAL && \@_) {
-                    return PUSHCOLOR ('$attr') . join ('', \@_) . POPCOLOR;
-                } else {
-                    return '$attr' . join ('', \@_);
-                }
-            }
-        };
-        die "failed to generate constant $1" if $@;
-        $@ = $saved;
-        goto &$AUTOLOAD;
-    } else {
-        require Carp;
-        Carp::croak ("undefined subroutine &$AUTOLOAD called");
+    my ($sub, $attr) = $AUTOLOAD =~ m{ \A ([\w:]*::([[:upper:]_]+)) \z }xms;
+
+    # Check if we were called with something that doesn't look like an
+    # attribute.
+    if (!$attr || !defined $ATTRIBUTES{ lc $attr }) {
+        croak("undefined subroutine &$AUTOLOAD called");
     }
+
+    # If colors are disabled, just return the input.  Do this without
+    # installing a sub for (marginal, unbenchmarked) speed.
+    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+        return join q{}, @_;
+    }
+
+    # Figure out the ANSI string to set the desired attribute.
+    my $escape = "\e[" . $ATTRIBUTES{ lc $attr } . 'm';
+
+    # Save the current value of $@.  We can't just use local since we want to
+    # restore it before dispatching to the newly-created sub.  (The caller may
+    # be colorizing output that includes $@.)
+    my $eval_err = $@;
+
+    # Generate the constant sub, which should still recognize some of our
+    # package variables.  Use string eval to avoid a dependency on
+    # Sub::Install, even though it makes it somewhat less readable.
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
+    ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
+    my $eval_result = eval qq{
+        sub $AUTOLOAD {
+            if (\$AUTORESET && \@_) {
+                return '$escape' . join(q{}, \@_) . "\e[0m";
+            } elsif (\$AUTOLOCAL && \@_) {
+                return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
+            } else {
+                return '$escape' . join(q{}, \@_);
+            }
+        }
+        1;
+    };
+
+    # Failure is an internal error, not a problem with the caller.
+    ## no critic (ErrorHandling::RequireCarping)
+    if (!$eval_result || $@) {
+        die "failed to generate constant $attr: $@";
+    }
+
+    # Restore $@.
+    ## no critic (Variables::RequireLocalizedPunctuationVars)
+    $@ = $eval_err;
+
+    # Dispatch to the newly-created sub.
+    ## no critic (References::ProhibitDoubleSigils)
+    goto &$AUTOLOAD;
 }
+## use critic (Subroutines::RequireArgUnpacking)
 
 # Append a new color to the top of the color stack and return the top of
 # the stack.
 sub PUSHCOLOR {
     my ($text) = @_;
-    my ($color) = ($text =~ m/^((?:\e\[[\d;]+m)+)/);
+
+    # Extract any number of color-setting escape sequences from the start of
+    # the string.
+    my ($color) = $text =~ m{ \A ( (?:\e\[ [\d;]+ m)+ ) }xms;
+
+    # If we already have a stack, append these escapes to the set from the top
+    # of the stack.  This way, each position in the stack stores the complete
+    # enabled colors for that stage, at the cost of some potential
+    # inefficiency.
     if (@COLORSTACK) {
         $color = $COLORSTACK[-1] . $color;
     }
-    push (@COLORSTACK, $color);
+
+    # Push the color onto the stack.
+    push @COLORSTACK, $color;
     return $text;
 }
 
 # Pop the color stack and return the new top of the stack (or reset, if
 # the stack is empty).
 sub POPCOLOR {
+    my (@text) = @_;
     pop @COLORSTACK;
     if (@COLORSTACK) {
-        return $COLORSTACK[-1] . join ('', @_);
+        return $COLORSTACK[-1] . join q{}, @text;
     } else {
-        return RESET (@_);
+        return RESET(@text);
     }
 }
 
 # Surround arguments with a push and a pop.
 sub LOCALCOLOR {
-    return PUSHCOLOR (join ('', @_)) . POPCOLOR ();
+    my (@text) = @_;
+    return PUSHCOLOR(join q{}, @text) . POPCOLOR();
 }
 
 ##############################################################################
@@ -179,74 +263,100 @@ sub LOCALCOLOR {
 
 # Return the escape code for a given set of color attributes.
 sub color {
-    return '' if defined $ENV{ANSI_COLORS_DISABLED};
-    my @codes = map { split } @_;
-    my $attribute = '';
-    foreach (@codes) {
-        $_ = lc $_;
-        unless (defined $ATTRIBUTES{$_}) {
-            require Carp;
-            Carp::croak ("Invalid attribute name $_");
-        }
-        $attribute .= $ATTRIBUTES{$_} . ';';
+    my (@codes) = @_;
+    @codes = map { split } @codes;
+
+    # Return the empty string if colors are disabled.
+    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+        return q{};
     }
+
+    # Build the attribute string from semicolon-separated numbers.
+    my $attribute = q{};
+    for my $code (@codes) {
+        $code = lc $code;
+        if (!defined $ATTRIBUTES{$code}) {
+            croak("Invalid attribute name $code");
+        }
+        $attribute .= $ATTRIBUTES{$code} . q{;};
+    }
+
+    # We added one too many semicolons for simplicity.  Remove the last one.
     chop $attribute;
-    return ($attribute ne '') ? "\e[${attribute}m" : undef;
+
+    # Return undef if there were no attributes.
+    return ($attribute ne q{}) ? "\e[${attribute}m" : undef;
 }
 
 # Return a list of named color attributes for a given set of escape codes.
 # Escape sequences can be given with or without enclosing "\e[" and "m".  The
 # empty escape sequence '' or "\e[m" gives an empty list of attrs.
 sub uncolor {
+    my (@escapes) = @_;
     my (@nums, @result);
-    for (@_) {
-        my $escape = $_;
-        $escape =~ s/^\e\[//;
-        $escape =~ s/m$//;
-        unless ($escape =~ /^((?:\d+;)*\d*)$/) {
-            require Carp;
-            Carp::croak ("Bad escape sequence $escape");
+
+    # Walk the list of escapes and build a list of attribute numbers.
+    for my $escape (@escapes) {
+        $escape =~ s{ \A \e\[ }{}xms;
+        $escape =~ s{ m \z }   {}xms;
+        my ($attrs) = $escape =~ m{ \A ((?:\d+;)* \d*) \z }xms;
+        if (!defined $attrs) {
+            croak("Bad escape sequence $escape");
         }
-        push (@nums, split (/;/, $1));
+        push @nums, split m{;}xms, $attrs;
     }
-    for (@nums) {
-        $_ += 0; # Strip leading zeroes
-        my $name = $ATTRIBUTES_R{$_};
+
+    # Now, walk the list of numbers and convert them to attribute names.
+    for my $num (@nums) {
+        $num += 0;    # Strip leading zeroes
+        my $name = $ATTRIBUTES_R{$num};
         if (!defined $name) {
-            require Carp;
-            Carp::croak ("No name for escape sequence $_" );
+            croak("No name for escape sequence $num");
         }
-        push (@result, $name);
+        push @result, $name;
     }
+
+    # Return the attribute names.
     return @result;
 }
 
 # Given a string and a set of attributes, returns the string surrounded by
 # escape codes to set those attributes and then clear them at the end of the
 # string.  The attributes can be given either as an array ref as the first
-# argument or as a list as the second and subsequent arguments.  If $EACHLINE
-# is set, insert a reset before each occurrence of the string $EACHLINE and
-# the starting attribute code after the string $EACHLINE, so that no attribute
-# crosses line delimiters (this is often desirable if the output is to be
-# piped to a pager or some other program).
+# argument or as a list as the second and subsequent arguments.
+#
+# If $EACHLINE is set, insert a reset before each occurrence of the string
+# $EACHLINE and the starting attribute code after the string $EACHLINE, so
+# that no attribute crosses line delimiters (this is often desirable if the
+# output is to be piped to a pager or some other program).
 sub colored {
+    my ($first, @rest) = @_;
     my ($string, @codes);
-    if (ref ($_[0]) && ref ($_[0]) eq 'ARRAY') {
-        @codes = @{+shift};
-        $string = join ('', @_);
+    if (ref($first) && ref($first) eq 'ARRAY') {
+        @codes = @{$first};
+        $string = join q{}, @rest;
     } else {
-        $string = shift;
-        @codes = @_;
+        $string = $first;
+        @codes  = @rest;
     }
-    return $string if defined $ENV{ANSI_COLORS_DISABLED};
+
+    # Return the string unmolested if colors are disabled.
+    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+        return $string;
+    }
+
+    # Find the attribute string for our colors.
+    my $attr = color(@codes);
+
+    # If $EACHLINE is defined, split the string on line boundaries, suppress
+    # empty segments, and then colorize each of the line sections.
     if (defined $EACHLINE) {
-        my $attr = color (@codes);
-        return join '',
-            map { ($_ ne $EACHLINE) ? $attr . $_ . "\e[0m" : $_ }
-                grep { length ($_) > 0 }
-                    split (/(\Q$EACHLINE\E)/, $string);
+        my @text = map { ($_ ne $EACHLINE) ? $attr . $_ . "\e[0m" : $_ }
+          grep { length($_) > 0 }
+          split m{ (\Q$EACHLINE\E) }xms, $string;
+        return join q{}, @text;
     } else {
-        return color (@codes) . $string . "\e[0m";
+        return $attr . $string . "\e[0m";
     }
 }
 
@@ -256,17 +366,18 @@ sub colored {
 sub colorstrip {
     my (@string) = @_;
     for my $string (@string) {
-        $string =~ s/\e\[[\d;]*m//g;
+        $string =~ s{ \e\[ [\d;]* m }{}xmsg;
     }
-    return wantarray ? @string : join ('', @string);
+    return wantarray ? @string : join q{}, @string;
 }
 
 # Given a list of color attributes (arguments for color, for instance), return
 # true if they're all valid or false if any of them are invalid.
 sub colorvalid {
-    my @codes = map { split } @_;
-    for (@codes) {
-        unless (defined $ATTRIBUTES{lc $_}) {
+    my (@codes) = @_;
+    @codes = map { split } @codes;
+    for my $code (@codes) {
+        if (!defined $ATTRIBUTES{ lc $code }) {
             return;
         }
     }
@@ -289,7 +400,7 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
 cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
-grey ATTR urxvt mistyped
+grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin
 
 =head1 SYNOPSIS
 

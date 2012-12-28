@@ -1,5 +1,18 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/critic.t: New test that runs perlcritic (and perltidy) on all
+	source files and checks for violations.
+	* t/data/perlcriticrc: New file.
+	* t/data/perltidyrc: New file.
+	* ANSIColor.pm: Substantial reworking to improve coding style and
+	layout.  Update to Perl 5.6 syntax.  Unconditionally load Carp for
+	simplicity.
+	* Makefile.PL: Require Perl 5.6.  Remove conditionals for
+	configuration that was not supported prior to Perl 5.6.
+	* t/basic.t: Update coding style.
+	* t/eval.t: Likewise.
+	* t/stringify.t: Likewise.
+
 	* t/minimum-version.t: New test for the minimum required version
 	of Perl.
 
