@@ -756,9 +756,6 @@ return the empty string or pass through the original text as appropriate.
 This is intended to support easy use of scripts using this module on
 platforms that don't support ANSI escape sequences.
 
-For it to have its proper effect, this environment variable must be set
-before any color constants are used in the program.
-
 =back
 
 =head1 RESTRICTIONS
