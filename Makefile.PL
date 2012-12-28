@@ -1,4 +1,12 @@
 # Makefile.PL for Term::ANSIColor.
+#
+# Copyright 1997, 1998, 2000, 2009, 2011, 2012 Russ Allbery <rra@stanford.edu>
+#
+# This program is free software; you may redistribute it and/or modify it
+# under the same terms as Perl itself.
+
+use strict;
+use warnings;
 
 use ExtUtils::MakeMaker;
 

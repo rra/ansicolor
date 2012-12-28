@@ -57,7 +57,8 @@ REQUIREMENTS
   time.
 
   The test suite requires Perl 5.6 or later and the Test::More module.  To
-  check the POD documentation, Test::Pod is also required.  To check
+  check the POD documentation, Test::Pod is also required.  To check for
+  use strict and use warnings, Test::Strict is also required.  To check
   spelling, Test::Spelling and its dependencies, including a
   spell-checking program, are required.  Spelling tests are disabled by
   default since spelling dictionaries differ too much between systems.  To

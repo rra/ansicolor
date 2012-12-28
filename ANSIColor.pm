@@ -20,6 +20,7 @@ require 5.001;
 $VERSION = '3.02';
 
 use strict;
+use warnings;
 use vars qw($AUTOLOAD $AUTOLOCAL $AUTORESET @COLORLIST @COLORSTACK $EACHLINE
             @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION %ATTRIBUTES
             %ATTRIBUTES_R);
