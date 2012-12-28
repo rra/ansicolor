@@ -1,5 +1,7 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/pod-coverage.t: New test for POD coverage.
+
 	* ANSIColor.pm: Add use warnings.
 	* Makefile.PL: Add use strict and use warnings.
 	* t/strict.t: New test for strict and warnings in all code.
