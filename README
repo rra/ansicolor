@@ -56,13 +56,12 @@ REQUIREMENTS
   after 5.001, although it hasn't been tested with old versions in some
   time.
 
-  The test suite requires the Test::More module.  To check the POD
-  documentation, Test::Pod is also required.  To check spelling,
-  Pod::Spell and either aspell or ispell with the american dictionary are
-  also required.  The user's path is searched for aspell or ispell and
-  aspell is preferred.  Spelling tests are disabled by default since
-  spelling dictionaries differ too much between systems.  To enable those
-  tests, set RRA_MAINTAINER_TESTS to a true value.
+  The test suite requires Perl 5.6 or later and the Test::More module.  To
+  check the POD documentation, Test::Pod is also required.  To check
+  spelling, Test::Spelling and its dependencies, including a
+  spell-checking program, are required.  Spelling tests are disabled by
+  default since spelling dictionaries differ too much between systems.  To
+  enable those tests, set RRA_MAINTAINER_TESTS to a true value.
 
 INSTALLATION
 
