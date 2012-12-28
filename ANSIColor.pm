@@ -666,6 +666,18 @@ previous attributes set by the argument of a prior PUSHCOLOR.  LOCALCOLOR
 surrounds its argument in a PUSHCOLOR and POPCOLOR so that the color
 resets afterward.
 
+If $Term::ANSIColor::AUTOLOCAL is set, each sequence of color constants
+will be implicitly preceded by LOCALCOLOR.  In other words, the following:
+
+    {
+        local $Term::ANSIColor::AUTOLOCAL = 1;
+        print BLUE "Text\n";
+    }
+
+is equivalent to:
+
+    print LOCALCOLOR BLUE "Text\n";
+
 When using PUSHCOLOR, POPCOLOR, and LOCALCOLOR, it's particularly
 important to not put commas between the constants.
 
