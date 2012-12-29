@@ -414,7 +414,7 @@ grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin
     print "This text is bold blue.\n";
     print color 'reset';
     print "This text is normal.\n";
-    print colored ("Yellow on magenta.", 'yellow on_magenta'), "\n";
+    print colored("Yellow on magenta.", 'yellow on_magenta'), "\n";
     print "This text is normal.\n";
     print colored ['yellow on_magenta'], 'Yellow on magenta.', "\n";
     print colored ['red on_bright_yellow'], 'Red on bright yellow.', "\n";
@@ -422,13 +422,13 @@ grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin
     print "\n";
 
     use Term::ANSIColor qw(uncolor);
-    print uncolor ('01;31'), "\n";
+    print uncolor('01;31'), "\n";
 
     use Term::ANSIColor qw(colorstrip);
     print colorstrip '\e[1mThis is bold\e[0m', "\n";
 
     use Term::ANSIColor qw(colorvalid);
-    my $valid = colorvalid ('blue bold', 'on_magenta');
+    my $valid = colorvalid('blue bold', 'on_magenta');
     print "Color string is ", $valid ? "valid\n" : "invalid\n";
 
     use Term::ANSIColor qw(:constants);
@@ -650,7 +650,8 @@ either use say() (in newer versions of Perl) or print the newline with a
 separate print statement to avoid confusing the terminal.
 
 If $Term::ANSIColor::AUTOLOCAL is set (see below), it takes precedence
-over $Term::ANSIColor::AUTORESET, and the latter is ignored.
+over $Term::ANSIColor::AUTORESET, and the latter is ignored.  This
+behavior changed in Term::ANSIColor 4.00.
 
 The subroutine interface has the advantage over the constants interface in
 that only two subroutines are exported into your namespace, versus
@@ -664,13 +665,13 @@ bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
 
 =head2 The Color Stack
 
-As of Term::ANSIColor 2.0, you can import C<:pushpop> and maintain a stack
-of colors using PUSHCOLOR, POPCOLOR, and LOCALCOLOR.  PUSHCOLOR takes the
-attribute string that starts its argument and pushes it onto a stack of
-attributes.  POPCOLOR removes the top of the stack and restores the
-previous attributes set by the argument of a prior PUSHCOLOR.  LOCALCOLOR
-surrounds its argument in a PUSHCOLOR and POPCOLOR so that the color
-resets afterward.
+As of Term::ANSIColor 2.00, you can import C<:pushpop> and maintain a
+stack of colors using PUSHCOLOR, POPCOLOR, and LOCALCOLOR.  PUSHCOLOR
+takes the attribute string that starts its argument and pushes it onto a
+stack of attributes.  POPCOLOR removes the top of the stack and restores
+the previous attributes set by the argument of a prior PUSHCOLOR.
+LOCALCOLOR surrounds its argument in a PUSHCOLOR and POPCOLOR so that the
+color resets afterward.
 
 If $Term::ANSIColor::AUTOLOCAL is set, each sequence of color constants
 will be implicitly preceded by LOCALCOLOR.  In other words, the following:
