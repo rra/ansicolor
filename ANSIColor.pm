@@ -205,7 +205,7 @@ sub AUTOLOAD {
 
     # Failure is an internal error, not a problem with the caller.
     ## no critic (ErrorHandling::RequireCarping)
-    if (!$eval_result || $@) {
+    if (!$eval_result) {
         die "failed to generate constant $attr: $@";
     }
 

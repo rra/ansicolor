@@ -1,5 +1,14 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/strict.t: Add test suite coverage checking if running the test
+	in maintainer mode.
+	* ANSIColor.pm (AUTOLOAD): Drop a redundant check on the result of
+	eval so that 100% test coverage can be achieved.
+	* t/basic.t: Remove taint checking, which is incompatible with
+	coverage testing.  Add tests to achieve 100% coverage.
+	* t/eval.t: Remove taint checking.
+	* t/stringify.t: Likewise.
+
 	* ANSIColor.pm: Document $Term::ANSIColor::AUTOLOCAL.
 
 	* ANSIColor.pm (AUTOLOAD): Support ANSI_COLORS_DISABLED in the

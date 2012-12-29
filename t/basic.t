@@ -1,4 +1,4 @@
-#!/usr/bin/perl -T
+#!/usr/bin/perl
 #
 # Basic test suite for the Term::ANSIColor Perl module.
 #
@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 57;
+use Test::More tests => 104;
 
 # Load the module.
 BEGIN {
@@ -24,6 +24,9 @@ BEGIN {
 is(color('blue on_green', 'bold'), "\e[34;42;1m", 'Simple attributes');
 is(colored('testing', 'blue', 'bold'), "\e[34;1mtesting\e[0m", 'colored');
 is((BLUE BOLD 'testing'), "\e[34m\e[1mtesting", 'Constants');
+
+# color should return undef if there were no attributes.
+is(color(), undef, 'color returns undef with no attributes');
 
 # Autoreset after the end of a command string.
 $Term::ANSIColor::AUTORESET = 1;
@@ -59,7 +62,8 @@ is((GREEN 'testing'), 'testing', 'Constant support for ANSI_COLORS_DISABLED');
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Earlier versions of Term::ANSIColor didn't support ANSI_COLORS_DISABLED if
-# the constant had been created before the environment variable was set.
+# the constant had been created before the environment variable was set.  Test
+# all the ones we're going to use to get full test coverage.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
 is((BLUE 'testing'), 'testing', 'ANSI_COLORS_DISABLED with existing constant');
 delete $ENV{ANSI_COLORS_DISABLED};
@@ -105,7 +109,7 @@ is((POPCOLOR 'text'),       "\e[31m\e[42mtext", '...and POPCOLOR works');
 is((LOCALCOLOR GREEN ON_BLUE 'text'),
     "\e[32m\e[44mtext\e[31m\e[42m", 'LOCALCOLOR');
 $Term::ANSIColor::AUTOLOCAL = 1;
-is((ON_BLUE 'text'), "\e[44mtext\e[31m\e[42m", 'AUTOLOCAL');
+is((BLUE 'text'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL');
 $Term::ANSIColor::AUTOLOCAL = 0;
 is((POPCOLOR 'text'), "\e[0mtext", 'POPCOLOR with empty stack');
 
@@ -219,3 +223,75 @@ like(
     'Correct error from undefined attribute with disabled colors'
 );
 delete $ENV{ANSI_COLORS_DISABLED};
+
+# These are somewhat redundant, but they ensure we test all the branches in
+# our generated constant subs so that we can use Test::Strict to check test
+# suite coverage.
+is((BOLD 't'),          "\e[1mt",   'Basic constant works for BOLD');
+is((GREEN 't'),         "\e[32mt",  '...and for GREEN');
+is((DARK 't'),          "\e[2mt",   '...and for DARK');
+is((FAINT 't'),         "\e[2mt",   '...and for FAINT');
+is((BRIGHT_RED 't'),    "\e[91mt",  '...and for BRIGHT_RED');
+is((ON_BRIGHT_RED 't'), "\e[101mt", '...and for ON_BRIGHT_RED');
+is((ITALIC 't'),        "\e[3mt",   '...and for ITALIC');
+is((RED 't'),           "\e[31mt",  '...and for RED');
+is((ON_GREEN 't'),      "\e[42mt",  '...and for ON_GREEN');
+is((ON_BLUE 't'),       "\e[44mt",  '...and for ON_BLUE');
+is((RESET 't'),         "\e[0mt",   '...and for RESET');
+
+# Do the same for disabled colors.
+local $ENV{ANSI_COLORS_DISABLED} = 1;
+is(BOLD,          q{}, 'ANSI_COLORS_DISABLED works for BOLD');
+is(GREEN,         q{}, '...and for GREEN');
+is(DARK,          q{}, '...and for DARK');
+is(FAINT,         q{}, '...and for FAINT');
+is(BRIGHT_RED,    q{}, '...and for BRIGHT_RED');
+is(ON_BRIGHT_RED, q{}, '...and for ON_BRIGHT_RED');
+is(ITALIC,        q{}, '...and for ITALIC');
+is(RED,           q{}, '...and for RED');
+is(ON_GREEN,      q{}, '...and for ON_GREEN');
+is(ON_BLUE,       q{}, '...and for ON_BLUE');
+is(RESET,         q{}, '...and for RESET');
+delete $ENV{ANSI_COLORS_DISABLED};
+
+# Do the same for AUTORESET.
+$Term::ANSIColor::AUTORESET = 1;
+is((BOLD 't'),          "\e[1mt\e[0m",   'AUTORESET works for BOLD');
+is((GREEN 't'),         "\e[32mt\e[0m",  '...and for GREEN');
+is((DARK 't'),          "\e[2mt\e[0m",   '...and for DARK');
+is((FAINT 't'),         "\e[2mt\e[0m",   '...and for FAINT');
+is((BRIGHT_RED 't'),    "\e[91mt\e[0m",  '...and for BRIGHT_RED');
+is((ON_BRIGHT_RED 't'), "\e[101mt\e[0m", '...and for ON_BRIGHT_RED');
+is((ITALIC 't'),        "\e[3mt\e[0m",   '...and for ITALIC');
+is((RED 't'),           "\e[31mt\e[0m",  '...and for RED');
+is((ON_GREEN 't'),      "\e[42mt\e[0m",  '...and for ON_GREEN');
+is((ON_BLUE 't'),       "\e[44mt\e[0m",  '...and for ON_BLUE');
+is((RESET 't'),         "\e[0mt\e[0m",   '...and for RESET');
+$Term::ANSIColor::AUTORESET = 0;
+
+# Do the same for AUTOLOCAL.
+$Term::ANSIColor::AUTOLOCAL = 1;
+is((BOLD 't'),          "\e[1mt\e[0m",   'AUTORESET works for BOLD');
+is((GREEN 't'),         "\e[32mt\e[0m",  '...and for GREEN');
+is((DARK 't'),          "\e[2mt\e[0m",   '...and for DARK');
+is((FAINT 't'),         "\e[2mt\e[0m",   '...and for FAINT');
+is((BRIGHT_RED 't'),    "\e[91mt\e[0m",  '...and for BRIGHT_RED');
+is((ON_BRIGHT_RED 't'), "\e[101mt\e[0m", '...and for ON_BRIGHT_RED');
+is((ITALIC 't'),        "\e[3mt\e[0m",   '...and for ITALIC');
+is((RED 't'),           "\e[31mt\e[0m",  '...and for RED');
+is((ON_GREEN 't'),      "\e[42mt\e[0m",  '...and for ON_GREEN');
+is((ON_BLUE 't'),       "\e[44mt\e[0m",  '...and for ON_BLUE');
+is((RESET 't'),         "\e[0mt\e[0m",   '...and for RESET');
+$Term::ANSIColor::AUTOLOCAL = 0;
+
+# Force an internal error inside the AUTOLOAD stub by creating an attribute
+# that will generate a syntax error.  This is just for coverage purposes.
+# Disable warnings since our syntax error will spew otherwise.
+local $SIG{__WARN__} = sub { };
+$Term::ANSIColor::ATTRIBUTES{yellow} = q{'ERROR'};
+ok(!eval { YELLOW 't' }, 'Caught internal AUTOLOAD error');
+like(
+    $@,
+    qr{ \A failed [ ] to [ ] generate [ ] constant [ ] YELLOW: [ ] }xms,
+    '...with correct error message'
+);

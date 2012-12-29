@@ -74,6 +74,7 @@ REQUIREMENTS
   environment variable RRA_MAINTAINER_TESTS to a true value.  For these
   tests, the additional Perl modules:
 
+      Devel::Cover
       Test::Perl::Critic
       Test::Spelling
 
