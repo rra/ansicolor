@@ -1,5 +1,12 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/taint.t: New check for proper untainting in AUTOLOAD.
+	* ANSIColor.pm: Comment the untainting of $AUTOLOAD so that it
+	isn't accidentally removed as apparently unnecessary.
+	* t/strict.t: Ignore t/taint.t for coverage checking, since
+	Test::Strict doesn't know how to invoke tests that require
+	tainting.
+
 	* t/strict.t: Add test suite coverage checking if running the test
 	in maintainer mode.
 	* ANSIColor.pm (AUTOLOAD): Drop a redundant check on the result of

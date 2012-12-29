@@ -175,6 +175,9 @@ sub AUTOLOAD {
         return join q{}, @_;
     }
 
+    # We've untainted the name of the sub.
+    $AUTOLOAD = $sub;
+
     # Figure out the ANSI string to set the desired attribute.
     my $escape = "\e[" . $ATTRIBUTES{ lc $attr } . 'm';
 

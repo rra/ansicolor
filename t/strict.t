@@ -14,6 +14,7 @@
 use strict;
 use warnings;
 
+use File::Spec;
 use Test::More;
 
 # Coverage level achieved.  We actually have 100% test coverage, but for some
@@ -24,8 +25,11 @@ use constant COVERAGE_LEVEL => 90;
 # Skip tests if Test::Strict is not installed.
 if (!eval { require Test::Strict }) {
     plan skip_all => 'Test::Strict required to test Perl syntax';
-    $Test::Strict::TEST_WARNINGS       = 0;      # suppress warning
-    $Test::Strict::DEVEL_COVER_OPTIONS = q{};    # suppress warning
+
+    # Suppress "only used once" warnings.
+    $Test::Strict::TEST_SKIP           = [];
+    $Test::Strict::TEST_WARNINGS       = 0;
+    $Test::Strict::DEVEL_COVER_OPTIONS = q{};
 }
 Test::Strict->import;
 
@@ -43,6 +47,10 @@ SKIP: {
     if (!eval { require Devel::Cover }) {
         skip 'Devel::Cover required to check test coverage', 1;
     }
+
+    # Skip t/taint.t since Test::Strict doesn't know how to run scripts that
+    # require taint checking properly.
+    $Test::Strict::TEST_SKIP = [File::Spec->canonpath('t/taint.t')];
 
     # Disable POD coverage; that's handled separately and is confused by our
     # autoloading.
