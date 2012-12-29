@@ -1,5 +1,7 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* t/basic.t: Test uncolor with \e[m and '' as only arguments.
+
 	* ANSIColor.pm: $AUTOLOCAL takes precedence over $AUTORESET,
 	reversing the previous behvior.  Document the precedence.
 	* t/basic.t: Test for $AUTOLOCAL vs. $AUTORESET precedence.
