@@ -1,0 +1,149 @@
+#!/usr/bin/perl
+#
+# Generate 256-color test files.
+#
+# Takes one or more of four arguments: fg (foregrond), bg (background), grey,
+# or ansi.  Generates a test file for 256-color emulator support testing that
+# region of colors.  This requires Term::ANSIColor 4.00 or later already be
+# installed or that this script be run manually under Perl with flags pointing
+# to where the module is.
+#
+# Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
+# Copyright 2012 Russ Allbery <rra@stanford.edu>
+#
+# This program is free software; you may redistribute it and/or modify it
+# under the same terms as Perl itself.
+
+use 5.006;
+use strict;
+use warnings;
+
+use Carp qw(croak);
+use Term::ANSIColor 4.00 qw(color);
+
+# Screen width for centering headings.
+use constant SCREEN_WIDTH => 80;
+
+# print and printf with error checking.  autodie unfortunately can't help us
+# with these because they can't be prototyped and hence can't be overridden.
+
+## no critic (Subroutines::RequireArgUnpacking)
+sub print_checked  { print @_  or croak 'print failed';  return }
+sub printf_checked { printf @_ or croak 'printf failed'; return }
+## use critic
+
+# Not useful for this file.
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+
+# The sample background or foreground colors.
+my @SAMPLES = qw(000 222 555);
+
+# The list of all possible RGB values.
+my @RGB;
+for my $r (0 .. 5) {
+    for my $g (0 .. 5) {
+        push @RGB, map { "$r$g$_" } 0 .. 5;
+    }
+}
+
+# Print out a centered heading, assuming 80 columns.  Do not print out a
+# trailing newline.
+#
+# $heading - Heading to print
+#
+# Returns: undef
+sub heading {
+    my ($heading) = @_;
+    my $padding = (SCREEN_WIDTH - length $heading) / 2;
+    print_checked(q{ } x $padding, $heading);
+    return;
+}
+
+# Print out the test file that tries all valid RGB foreground colors.
+#
+# Returns: undef
+#  Throws: Text exception on I/O failure
+sub print_fg_test {
+    heading('--- RGB000 - RGB555 from 256-color palette (foreground) --');
+    for my $bg (@SAMPLES) {
+        for my $i (0 .. $#RGB) {
+            if (($i % 18) == 0) {
+                printf_checked("%s\nbg %03d %s",
+                    color('reset'), $bg, color("on_rgb$bg"));
+            }
+            printf_checked('%s%03d ', color("rgb$RGB[$i]"), $RGB[$i]);
+        }
+    }
+    print_checked(color('reset'), "\n\n");
+    return;
+}
+
+# Print out the test file that tries all valid RGB background colors.
+#
+# Returns: undef
+#  Throws: Text exception on I/O failure
+sub print_bg_test {
+    heading('--- RGB000 - RGB555 from 256-color palette (background) --');
+    for my $fg (@SAMPLES) {
+        for my $i (0 .. $#RGB) {
+            if (($i % 18) == 0) {
+                printf_checked("%s\nfg %03d %s",
+                    color('reset'), $fg, color("rgb$fg"));
+            }
+            printf_checked('%s%03d ', color("on_rgb$RGB[$i]"), $RGB[$i]);
+        }
+    }
+    print_checked(color('reset'), "\n\n");
+    return;
+}
+
+# Print out the test file that shows all valid grey-scale colors.
+#
+# Returns: undef
+#  Throws: Text exception on I/O failure
+sub print_grey_test {
+    heading('--- Grey0 - Grey23 from 256-color palette ---');
+    print_checked("\n");
+    for my $bg (0 .. 23) {
+        printf_checked('%2d %s', $bg, color("on_grey$bg"));
+        for my $fg (0 .. 23) {
+            printf_checked('%s%d ', color("grey$fg"), $fg);
+        }
+        print_checked(color('reset'), "\n");
+    }
+    print_checked("\n");
+    return;
+}
+
+# Print out the test file that shows the 16 ANSI colors.
+#
+# Returns: undef
+#  Throws: Text exception on I/O failure
+sub print_ansi_test {
+    heading('--- ANSI colors 0 - 15 from 256-color palette ---');
+    print_checked("\n");
+    for my $bg (0 .. 15) {
+        printf_checked('%2d %s', $bg, color("on_ansi$bg"));
+        for my $fg (0 .. 15) {
+            printf_checked('%s%d ', color("ansi$fg"), $fg);
+        }
+        print_checked(color('reset'), "\n");
+    }
+    print_checked("\n");
+    return;
+}
+
+# Main routine.  Scan @ARGV for which test files to print out.
+my %tests = (
+    fg   => \&print_fg_test,
+    bg   => \&print_bg_test,
+    grey => \&print_grey_test,
+    ansi => \&print_ansi_test,
+);
+for my $file (@ARGV) {
+    if ($tests{$file}) {
+        $tests{$file}->();
+    } else {
+        die "Unknown test file: $file\n";
+    }
+}

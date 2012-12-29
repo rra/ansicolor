@@ -189,4 +189,9 @@ THANKS
   To Simon Wistow for reporting that Term::ANSIColor was inadvertantly
   clobbering $@ when generating constant subs.
 
+  To Kurt Starsinic for the initial implementation of 256-color support.
+
+  To Magnus Woldrich for Term::ExtendedColor and for research on which
+  emulators support 256 colors.
+
   To Larry Wall, as always, for Perl.

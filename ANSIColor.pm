@@ -1,7 +1,9 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-#     2011, 2012 Russ Allbery <rra@stanford.edu> and Zenin
+#     2011, 2012 Russ Allbery <rra@stanford.edu>
+# Copyright 1996 Zenin
+# Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 # PUSH/POP support submitted 2007 by openmethods.com voice solutions
 #
 # This program is free software; you may redistribute it and/or modify it
@@ -28,7 +30,7 @@ use Exporter ();
 
 # Declare variables that should be set in BEGIN for robustness.
 ## no critic (Modules::ProhibitAutomaticExportation)
-our (@COLORLIST, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA, $VERSION);
+our (@EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA, $VERSION);
 
 # We use autoloading, which sets this variable to the name of the called sub.
 our $AUTOLOAD;
@@ -37,10 +39,10 @@ our $AUTOLOAD;
 # against circular module loading (not that we load any modules, but
 # consistency is good).
 BEGIN {
-    $VERSION = '3.02';
+    $VERSION = '4.00';
 
-    # All of the supported constants, used in %EXPORT_TAGS.
-    @COLORLIST = qw(
+    # All of the basic supported constants, used in %EXPORT_TAGS.
+    my @colorlist = qw(
       CLEAR           RESET             BOLD            DARK
       FAINT           ITALIC            UNDERLINE       UNDERSCORE
       BLINK           REVERSE           CONCEALED
@@ -56,15 +58,28 @@ BEGIN {
       ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
     );
 
+    # 256-color constants, used in %EXPORT_TAGS.
+    ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+    my @colorlist256 = (
+        (map { ("ANSI$_", "ON_ANSI$_") } 0 .. 15),
+        (map { ("GREY$_", "ON_GREY$_") } 0 .. 23),
+    );
+    for my $r (0 .. 5) {
+        for my $g (0 .. 5) {
+            push @colorlist256, map { ("RGB$r$g$_", "ON_RGB$r$g$_") } 0 .. 5;
+        }
+    }
+
     # Exported symbol configuration.
     @ISA         = qw(Exporter);
     @EXPORT      = qw(color colored);
     @EXPORT_OK   = qw(uncolor colorstrip colorvalid);
     %EXPORT_TAGS = (
-        constants => \@COLORLIST,
-        pushpop   => [@COLORLIST, qw(PUSHCOLOR POPCOLOR LOCALCOLOR)]
+        constants    => \@colorlist,
+        constants256 => \@colorlist256,
+        pushpop      => [@colorlist, qw(PUSHCOLOR POPCOLOR LOCALCOLOR)],
     );
-    Exporter::export_ok_tags('pushpop');
+    Exporter::export_ok_tags('pushpop', 'constants256');
 }
 
 ##############################################################################
@@ -86,7 +101,7 @@ our $EACHLINE;
 # Internal data structures
 ##############################################################################
 
-# All supported attributes, including aliases.
+# All basic supported attributes, including aliases.
 #<<<
 our %ATTRIBUTES = (
     'clear'          => 0,
@@ -120,6 +135,38 @@ our %ATTRIBUTES = (
     'bright_white'   => 97,   'on_bright_white'   => 107,
 );
 #>>>
+
+# Generating the 256-color codes involves a lot of codes and offsets that are
+# not helped by turning them into constants.
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+
+# The first 16 256-color codes are duplicates of the 16 ANSI colors,
+# included for completeness.
+for my $n (0 .. 15) {
+    $ATTRIBUTES{"ansi$n"}    = "38;5;$n";
+    $ATTRIBUTES{"on_ansi$n"} = "48;5;$n";
+}
+
+# 256-color RGB colors.  Red, green, and blue can each be values 0 through 6,
+# and the resulting 216 colors start with color 16.
+for my $r (0 .. 5) {
+    for my $g (0 .. 5) {
+        for my $b (0 .. 5) {
+            my $n = 16 + 36 * $r + 6 * $g + $b;
+            $ATTRIBUTES{"rgb$r$g$b"}    = "38;5;$n";
+            $ATTRIBUTES{"on_rgb$r$g$b"} = "48;5;$n";
+        }
+    }
+}
+
+# The last 256-color codes are 24 shades of grey.
+for my $n (0 .. 23) {
+    my $code = $n + 232;
+    $ATTRIBUTES{"grey$n"}    = "38;5;$code";
+    $ATTRIBUTES{"on_grey$n"} = "48;5;$code";
+}
+
+## use critic (ValuesAndExpressions::ProhibitMagicNumbers)
 
 # Reverse lookup.  Alphabetically first name for a sequence is preferred.
 our %ATTRIBUTES_R;
@@ -161,7 +208,7 @@ our @COLORSTACK;
 ## no critic (ClassHierarchies::ProhibitAutoloading)
 ## no critic (Subroutines::RequireArgUnpacking)
 sub AUTOLOAD {
-    my ($sub, $attr) = $AUTOLOAD =~ m{ \A ([\w:]*::([[:upper:]_]+)) \z }xms;
+    my ($sub, $attr) = $AUTOLOAD =~ m{ \A ([\w:]*::([[:upper:]\d_]+)) \z }xms;
 
     # Check if we were called with something that doesn't look like an
     # attribute.
@@ -296,6 +343,9 @@ sub color {
 # Return a list of named color attributes for a given set of escape codes.
 # Escape sequences can be given with or without enclosing "\e[" and "m".  The
 # empty escape sequence '' or "\e[m" gives an empty list of attrs.
+#
+# There is one special case.  256-color codes start with 38 or 48, followed by
+# a 5 and then the 256-color code.
 sub uncolor {
     my (@escapes) = @_;
     my (@nums, @result);
@@ -308,12 +358,14 @@ sub uncolor {
         if (!defined $attrs) {
             croak("Bad escape sequence $escape");
         }
-        push @nums, split m{;}xms, $attrs;
+
+        # Pull off 256-color codes (38;5;n or 48;5;n) as a unit.
+        push @nums, $attrs =~ m{ ( [34]8;5;\d+ | \d+ ) (?: ; | \z ) }xmsg;
     }
 
     # Now, walk the list of numbers and convert them to attribute names.
     for my $num (@nums) {
-        $num += 0;    # Strip leading zeroes
+        $num =~ s{ ( \A | ; ) 0+ (\d) }{$1$2}xmsg;
         my $name = $ATTRIBUTES_R{$num};
         if (!defined $name) {
             croak("No name for escape sequence $num");
@@ -405,7 +457,8 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
 cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
-grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin
+grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic
+aterm rxvt CPAN RGB
 
 =head1 SYNOPSIS
 
@@ -465,11 +518,10 @@ used (see L</SYNOPSIS>).
 =head2 Supported Colors
 
 Terminal emulators that support color divide into two types: ones that
-support only eight colors, and ones that support sixteen.  This module
-provides both the ANSI escape codes for the "normal" colors, supported by
-both types, as well as the additional colors supported by sixteen-color
-emulators.  These colors are referred to as ANSI colors 0 through 7
-(normal) and 8 through 15.
+support only eight colors, ones that support sixteen, and ones that
+support 256.  This module provides the ANSI escape codes all of them.
+These colors are referred to as ANSI colors 0 through 7 (normal), 8
+through 15 (16-color), and 16 through 255 (256-color).
 
 Unfortunately, interpretation of colors 0 through 7 often depends on
 whether the emulator supports eight colors or sixteen colors.  Emulators
@@ -492,8 +544,19 @@ C<red> is color 1 and C<bright_red> is color 9.  The same applies for
 background colors: C<on_red> is the normal color and C<on_bright_red> is
 the bright color.  Capitalize these strings for the constant interface.
 
+For 256-color emulators, this module additionally provides C<ansi0>
+through C<ansi15>, which are the same as colors 0 through 15 in
+sixteen-color emulators but use the 256-color escape syntax, C<grey0>
+through C<grey23> ranging from nearly black to nearly white, and a set of
+RGB colors.  The RGB colors are of the form C<rgbI<RGB>> where I<R>, I<G>,
+and I<B> are numbers from 0 to 5 giving the intensity of red, green, and
+blue.  C<on_> variants of all of these colors are also provided.  These
+colors may be ignored completely on non-256-color terminals or may be
+misinterpreted and produce random behavior.  Additional attributes such as
+blink, italic, or bold may not work with the 256-color palette.
+
 There is unfortunately no way to know whether the current emulator
-supports sixteen colors or not, which makes the choice of colors
+supports more than eight colors, which makes the choice of colors
 difficult.  The most conservative choice is to use only the regular
 colors, which are at least displayed on all emulators.  However, they will
 appear dark in sixteen-color terminal emulators, including most common
@@ -503,7 +566,8 @@ offer the user a way to configure the colors for a given application to
 fit their terminal emulator.
 
 Support for colors 8 through 15 (the C<bright_> variants) was added in
-Term::ANSIColor 3.0.
+Term::ANSIColor 3.00.  Support for colors 16 through 256 was added in
+Term::ANSIColor 4.00.
 
 =head2 Function Interface
 
@@ -538,6 +602,21 @@ The recognized bright background color attributes (colors 8 to 15) are:
 
   on_bright_black  on_bright_red      on_bright_green  on_bright_yellow
   on_bright_blue   on_bright_magenta  on_bright_cyan   on_bright_white
+
+For 256-color terminals, the recognized foreground colors are:
+
+  ansi0 .. ansi15
+  grey0 .. grey23
+
+plus C<rgbI<RGB>> for I<R>, I<G>, and I<B> values from 0 to 5, such as
+C<rgb000> or C<rgb515>.  Similarly, the recognized background colors are:
+
+  on_ansi0 .. on_ansi15
+  on_grey0 .. on_grey23
+
+plus C<on_rgbI<RGB>> for for I<R>, I<G>, and I<B> values from 0 to 5.
+
+Support for the 256-color attributes was added in Term::ANSIColor 4.00.
 
 For any of the above listed attributes, case is not significant.
 
@@ -632,6 +711,28 @@ to
 described above since a background color is being used.)
 
 Support for C<ITALIC> was added in Term::ANSIColor 3.02.
+
+If you import C<:constants256>, you can use the following constants
+directly:
+
+  ANSI0 .. ANSI15
+  GREY0 .. GREY23
+
+  RGBXYZ (for X, Y, and Z values from 0 to 5, like RGB000 or RGB515)
+
+  ON_ANSI0 .. ON_ANSI15
+  ON_GREY0 .. ON_GREY23
+
+  ON_RGBXYZ (for X, Y, and Z values from 0 to 5)
+
+Support for C<:constants256> and the associated constants was added in
+Term::ANSIColor 4.00.
+
+Note that C<:constants256> does not include the other constants, so if you
+want to mix both, you need to include C<:constants> as well.  You may want
+to explicitly import at least C<RESET>, as in:
+
+    use Term::ANSIColor 4.00 qw(RESET :constants256);
 
 When using the constants, if you don't want to have to remember to add the
 C<, RESET> at the end of each print line, you can set
@@ -825,7 +926,7 @@ helped me flesh it out:
  PuTTY         yes     color     no      yes      no       yes      no
  Windows       yes      no       no      no       no       yes      no
  Cygwin SSH    yes      yes      no     color    color    color     yes
- Mac Terminal  yes      yes      no      yes      yes      yes      yes
+ Terminal.app  yes      yes      no      yes      yes      yes      yes
 
 Windows is Windows telnet, Cygwin SSH is the OpenSSH implementation under
 Cygwin on Windows NT, and Mac Terminal is the Terminal application in Mac
@@ -848,6 +949,9 @@ double-underlining, framing, circling, and overlining.  As none of these
 attributes are widely supported or useful, they also aren't currently
 supported by this module.
 
+Most modern X terminal emulators support 256 colors.  Known to not support
+those colors are aterm, rxvt, Terminal.app, and TTY/VC.
+
 =head1 SEE ALSO
 
 ECMA-048 is available on-line (at least at the time of this writing) at
@@ -858,6 +962,13 @@ does not own a copy of it.  Since the source material for ISO 6429 was
 ECMA-048 and the latter is available for free, there seems little reason
 to obtain the ISO standard.
 
+The 256-color control sequences are documented at
+L<http://www.xfree86.org/current/ctlseqs.html> (search for 256-color).
+
+The CPAN module Term::ExtendedColor provides a different and more
+comprehensive interface for 256-color emulators that may be more
+convenient.
+
 The current version of this module is always available from its web site
 at L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of
 the Perl core distribution as of 5.6.0.
@@ -866,13 +977,15 @@ the Perl core distribution as of 5.6.0.
 
 Original idea (using constants) by Zenin, reimplemented using subs by Russ
 Allbery <rra@stanford.edu>, and then combined with the original idea by
-Russ with input from Zenin.  Russ Allbery now maintains this module.
+Russ with input from Zenin.  256-color support is based on work by Kurt
+Starsinic.  Russ Allbery now maintains this module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009,
-2010, 2011, 2012 Russ Allbery <rra@stanford.edu> and Zenin.  This program
-is free software; you may redistribute it and/or modify it under the same
+Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
+2006, 2008, 2009, 2010, 2011, 2012 Russ Allbery <rra@stanford.edu>.
+Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>.  This program is
+free software; you may redistribute it and/or modify it under the same
 terms as Perl itself.
 
 PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
