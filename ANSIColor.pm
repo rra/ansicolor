@@ -200,7 +200,7 @@ sub AUTOLOAD {
             } elsif (\$AUTORESET && \@_) {
                 return '$escape' . join(q{}, \@_) . "\e[0m";
             } else {
-                return '$escape' . join(q{}, \@_);
+                return '$escape' . join q{}, \@_;
             }
         }
         1;

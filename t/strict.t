@@ -17,10 +17,8 @@ use warnings;
 use File::Spec;
 use Test::More;
 
-# Coverage level achieved.  We actually have 100% test coverage, but for some
-# bizarre reason Devel::Cover reports only 70.5% condition coverage (while
-# showing all conditions green in the HTML report).
-use constant COVERAGE_LEVEL => 90;
+# Coverage level achieved.
+use constant COVERAGE_LEVEL => 100;
 
 # Skip tests if Test::Strict is not installed.
 if (!eval { require Test::Strict }) {

@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 108;
+use Test::More tests => 136;
 
 # Load the module.
 BEGIN {
@@ -239,6 +239,7 @@ delete $ENV{ANSI_COLORS_DISABLED};
 # our generated constant subs so that we can use Test::Strict to check test
 # suite coverage.
 is((BOLD 't'),          "\e[1mt",   'Basic constant works for BOLD');
+is((BLUE 't'),          "\e[34mt",  '...and for BLUE');
 is((GREEN 't'),         "\e[32mt",  '...and for GREEN');
 is((DARK 't'),          "\e[2mt",   '...and for DARK');
 is((FAINT 't'),         "\e[2mt",   '...and for FAINT');
@@ -253,6 +254,7 @@ is((RESET 't'),         "\e[0mt",   '...and for RESET');
 # Do the same for disabled colors.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
 is(BOLD,          q{}, 'ANSI_COLORS_DISABLED works for BOLD');
+is(BLUE,          q{}, '...and for BLUE');
 is(GREEN,         q{}, '...and for GREEN');
 is(DARK,          q{}, '...and for DARK');
 is(FAINT,         q{}, '...and for FAINT');
@@ -268,6 +270,7 @@ delete $ENV{ANSI_COLORS_DISABLED};
 # Do the same for AUTORESET.
 $Term::ANSIColor::AUTORESET = 1;
 is((BOLD 't'),          "\e[1mt\e[0m",   'AUTORESET works for BOLD');
+is((BLUE 't'),          "\e[34mt\e[0m",  '...and for BLUE');
 is((GREEN 't'),         "\e[32mt\e[0m",  '...and for GREEN');
 is((DARK 't'),          "\e[2mt\e[0m",   '...and for DARK');
 is((FAINT 't'),         "\e[2mt\e[0m",   '...and for FAINT');
@@ -278,11 +281,24 @@ is((RED 't'),           "\e[31mt\e[0m",  '...and for RED');
 is((ON_GREEN 't'),      "\e[42mt\e[0m",  '...and for ON_GREEN');
 is((ON_BLUE 't'),       "\e[44mt\e[0m",  '...and for ON_BLUE');
 is((RESET 't'),         "\e[0mt\e[0m",   '...and for RESET');
+is((BOLD),              "\e[1m",         'No reset is done without text');
+is((BLUE),              "\e[34m",        '...and for BLUE');
+is((GREEN),             "\e[32m",        '...and for GREEN');
+is((DARK),              "\e[2m",         '...and for DARK');
+is((FAINT),             "\e[2m",         '...and for FAINT');
+is((BRIGHT_RED),        "\e[91m",        '...and for BRIGHT_RED');
+is((ON_BRIGHT_RED),     "\e[101m",       '...and for ON_BRIGHT_RED');
+is((ITALIC),            "\e[3m",         '...and for ITALIC');
+is((RED),               "\e[31m",        '...and for RED');
+is((ON_GREEN),          "\e[42m",        '...and for ON_GREEN');
+is((ON_BLUE),           "\e[44m",        '...and for ON_BLUE');
+is((RESET),             "\e[0m",         '...and for RESET');
 $Term::ANSIColor::AUTORESET = 0;
 
 # Do the same for AUTOLOCAL.
 $Term::ANSIColor::AUTOLOCAL = 1;
 is((BOLD 't'),          "\e[1mt\e[0m",   'AUTORESET works for BOLD');
+is((BLUE 't'),          "\e[34mt\e[0m",  '...and for BLUE');
 is((GREEN 't'),         "\e[32mt\e[0m",  '...and for GREEN');
 is((DARK 't'),          "\e[2mt\e[0m",   '...and for DARK');
 is((FAINT 't'),         "\e[2mt\e[0m",   '...and for FAINT');
@@ -293,6 +309,18 @@ is((RED 't'),           "\e[31mt\e[0m",  '...and for RED');
 is((ON_GREEN 't'),      "\e[42mt\e[0m",  '...and for ON_GREEN');
 is((ON_BLUE 't'),       "\e[44mt\e[0m",  '...and for ON_BLUE');
 is((RESET 't'),         "\e[0mt\e[0m",   '...and for RESET');
+is((BOLD),              "\e[1m",         'No LOCALCOLOR is done without text');
+is((BLUE),              "\e[34m",        '...and for BLUE');
+is((GREEN),             "\e[32m",        '...and for GREEN');
+is((DARK),              "\e[2m",         '...and for DARK');
+is((FAINT),             "\e[2m",         '...and for FAINT');
+is((BRIGHT_RED),        "\e[91m",        '...and for BRIGHT_RED');
+is((ON_BRIGHT_RED),     "\e[101m",       '...and for ON_BRIGHT_RED');
+is((ITALIC),            "\e[3m",         '...and for ITALIC');
+is((RED),               "\e[31m",        '...and for RED');
+is((ON_GREEN),          "\e[42m",        '...and for ON_GREEN');
+is((ON_BLUE),           "\e[44m",        '...and for ON_BLUE');
+is((RESET),             "\e[0m",         '...and for RESET');
 $Term::ANSIColor::AUTOLOCAL = 0;
 
 # Force an internal error inside the AUTOLOAD stub by creating an attribute
