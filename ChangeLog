@@ -1,8 +1,13 @@
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: $AUTOLOCAL takes precedence over $AUTORESET,
+	reversing the previous behvior.  Document the precedence.
+	* t/basic.t: Test for $AUTOLOCAL vs. $AUTORESET precedence.
+
 	* t/taint.t: New check for proper untainting in AUTOLOAD.
 	* ANSIColor.pm: Comment the untainting of $AUTOLOAD so that it
 	isn't accidentally removed as apparently unnecessary.
+
 	* t/strict.t: Ignore t/taint.t for coverage checking, since
 	Test::Strict doesn't know how to invoke tests that require
 	tainting.

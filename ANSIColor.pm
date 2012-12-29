@@ -195,10 +195,10 @@ sub AUTOLOAD {
         sub $AUTOLOAD {
             if (defined \$ENV{ANSI_COLORS_DISABLED}) {
                 return join q{}, \@_;
-            } elsif (\$AUTORESET && \@_) {
-                return '$escape' . join(q{}, \@_) . "\e[0m";
             } elsif (\$AUTOLOCAL && \@_) {
                 return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
+            } elsif (\$AUTORESET && \@_) {
+                return '$escape' . join(q{}, \@_) . "\e[0m";
             } else {
                 return '$escape' . join(q{}, \@_);
             }
@@ -646,8 +646,11 @@ will reset the display mode afterward, whereas:
     print BOLD, BLUE, "Text\n";
 
 will not.  If you are using background colors, you will probably want to
-print the newline with a separate print statement to avoid confusing the
-terminal.
+either use say() (in newer versions of Perl) or print the newline with a
+separate print statement to avoid confusing the terminal.
+
+If $Term::ANSIColor::AUTOLOCAL is set (see below), it takes precedence
+over $Term::ANSIColor::AUTORESET, and the latter is ignored.
 
 The subroutine interface has the advantage over the constants interface in
 that only two subroutines are exported into your namespace, versus
@@ -680,6 +683,9 @@ will be implicitly preceded by LOCALCOLOR.  In other words, the following:
 is equivalent to:
 
     print LOCALCOLOR BLUE "Text\n";
+
+If $Term::ANSIColor::AUTOLOCAL is set, it takes precedence over
+$Term::ANSIColor::AUTORESET, and the latter is ignored.
 
 When using PUSHCOLOR, POPCOLOR, and LOCALCOLOR, it's particularly
 important to not put commas between the constants.

@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 104;
+use Test::More tests => 108;
 
 # Load the module.
 BEGIN {
@@ -112,6 +112,17 @@ $Term::ANSIColor::AUTOLOCAL = 1;
 is((BLUE 'text'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL');
 $Term::ANSIColor::AUTOLOCAL = 0;
 is((POPCOLOR 'text'), "\e[0mtext", 'POPCOLOR with empty stack');
+
+# If AUTOLOCAL and AUTORESET are both set, the former takes precedence.
+is((PUSHCOLOR RED ON_GREEN 'text'),
+    "\e[31m\e[42mtext", 'Push some colors onto the stack');
+$Term::ANSIColor::AUTOLOCAL = 1;
+$Term::ANSIColor::AUTORESET = 1;
+is((BLUE 'text'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL overrides AUTORESET');
+$Term::ANSIColor::AUTOLOCAL = 0;
+is((BLUE 'text'), "\e[34mtext\e[0m", 'AUTORESET works with stacked colors');
+is((POPCOLOR 'text'), "\e[0mtext\e[0m", 'POPCOLOR with empty stack');
+$Term::ANSIColor::AUTORESET = 0;
 
 # Test push and pop support with the syntax from the original openmethods.com
 # submission, which uses a different coding style.
