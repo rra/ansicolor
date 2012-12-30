@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 91;
+use Test::More tests => 92;
 
 # Load the module.
 BEGIN {
@@ -46,8 +46,9 @@ for my $color (qw(ansi0 ansi15 rgb000 rgb555 grey0 grey23)) {
 }
 
 # Check uncolor with 256-color codes.
-is_deeply([uncolor('38;5;0')],       ['ansi0'],  'uncolor of ansi0');
-is_deeply([uncolor("\e[38;5;231m")], ['rgb555'], 'uncolor of rgb555');
+is_deeply([uncolor('38;5;0')],        ['ansi0'],    'uncolor of ansi0');
+is_deeply([uncolor("\e[38;5;231m")],  ['rgb555'],   'uncolor of rgb555');
+is_deeply([uncolor("\e[48;05;001m")], ['on_ansi1'], 'uncolor with leading 0s');
 
 # An invalid 256-color code should report an error on the part that makes it
 # invalid.  Check truncated codes (should report on the 38 or 48), codes with

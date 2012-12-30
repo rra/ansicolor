@@ -394,7 +394,7 @@ sub uncolor {
         }
 
         # Pull off 256-color codes (38;5;n or 48;5;n) as a unit.
-        push @nums, $attrs =~ m{ ( [34]8;5;\d+ | \d+ ) (?: ; | \z ) }xmsg;
+        push @nums, $attrs =~ m{ ( 0*[34]8;0*5;\d+ | \d+ ) (?: ; | \z ) }xmsg;
     }
 
     # Now, walk the list of numbers and convert them to attribute names.
