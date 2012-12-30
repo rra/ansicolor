@@ -526,21 +526,21 @@ aterm rxvt CPAN RGB Solarized Whitespace alphanumerics undef
     print "\n";
 
     # Map escape sequences back to color names.
-    use Term::ANSIColor qw(uncolor);
+    use Term::ANSIColor 1.04 qw(uncolor);
     my $names = uncolor('01;31');
     print join(q{ }, @{$names}), "\n";
 
     # Strip all color escape sequences.
-    use Term::ANSIColor qw(colorstrip);
+    use Term::ANSIColor 2.01 qw(colorstrip);
     print colorstrip '\e[1mThis is bold\e[0m', "\n";
 
     # Determine whether a color is valid.
-    use Term::ANSIColor qw(colorvalid);
+    use Term::ANSIColor 2.02 qw(colorvalid);
     my $valid = colorvalid('blue bold', 'on_magenta');
     print "Color string is ", $valid ? "valid\n" : "invalid\n";
 
     # Create new aliases for colors.
-    use Term::ANSIColor qw(coloralias);
+    use Term::ANSIColor 4.00 qw(coloralias);
     coloralias('alert', 'red');
     print "Alert is ", coloralias('alert'), "\n";
     print colored("This is in red.", 'alert'), "\n";
@@ -555,7 +555,7 @@ aterm rxvt CPAN RGB Solarized Whitespace alphanumerics undef
         print "This text is normal.\n";
     }
 
-    use Term::ANSIColor qw(:pushpop);
+    use Term::ANSIColor 2.00 qw(:pushpop);
     print PUSHCOLOR RED ON_GREEN "This text is red on green.\n";
     print PUSHCOLOR BRIGHT_BLUE "This text is bright blue on green.\n";
     print RESET BRIGHT_BLUE "This text is just bright blue.\n";
@@ -575,6 +575,9 @@ This module has two interfaces, one through color() and colored() and the
 other through constants.  It also offers the utility functions uncolor(),
 colorstrip(), colorvalid(), and coloralias(), which have to be explicitly
 imported to be used (see L</SYNOPSIS>).
+
+See L</COMPATIBILITY> for the versions of Term::ANSIColor that introduced
+particular features and the versions of Perl that included them.
 
 =head2 Supported Colors
 
@@ -626,10 +629,6 @@ emulators, you may wish to use the bright variants instead.  Even better,
 offer the user a way to configure the colors for a given application to
 fit their terminal emulator.
 
-Support for colors 8 through 15 (the C<bright_> variants) was added in
-Term::ANSIColor 3.00.  Support for colors 16 through 256 was added in
-Term::ANSIColor 4.00.
-
 =head2 Function Interface
 
 The function interface uses attribute strings to describe the colors and
@@ -642,8 +641,6 @@ equivalent, so use whichever is the most intuitive to you.
 Note that not all attributes are supported by all terminal types, and some
 terminals may not support any of these sequences.  Dark and faint, italic,
 blink, and concealed in particular are frequently not implemented.
-
-Support for italic was added in Term::ANSIColor 3.02.
 
 The recognized normal foreground color attributes (colors 0 to 7) are:
 
@@ -676,8 +673,6 @@ C<rgb000> or C<rgb515>.  Similarly, the recognized background colors are:
   on_grey0 .. on_grey23
 
 plus C<on_rgbI<RGB>> for for I<R>, I<G>, and I<B> values from 0 to 5.
-
-Support for the 256-color attributes was added in Term::ANSIColor 4.00.
 
 For any of the above listed attributes, case is not significant.
 
@@ -796,8 +791,6 @@ to
 (Note that the newline is kept separate to avoid confusing the terminal as
 described above since a background color is being used.)
 
-Support for C<ITALIC> was added in Term::ANSIColor 3.02.
-
 If you import C<:constants256>, you can use the following constants
 directly:
 
@@ -810,9 +803,6 @@ directly:
   ON_GREY0 .. ON_GREY23
 
   ON_RGBXYZ (for X, Y, and Z values from 0 to 5)
-
-Support for C<:constants256> and the associated constants was added in
-Term::ANSIColor 4.00.
 
 Note that C<:constants256> does not include the other constants, so if you
 want to mix both, you need to include C<:constants> as well.  You may want
@@ -837,8 +827,7 @@ either use say() (in newer versions of Perl) or print the newline with a
 separate print statement to avoid confusing the terminal.
 
 If $Term::ANSIColor::AUTOLOCAL is set (see below), it takes precedence
-over $Term::ANSIColor::AUTORESET, and the latter is ignored.  This
-behavior changed in Term::ANSIColor 4.00.
+over $Term::ANSIColor::AUTORESET, and the latter is ignored.
 
 The subroutine interface has the advantage over the constants interface in
 that only two subroutines are exported into your namespace, versus
@@ -852,13 +841,12 @@ bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
 
 =head2 The Color Stack
 
-As of Term::ANSIColor 2.00, you can import C<:pushpop> and maintain a
-stack of colors using PUSHCOLOR, POPCOLOR, and LOCALCOLOR.  PUSHCOLOR
-takes the attribute string that starts its argument and pushes it onto a
-stack of attributes.  POPCOLOR removes the top of the stack and restores
-the previous attributes set by the argument of a prior PUSHCOLOR.
-LOCALCOLOR surrounds its argument in a PUSHCOLOR and POPCOLOR so that the
-color resets afterward.
+You can import C<:pushpop> and maintain a stack of colors using PUSHCOLOR,
+POPCOLOR, and LOCALCOLOR.  PUSHCOLOR takes the attribute string that
+starts its argument and pushes it onto a stack of attributes.  POPCOLOR
+removes the top of the stack and restores the previous attributes set by
+the argument of a prior PUSHCOLOR.  LOCALCOLOR surrounds its argument in a
+PUSHCOLOR and POPCOLOR so that the color resets afterward.
 
 If $Term::ANSIColor::AUTOLOCAL is set, each sequence of color constants
 will be implicitly preceded by LOCALCOLOR.  In other words, the following:
@@ -1010,8 +998,6 @@ module is loaded and is then subsequently ignored.  Changes to
 ANSI_COLORS_ALIASES after the module is loaded will have no effect.  See
 coloralias() for an equivalent facility that can be used at runtime.
 
-Support for this environment variable was added in Term::ANSIColor 4.00.
-
 =item ANSI_COLORS_DISABLED
 
 If this environment variable is set, all of the functions defined by this
@@ -1022,6 +1008,38 @@ This is intended to support easy use of scripts using this module on
 platforms that don't support ANSI escape sequences.
 
 =back
+
+=head1 COMPATIBILITY
+
+Term::ANSIColor was first included with Perl in Perl 5.6.0.
+
+The uncolor() function and support for ANSI_COLORS_DISABLED were added in
+Term::ANSIColor 1.04, included in Perl 5.8.0.
+
+Support for dark was added in Term::ANSIColor 1.08, included in Perl
+5.8.4.
+
+The color stack, including the C<:pushpop> import tag, PUSHCOLOR,
+POPCOLOR, LOCALCOLOR, and the $Term::ANSIColor::AUTOLOCAL variable, was
+added in Term::ANSIColor 2.00, included in Perl 5.10.1.
+
+colorstrip() was added in Term::ANSIColor 2.01 and colorvalid() was added
+in Term::ANSIColor 2.02, both included in Perl 5.11.0.
+
+Support for colors 8 through 15 (the C<bright_> variants) was added in
+Term::ANSIColor 3.00, included in Perl 5.13.3.
+
+Support for italic was added in Term::ANSIColor 3.02, included in Perl
+5.17.1.
+
+Support for colors 16 through 256 (the C<ansi>, C<rgb>, and C<grey>
+colors), the C<:constants256> import tag, the coloralias() function, and
+support for the ANSI_COLORS_ALIASES environment variable were added in
+Term::ANSIColor 4.00.
+
+$Term::ANSIColor::AUTOLOCAL was changed to take precedence over
+$Term::ANSIColor::AUTORESET, rather than the other way around, in
+Term::ANSIColor 4.00.
 
 =head1 RESTRICTIONS
 
