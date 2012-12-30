@@ -96,7 +96,7 @@
 	generated constant subs.  Fixes a bug where the environment
 	variable would be ignored if the constant were used before it was
 	set.
-	* t/basic.t: Test for properl ANSI_COLORS_DISABLED support in
+	* t/basic.t: Test for proper ANSI_COLORS_DISABLED support in
 	generated constant subs.
 
 	* t/critic.t: New test that runs perlcritic (and perltidy) on all
