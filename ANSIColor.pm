@@ -307,7 +307,8 @@ sub AUTOLOAD {
 #
 # Returns: The text passed in
 sub PUSHCOLOR {
-    my ($text) = @_;
+    my (@text) = @_;
+    my $text = join q{}, @text;
 
     # Extract any number of color-setting escape sequences from the start of
     # the string.

@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 145;
+use Test::More tests => 152;
 
 # Load the module.
 BEGIN {
@@ -25,6 +25,9 @@ BEGIN {
 is(color('blue on_green', 'bold'), "\e[34;42;1m", 'Simple attributes');
 is(colored('testing', 'blue', 'bold'), "\e[34;1mtesting\e[0m", 'colored');
 is((BLUE BOLD 'testing'), "\e[34m\e[1mtesting", 'Constants');
+is(join(q{}, BLUE, BOLD, 'testing'),
+    "\e[34m\e[1mtesting", 'Constants with commas');
+is((BLUE 'test', 'ing'), "\e[34mtesting", 'Constants with multiple strings');
 
 # Test case variations on attributes.
 is(color('Blue BOLD', 'on_GReeN'), "\e[34;1;42m", 'Attribute case');
@@ -35,6 +38,8 @@ is(color(), undef, 'color returns undef with no attributes');
 # Autoreset after the end of a command string.
 $Term::ANSIColor::AUTORESET = 1;
 is((BLUE BOLD 'testing'), "\e[34m\e[1mtesting\e[0m\e[0m", 'AUTORESET');
+is((BLUE BOLD, 'te', 'st'), "\e[34m\e[1mtest\e[0m", 'AUTORESET with commas');
+$Term::ANSIColor::AUTORESET = 0;
 
 # Reset after each line terminator.
 $Term::ANSIColor::EACHLINE = "\n";
@@ -86,21 +91,21 @@ is((BOLD),        "\e[1m", '...likewise for constants');
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Make sure DARK is exported.  This was omitted in versions prior to 1.07.
-is((DARK 'testing'), "\e[2mtesting\e[0m", 'DARK');
+is((DARK 'testing'), "\e[2mtesting", 'DARK');
 
 # Check faint as a synonym for dark.
 is(colored('test', 'faint'), "\e[2mtest\e[0m", 'colored supports faint');
-is((FAINT 'test'), "\e[2mtest\e[0m", '...and the FAINT constant works');
+is((FAINT 'test'), "\e[2mtest", '...and the FAINT constant works');
 
 # Test bright color support.
-is(color('bright_red'),    "\e[91m",           'Bright red is supported');
-is((BRIGHT_RED 'test'),    "\e[91mtest\e[0m",  '...and as a constant');
-is(color('on_bright_red'), "\e[101m",          '...as is on bright red');
-is((ON_BRIGHT_RED 'test'), "\e[101mtest\e[0m", '...and as a constant');
+is(color('bright_red'),    "\e[91m",      'Bright red is supported');
+is((BRIGHT_RED 'test'),    "\e[91mtest",  '...and as a constant');
+is(color('on_bright_red'), "\e[101m",     '...as is on bright red');
+is((ON_BRIGHT_RED 'test'), "\e[101mtest", '...and as a constant');
 
 # Test italic, which was added in 3.02.
-is(color('italic'), "\e[3m",          'Italic is supported');
-is((ITALIC 'test'), "\e[3mtest\e[0m", '...and as a constant');
+is(color('italic'), "\e[3m",     'Italic is supported');
+is((ITALIC 'test'), "\e[3mtest", '...and as a constant');
 
 # Test colored with 0 and EACHLINE.  Regression test for an incorrect use of a
 # truth check.
@@ -117,7 +122,6 @@ is(
 is(colored(q{}, 'blue', 'bold'), q{}, 'colored w/empty string and EACHLINE');
 
 # Test push and pop support.
-$Term::ANSIColor::AUTORESET = 0;
 is((PUSHCOLOR RED ON_GREEN 'text'),
     "\e[31m\e[42mtext", 'PUSHCOLOR does not break constants');
 is((PUSHCOLOR BLUE 'text'), "\e[34mtext",       '...and adding another level');
@@ -127,6 +131,7 @@ is((LOCALCOLOR GREEN ON_BLUE 'text'),
     "\e[32m\e[44mtext\e[31m\e[42m", 'LOCALCOLOR');
 $Term::ANSIColor::AUTOLOCAL = 1;
 is((BLUE 'text'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL');
+is((BLUE 'te', 'xt'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL with commas');
 $Term::ANSIColor::AUTOLOCAL = 0;
 is((POPCOLOR 'text'), "\e[0mtext", 'POPCOLOR with empty stack');
 
@@ -161,6 +166,16 @@ is(
     'LOCALCOLOR with two arguments'
 );
 is(POPCOLOR . 'text', "\e[0mtext", 'POPCOLOR with no arguments');
+
+# Prior to Term::ANSIColor, PUSHCOLOR, unlike all other constants, didn't take
+# an array, so it could lose colors in some syntax.
+is(PUSHCOLOR(RED, ON_GREEN), "\e[31m\e[42m", 'PUSHCOLOR with two arguments');
+is(
+    LOCALCOLOR(GREEN, 'text'),
+    "\e[32mtext\e[31m\e[42m",
+    'LOCALCOLOR with two arguments'
+);
+is(POPCOLOR(BOLD, 'text'), "\e[0m\e[1mtext", 'POPCOLOR with two arguments');
 
 # Test colorstrip.
 is(
