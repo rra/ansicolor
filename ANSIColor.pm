@@ -302,6 +302,10 @@ sub AUTOLOAD {
 
 # Append a new color to the top of the color stack and return the top of
 # the stack.
+#
+# $text - Any text we're applying colors to, with color escapes prepended
+#
+# Returns: The text passed in
 sub PUSHCOLOR {
     my ($text) = @_;
 
@@ -324,6 +328,10 @@ sub PUSHCOLOR {
 
 # Pop the color stack and return the new top of the stack (or reset, if
 # the stack is empty).
+#
+# @text - Any text we're applying colors to
+#
+# Returns: The concatenation of @text prepended with the new stack color
 sub POPCOLOR {
     my (@text) = @_;
     pop @COLORSTACK;
@@ -334,7 +342,13 @@ sub POPCOLOR {
     }
 }
 
-# Surround arguments with a push and a pop.
+# Surround arguments with a push and a pop.  The effect will be to reset the
+# colors to whatever was on the color stack before this sequence of colors was
+# applied.
+#
+# @text - Any text we're applying colors to
+#
+# Returns: The concatenation of the text and the proper color reset sequence.
 sub LOCALCOLOR {
     my (@text) = @_;
     return PUSHCOLOR(join q{}, @text) . POPCOLOR();
@@ -345,6 +359,12 @@ sub LOCALCOLOR {
 ##############################################################################
 
 # Return the escape code for a given set of color attributes.
+#
+# @codes - A list of possibly space-separated color attributes
+#
+# Returns: The escape sequence setting those color attributes
+#          undef if no escape sequences were given
+#  Throws: Text exception for any invalid attribute
 sub color {
     my (@codes) = @_;
     @codes = map { split } @codes;
@@ -380,6 +400,11 @@ sub color {
 #
 # There is one special case.  256-color codes start with 38 or 48, followed by
 # a 5 and then the 256-color code.
+#
+# @escapes - A list of escape sequences or escape sequence numbers
+#
+# Returns: An array of attribute names corresponding to those sequences
+#  Throws: Text exceptions on invalid escape sequences or unknown colors
 sub uncolor {
     my (@escapes) = @_;
     my (@nums, @result);
@@ -398,6 +423,8 @@ sub uncolor {
     }
 
     # Now, walk the list of numbers and convert them to attribute names.
+    # Strip leading zeroes from any of the numbers.  (xterm, at least, allows
+    # leading zeroes to be added to any number in an escape sequence.)
     for my $num (@nums) {
         $num =~ s{ ( \A | ; ) 0+ (\d) }{$1$2}xmsg;
         my $name = $ATTRIBUTES_R{$num};
@@ -420,6 +447,13 @@ sub uncolor {
 # $EACHLINE and the starting attribute code after the string $EACHLINE, so
 # that no attribute crosses line delimiters (this is often desirable if the
 # output is to be piped to a pager or some other program).
+#
+# $first - An anonymous array of attributes or the text to color
+# @rest  - The text to color or the list of attributes
+#
+# Returns: The text, concatenated if necessary, surrounded by escapes to set
+#          the desired colors and reset them afterwards
+#  Throws: Text exception on invalid attributes
 sub colored {
     my ($first, @rest) = @_;
     my ($string, @codes);
@@ -452,6 +486,14 @@ sub colored {
 }
 
 # Define a new color alias, or return the value of an existing alias.
+#
+# $alias - The color alias to define
+# $color - The standard color the alias will correspond to (optional)
+#
+# Returns: The standard color value of the alias
+#          undef if one argument was given and the alias was not recognized
+#  Throws: Text exceptions for invalid alias names, attempts to use a
+#          standard color name as an alias, or an unknown standard color name
 sub coloralias {
     my ($alias, $color) = @_;
     if (!defined $color) {
@@ -471,6 +513,11 @@ sub coloralias {
 # Given a string, strip the ANSI color codes out of that string and return the
 # result.  This removes only ANSI color codes, not movement codes and other
 # escape sequences.
+#
+# @string - The list of strings to sanitize
+#
+# Returns: (array)  The strings stripped of ANSI color escape sequences
+#          (scalar) The same, concatenated
 sub colorstrip {
     my (@string) = @_;
     for my $string (@string) {
@@ -481,6 +528,10 @@ sub colorstrip {
 
 # Given a list of color attributes (arguments for color, for instance), return
 # true if they're all valid or false if any of them are invalid.
+#
+# @codes - A list of color attributes, possibly space-separated
+#
+# Returns: True if all the attributes are valid, false otherwise.
 sub colorvalid {
     my (@codes) = @_;
     @codes = map { split q{ }, lc $_ } @codes;
