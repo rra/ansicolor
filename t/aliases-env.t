@@ -29,6 +29,8 @@ my @COLOR_ALIASES = (
     'custom_green =green ',   'custom_blue=blue',
     'custom_unknown=unknown', '=no_new',
     'no_old=',                'no_equals',
+    'red=green',              'custom_test=red=blue',
+    'custom!test=red',
 );
 local $ENV{ANSI_COLORS_ALIASES} = join q{,}, @COLOR_ALIASES;
 
@@ -42,6 +44,12 @@ warnings_like(
         qr{ \A Bad [ ] color [ ] mapping [ ] "=no_new" [ ] at [ ]   }xms,
         qr{ \A Bad [ ] color [ ] mapping [ ] "no_old=" [ ] at [ ]   }xms,
         qr{ \A Bad [ ] color [ ] mapping [ ] "no_equals" [ ] at [ ] }xms,
+        qr{ \A Cannot [ ] alias [ ] standard [ ] color [ ] "red" [ ] in
+            [ ] "red=green" [ ] at [ ] }xms,
+        qr{ \A Invalid [ ] attribute [ ] name [ ] "red=blue" [ ] in [ ]
+            "custom_test=red=blue" [ ] at [ ] }xms,
+        qr{ \A Invalid [ ] alias [ ] name [ ] "custom!test" [ ] in [ ]
+            "custom!test=red" [ ] at [ ] }xms,
     ],
     'Correct warnings when loading module'
 );
