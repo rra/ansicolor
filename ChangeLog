@@ -1,5 +1,7 @@
 2012-12-30  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm: Version 4.00 released.
+
 	* LICENSE: New file summarizing copyright and license information.
 
 	* examples/generate-colors: Add support for "basic" and "bright"
