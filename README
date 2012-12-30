@@ -2,9 +2,10 @@
               (A simple ANSI text attribute control module)
 
   Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2007, 2009,
-  2010, 2011, 2012 Russ Allbery <rra@stanford.edu> and Zenin.  This
-  program is free software; you may redistribute it and/or modify it under
-  the same terms as Perl itself.
+  2010, 2011, 2012 Russ Allbery <rra@stanford.edu>.  Copyright 1996 Zenin.
+  Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>.  This program is
+  free software; you may redistribute it and/or modify it under the same
+  terms as Perl itself.
 
   I welcome bug reports and patches for this package at rra@stanford.edu
   or via the CPAN bug tracker at <http://rt.cpan.org/>.  However, please
@@ -61,10 +62,13 @@ REQUIREMENTS
   tests will be skipped automatically if the modules aren't available.  To
   run the full set of default tests, you will need the Perl modules:
 
+      Perl::Critic
       Test::MinimumVersion
       Test::Pod
       Test::Pod::Coverage
       Test::Strict
+      Test::Synopsis
+      Test::Warn
 
   and their dependencies.  These modules are all available from CPAN.
 
