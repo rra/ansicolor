@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 138;
+use Test::More tests => 139;
 
 # Load the module.
 BEGIN {
@@ -25,6 +25,9 @@ BEGIN {
 is(color('blue on_green', 'bold'), "\e[34;42;1m", 'Simple attributes');
 is(colored('testing', 'blue', 'bold'), "\e[34;1mtesting\e[0m", 'colored');
 is((BLUE BOLD 'testing'), "\e[34m\e[1mtesting", 'Constants');
+
+# Test case variations on attributes.
+is(color('Blue BOLD', 'on_GReeN'), "\e[34;1;42m", 'Attribute case');
 
 # color should return undef if there were no attributes.
 is(color(), undef, 'color returns undef with no attributes');
