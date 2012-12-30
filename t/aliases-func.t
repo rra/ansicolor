@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 # Load the module.
 BEGIN {
@@ -42,6 +42,9 @@ is(color('alert'),      color('green'), '...and now returns its new value');
 
 # uncolor ignores aliases.
 is_deeply([uncolor("\e[32m")], ['green'], 'uncolor ignores aliases');
+
+# Asking for the value of an unknown alias returns undef.
+is(coloralias('warning'), undef, 'coloralias on unknown alias returns undef');
 
 # Invalid alias names.
 $output = eval { coloralias('foo;bar', 'green') };

@@ -498,7 +498,11 @@ sub colored {
 sub coloralias {
     my ($alias, $color) = @_;
     if (!defined $color) {
-        return $ATTRIBUTES_R{ $ALIASES{$alias} };
+        if (!exists $ALIASES{$alias}) {
+            return;
+        } else {
+            return $ATTRIBUTES_R{ $ALIASES{$alias} };
+        }
     }
     if ($alias !~ m{ \A [\w._-]+ \z }xms) {
         croak(qq{Invalid alias name "$alias"});
