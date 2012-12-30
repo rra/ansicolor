@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 139;
+use Test::More tests => 140;
 
 # Load the module.
 BEGIN {
@@ -164,6 +164,8 @@ is_deeply(
     [q{}, 'bold', q{}],
     '...and in an array context'
 );
+is(colorstrip("foo\e[1m", 'bar', "baz\e[0m"),
+    'foobarbaz', '...and proper joining in scalar context');
 is(
     colorstrip("\e[2cSome other code\e and stray [0m stuff"),
     "\e[2cSome other code\e and stray [0m stuff",
