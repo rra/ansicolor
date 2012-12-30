@@ -73,7 +73,7 @@ BEGIN {
     # Exported symbol configuration.
     @ISA         = qw(Exporter);
     @EXPORT      = qw(color colored);
-    @EXPORT_OK   = qw(uncolor colorstrip colorvalid);
+    @EXPORT_OK   = qw(uncolor colorstrip colorvalid coloralias);
     %EXPORT_TAGS = (
         constants    => \@colorlist,
         constants256 => \@colorlist256,
@@ -180,7 +180,7 @@ for my $attr (reverse sort keys %ATTRIBUTES) {
 }
 
 # Import any custom colors set in the environment.
-our %CUSTOM;
+our %ALIASES;
 if (exists $ENV{ANSI_COLORS_CUSTOM}) {
     my $spec = $ENV{ANSI_COLORS_CUSTOM};
     $spec =~ s{\s+}{}xmsg;
@@ -194,10 +194,13 @@ if (exists $ENV{ANSI_COLORS_CUSTOM}) {
         my ($new, $old) = split m{=}xms, $definition, 2;
         if (!$new || !$old) {
             warn qq{Bad color mapping "$definition"};
-        } elsif (!exists $ATTRIBUTES{$old}) {
-            warn qq{Unknown color mapping "$definition"};
         } else {
-            $CUSTOM{$new} = $ATTRIBUTES{$old};
+            my $result = eval { coloralias($new, $old) };
+            if (!$result) {
+                my $error = $@;
+                $error =~ s{ [ ] at [ ] .* }{}xms;
+                warn qq{$error in "$definition"};
+            }
         }
     }
 }
@@ -357,8 +360,8 @@ sub color {
         $code = lc $code;
         if (defined $ATTRIBUTES{$code}) {
             $attribute .= $ATTRIBUTES{$code} . q{;};
-        } elsif (defined $CUSTOM{$code}) {
-            $attribute .= $CUSTOM{$code} . q{;};
+        } elsif (defined $ALIASES{$code}) {
+            $attribute .= $ALIASES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
         }
@@ -448,6 +451,23 @@ sub colored {
     }
 }
 
+# Define a new color alias, or return the value of an existing alias.
+sub coloralias {
+    my ($alias, $color) = @_;
+    if (!defined $color) {
+        return $ATTRIBUTES_R{ $ALIASES{$alias} };
+    }
+    if ($alias !~ m{ \A [\w._-]+ \z }xms) {
+        croak(qq{Invalid alias name "$alias"});
+    } elsif ($ATTRIBUTES{$alias}) {
+        croak(qq{Cannot alias standard color "$alias"});
+    } elsif (!exists $ATTRIBUTES{$color}) {
+        croak(qq{Invalid attribute name "$color"});
+    }
+    $ALIASES{$alias} = $ATTRIBUTES{$color};
+    return $color;
+}
+
 # Given a string, strip the ANSI color codes out of that string and return the
 # result.  This removes only ANSI color codes, not movement codes and other
 # escape sequences.
@@ -465,7 +485,7 @@ sub colorvalid {
     my (@codes) = @_;
     @codes = map { split q{ }, lc $_ } @codes;
     for my $code (@codes) {
-        if (!defined $ATTRIBUTES{$code} && !defined $CUSTOM{$code}) {
+        if (!defined $ATTRIBUTES{$code} && !defined $ALIASES{$code}) {
             return;
         }
     }
@@ -489,7 +509,7 @@ cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic
-aterm rxvt CPAN RGB Solarized Whitespace
+aterm rxvt CPAN RGB Solarized Whitespace alphanumerics undef
 
 =head1 SYNOPSIS
 
@@ -505,15 +525,25 @@ aterm rxvt CPAN RGB Solarized Whitespace
     print colored ['bright_red on_black'], 'Bright red on black.', "\n";
     print "\n";
 
+    # Map escape sequences back to color names.
     use Term::ANSIColor qw(uncolor);
-    print uncolor('01;31'), "\n";
+    my $names = uncolor('01;31');
+    print join(q{ }, @{$names}), "\n";
 
+    # Strip all color escape sequences.
     use Term::ANSIColor qw(colorstrip);
     print colorstrip '\e[1mThis is bold\e[0m', "\n";
 
+    # Determine whether a color is valid.
     use Term::ANSIColor qw(colorvalid);
     my $valid = colorvalid('blue bold', 'on_magenta');
     print "Color string is ", $valid ? "valid\n" : "invalid\n";
+
+    # Create new aliases for colors.
+    use Term::ANSIColor qw(coloralias);
+    coloralias('alert', 'red');
+    print "Alert is ", coloralias('alert'), "\n";
+    print colored("This is in red.", 'alert'), "\n";
 
     use Term::ANSIColor qw(:constants);
     print BOLD, BLUE, "This text is in bold blue.\n", RESET;
@@ -543,8 +573,8 @@ aterm rxvt CPAN RGB Solarized Whitespace
 
 This module has two interfaces, one through color() and colored() and the
 other through constants.  It also offers the utility functions uncolor(),
-colorstrip(), and colorvalid(), which have to be explicitly imported to be
-used (see L</SYNOPSIS>).
+colorstrip(), colorvalid(), and coloralias(), which have to be explicitly
+imported to be used (see L</SYNOPSIS>).
 
 =head2 Supported Colors
 
@@ -668,7 +698,7 @@ you can save it as a string, pass it to something else, send it to a file
 handle, or do anything else with it that you might care to.  color()
 throws an exception if given an invalid attribute.
 
-=item colored(STRING, ATTRIBUTES)
+=item colored(STRING, ATTR[, ATTR ...])
 
 =item colored(ATTR-REF, STRING[, STRING...])
 
@@ -707,6 +737,31 @@ together in scalar context.  Its arguments are not modified.
 
 colorvalid() takes attribute strings the same as color() and returns true
 if all attributes are known and false otherwise.
+
+=item coloralias(ALIAS[, ATTR])
+
+If ATTR is specified, coloralias() sets up an alias of ALIAS for the
+standard color ATTR.  From that point forward, ALIAS can be passed into
+color(), colored(), and colorvalid() and will have the same meaning as
+ATTR.  One possible use of this facility is to give more meaningful names
+to the 256-color RGB colors.  Only alphanumerics, C<.>, C<_>, and C<-> are
+allowed in alias names.
+
+If ATTR is not specified, coloralias() returns the standard color name to
+which ALIAS is aliased, if any, or undef if ALIAS does not exist.
+
+This is the same facility used by the ANSI_COLORS_CUSTOM environment
+variable (see L</ENVIRONMENT> below) but can be used at runtime, not just
+when the module is loaded.
+
+Later invocations of coloralias() with the same ALIAS will override
+earlier aliases.  There is no way to remove an alias.
+
+Aliases have no effect on the return value of uncolor().
+
+B<WARNING>: Aliases are global and affect all callers in the same process.
+There is no way to set an alias limited to a particular block of code or a
+particular object.
 
 =back
 
@@ -860,9 +915,35 @@ or:
 This will only show up under use strict (another good reason to run under
 use strict).
 
+=item Cannot alias standard color %s
+
+(F) The alias name passed to coloralias() matches a standard color name.
+Standard color names cannot be aliased.
+
+=item Cannot alias standard color %s in %s
+
+(W) The same, but in ANSI_COLORS_CUSTOM.  The color mapping was ignored.
+
+=item Invalid alias name %s
+
+(F) You passed an invalid alias name to coloralias().  Alias names must
+consist only of alphanumerics, C<.>, C<->, and C<_>.
+
+=item Invalid alias name %s in %s
+
+(W) You specified an invalid alias name on the left hand of the equal sign
+in a color mapping in ANSI_COLORS_CUSTOM.  The color mapping was ignored.
+
 =item Invalid attribute name %s
 
-(F) You passed an invalid attribute name to either color() or colored().
+(F) You passed an invalid attribute name to color(), colored(), or
+coloralias().
+
+=item Invalid attribute name %s in %s
+
+(W) You specified an invalid attribute name on the right hand of the equal
+sign in a color mapping in ANSI_COLORS_CUSTOM.  The color mapping was
+ignored.
 
 =item Name "%s" used only once: possible typo
 
@@ -888,14 +969,6 @@ color name.
 (F) The ANSI escape sequence passed to uncolor() contains escapes which
 aren't recognized and can't be translated to names.
 
-=item Unknown color mapping %s
-
-(W) The specified color mapping from ANSI_COLORS_CUSTOM names a color on
-the right side of the equal sign that was not recognized.  The environment
-variable maps custom color names to standard color names.  The color named
-on the right hand side must be a standard name.  The specified color
-mapping was ignored.
-
 =back
 
 =head1 ENVIRONMENT
@@ -904,11 +977,12 @@ mapping was ignored.
 
 =item ANSI_COLORS_CUSTOM
 
-This environment variable allows the user to specify custom color names
+This environment variable allows the user to specify custom color aliases
 that will be understood by color(), colored(), and colorvalid().  None of
 the other functions will be affected, and no new color constants will be
-created.  The custom color names are simply aliases for existing color
-names.
+created.  The custom colors are aliases for existing color names; no new
+escape sequences can be introduced.  Only alphanumerics, C<.>, C<_>, and
+C<-> are allowed in alias names.
 
 The format is:
 
@@ -933,24 +1007,8 @@ can be mapped with:
 
 This environment variable is read and applied when the Term::ANSIColor
 module is loaded and is then subsequently ignored.  Changes to
-ANSI_COLORS_CUSTOM after the module is loaded will have no effect.  This
-means that:
-
-    $ENV{ANSI_COLORS_CUSTOM} = 'custom=red';
-    use Term::ANSIColor 4.00;
-
-will not behave as expected because C<use> runs before other code.  If the
-calling program wants to set this variable, it should normally be done in
-a BEGIN block, or before Term::ANSIColor is loaded via C<require>.  For
-example:
-
-    BEGIN {
-        $ENV{ANSI_COLORS_CUSTOM} = 'custom=red';
-    }
-    use Term::ANSIColor 4.00;
-
-Normally it will be set in the environment by the user or by some calling
-process.
+ANSI_COLORS_CUSTOM after the module is loaded will have no effect.  See
+coloralias() for an equivalent facility that can be used at runtime.
 
 Support for this environment variable was added in Term::ANSIColor 4.00.
 

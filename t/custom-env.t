@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Test setting customized colors via the environment.
+# Test setting color aliases via the environment.
 #
 # Copyright 2012 Stephen Thirlwall
 # Copyright 2012 Russ Allbery <rra@stanford.edu>
@@ -37,8 +37,8 @@ my $require_sub = sub { require_ok('Term::ANSIColor') };
 warnings_like(
     $require_sub,
     [
-        qr{ \A Unknown [ ] color [ ] mapping [ ] "custom_unknown=unknown"
-            [ ] at [ ] }xms,
+        qr{ \A Invalid [ ] attribute [ ] name [ ] "unknown" [ ] in [ ]
+            "custom_unknown=unknown" [ ] at [ ] }xms,
         qr{ \A Bad [ ] color [ ] mapping [ ] "=no_new" [ ] at [ ]   }xms,
         qr{ \A Bad [ ] color [ ] mapping [ ] "no_old=" [ ] at [ ]   }xms,
         qr{ \A Bad [ ] color [ ] mapping [ ] "no_equals" [ ] at [ ] }xms,
