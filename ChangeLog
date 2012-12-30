@@ -5,19 +5,20 @@
 	new alias name restrictions.
 	(coloralias): New function to set a color alias.  Enforce
 	restrictions on the acceptable alias name.
-	* t/custom-env.t: Adjust warning test for new error message.
-	* t/custom-func.t: New test of coloralias.
+
+	* t/aliases-env.t: Adjust warning test for new error message.
+	* t/aliases-func.t: New test of coloralias.
 
 2012-12-29  Stephen Thirlwall  <stephen.thirlwall@strategicdata.com.au>
 	    Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Add support for custom color names configured with
-	the ANSI_COLORS_CUSTOM environment variable as set during module
+	the ANSI_COLORS_ALIASES environment variable as set during module
 	load.
 	(color): Support custom colors.
 	(colorvalid): Likewise.
-	* t/custom-env.t: New test of custom colors from the environment.
-	* t/basic.t: Delete ANSI_COLORS_CUSTOM from the environment before
+	* t/aliases-env.t: New test of custom colors from the environment.
+	* t/basic.t: Delete ANSI_COLORS_ALIASES from the environment before
 	module load to avoid any effects from the test runner's settings.
 	* t/basic256.t: Likewise.
 	* t/eval.t: Likewise.

@@ -15,10 +15,10 @@ use Test::More tests => 138;
 
 # Load the module.
 BEGIN {
-    delete $ENV{ANSI_COLORS_CUSTOM};
+    delete $ENV{ANSI_COLORS_ALIASES};
     delete $ENV{ANSI_COLORS_DISABLED};
     use_ok('Term::ANSIColor',
-        qw/:pushpop color colored uncolor colorstrip colorvalid/);
+        qw(:pushpop color colored uncolor colorstrip colorvalid));
 }
 
 # Various basic tests.

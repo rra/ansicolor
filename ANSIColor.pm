@@ -181,8 +181,8 @@ for my $attr (reverse sort keys %ATTRIBUTES) {
 
 # Import any custom colors set in the environment.
 our %ALIASES;
-if (exists $ENV{ANSI_COLORS_CUSTOM}) {
-    my $spec = $ENV{ANSI_COLORS_CUSTOM};
+if (exists $ENV{ANSI_COLORS_ALIASES}) {
+    my $spec = $ENV{ANSI_COLORS_ALIASES};
     $spec =~ s{\s+}{}xmsg;
 
     # Error reporting here is an interesting question.  Use warn rather than
@@ -750,7 +750,7 @@ allowed in alias names.
 If ATTR is not specified, coloralias() returns the standard color name to
 which ALIAS is aliased, if any, or undef if ALIAS does not exist.
 
-This is the same facility used by the ANSI_COLORS_CUSTOM environment
+This is the same facility used by the ANSI_COLORS_ALIASES environment
 variable (see L</ENVIRONMENT> below) but can be used at runtime, not just
 when the module is loaded.
 
@@ -895,7 +895,7 @@ attributes are.
 
 =item Bad color mapping %s
 
-(W) The specified color mapping from ANSI_COLORS_CUSTOM is not valid and
+(W) The specified color mapping from ANSI_COLORS_ALIASES is not valid and
 could not be parsed.  It was ignored.
 
 =item Bad escape sequence %s
@@ -922,7 +922,7 @@ Standard color names cannot be aliased.
 
 =item Cannot alias standard color %s in %s
 
-(W) The same, but in ANSI_COLORS_CUSTOM.  The color mapping was ignored.
+(W) The same, but in ANSI_COLORS_ALIASES.  The color mapping was ignored.
 
 =item Invalid alias name %s
 
@@ -932,7 +932,7 @@ consist only of alphanumerics, C<.>, C<->, and C<_>.
 =item Invalid alias name %s in %s
 
 (W) You specified an invalid alias name on the left hand of the equal sign
-in a color mapping in ANSI_COLORS_CUSTOM.  The color mapping was ignored.
+in a color mapping in ANSI_COLORS_ALIASES.  The color mapping was ignored.
 
 =item Invalid attribute name %s
 
@@ -942,7 +942,7 @@ coloralias().
 =item Invalid attribute name %s in %s
 
 (W) You specified an invalid attribute name on the right hand of the equal
-sign in a color mapping in ANSI_COLORS_CUSTOM.  The color mapping was
+sign in a color mapping in ANSI_COLORS_ALIASES.  The color mapping was
 ignored.
 
 =item Name "%s" used only once: possible typo
@@ -975,7 +975,7 @@ aren't recognized and can't be translated to names.
 
 =over 4
 
-=item ANSI_COLORS_CUSTOM
+=item ANSI_COLORS_ALIASES
 
 This environment variable allows the user to specify custom color aliases
 that will be understood by color(), colored(), and colorvalid().  None of
@@ -986,14 +986,14 @@ C<-> are allowed in alias names.
 
 The format is:
 
-    ANSI_COLORS_CUSTOM='newcolor1=oldcolor1,newcolor2=oldcolor2'
+    ANSI_COLORS_ALIASES='newcolor1=oldcolor1,newcolor2=oldcolor2'
 
 Whitespace is ignored.
 
 For example the L<Solarized|http://ethanschoonover.com/solarized> colors
 can be mapped with:
 
-    ANSI_COLORS_CUSTOM='\
+    ANSI_COLORS_ALIASES='\
         base00=bright_yellow, on_base00=on_bright_yellow,\
         base01=bright_green,  on_base01=on_bright_green, \
         base02=black,         on_base02=on_black,        \
@@ -1007,7 +1007,7 @@ can be mapped with:
 
 This environment variable is read and applied when the Term::ANSIColor
 module is loaded and is then subsequently ignored.  Changes to
-ANSI_COLORS_CUSTOM after the module is loaded will have no effect.  See
+ANSI_COLORS_ALIASES after the module is loaded will have no effect.  See
 coloralias() for an equivalent facility that can be used at runtime.
 
 Support for this environment variable was added in Term::ANSIColor 4.00.

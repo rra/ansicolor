@@ -24,13 +24,13 @@ delete $ENV{ANSI_COLORS_DISABLED};
 
 # Set up some custom color configuration.  The last four will produce warnings
 # on module load.
-my @CUSTOM_COLORS = (
+my @COLOR_ALIASES = (
     ' custom_black = black',  'custom_red= red',
     'custom_green =green ',   'custom_blue=blue',
     'custom_unknown=unknown', '=no_new',
     'no_old=',                'no_equals',
 );
-local $ENV{ANSI_COLORS_CUSTOM} = join q{,}, @CUSTOM_COLORS;
+local $ENV{ANSI_COLORS_ALIASES} = join q{,}, @COLOR_ALIASES;
 
 # Load the module, which should produce those warnings.
 my $require_sub = sub { require_ok('Term::ANSIColor') };
