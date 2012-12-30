@@ -194,4 +194,7 @@ THANKS
   To Magnus Woldrich for Term::ExtendedColor and for research on which
   emulators support 256 colors.
 
+  To Stephen Thirlwall for the initial implementation of custom color
+  support.
+
   To Larry Wall, as always, for Perl.

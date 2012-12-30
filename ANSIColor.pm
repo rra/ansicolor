@@ -101,6 +101,11 @@ our $EACHLINE;
 # Internal data structures
 ##############################################################################
 
+# This module does quite a bit of initialization at the time it is first
+# loaded, primarily to set up the package-global %ATTRIBUTES hash.  The
+# entries for 256-color names are easier to handle programmatically, and
+# custom colors are also imported from the environment if any are set.
+
 # All basic supported attributes, including aliases.
 #<<<
 our %ATTRIBUTES = (
@@ -142,19 +147,19 @@ our %ATTRIBUTES = (
 
 # The first 16 256-color codes are duplicates of the 16 ANSI colors,
 # included for completeness.
-for my $n (0 .. 15) {
-    $ATTRIBUTES{"ansi$n"}    = "38;5;$n";
-    $ATTRIBUTES{"on_ansi$n"} = "48;5;$n";
+for my $code (0 .. 15) {
+    $ATTRIBUTES{"ansi$code"}    = "38;5;$code";
+    $ATTRIBUTES{"on_ansi$code"} = "48;5;$code";
 }
 
-# 256-color RGB colors.  Red, green, and blue can each be values 0 through 6,
+# 256-color RGB colors.  Red, green, and blue can each be values 0 through 5,
 # and the resulting 216 colors start with color 16.
 for my $r (0 .. 5) {
     for my $g (0 .. 5) {
         for my $b (0 .. 5) {
-            my $n = 16 + 36 * $r + 6 * $g + $b;
-            $ATTRIBUTES{"rgb$r$g$b"}    = "38;5;$n";
-            $ATTRIBUTES{"on_rgb$r$g$b"} = "48;5;$n";
+            my $code = 16 + (6 * 6 * $r) + (6 * $g) + $b;
+            $ATTRIBUTES{"rgb$r$g$b"}    = "38;5;$code";
+            $ATTRIBUTES{"on_rgb$r$g$b"} = "48;5;$code";
         }
     }
 }
@@ -172,6 +177,29 @@ for my $n (0 .. 23) {
 our %ATTRIBUTES_R;
 for my $attr (reverse sort keys %ATTRIBUTES) {
     $ATTRIBUTES_R{ $ATTRIBUTES{$attr} } = $attr;
+}
+
+# Import any custom colors set in the environment.
+our %CUSTOM;
+if (exists $ENV{ANSI_COLORS_CUSTOM}) {
+    my $spec = $ENV{ANSI_COLORS_CUSTOM};
+    $spec =~ s{\s+}{}xmsg;
+
+    # Error reporting here is an interesting question.  Use warn rather than
+    # carp because carp would report the line of the use or require, which
+    # doesn't help anyone understand what's going on, whereas seeing this code
+    # will be more helpful.
+    ## no critic (ErrorHandling::RequireCarping)
+    for my $definition (split m{,}xms, $spec) {
+        my ($new, $old) = split m{=}xms, $definition, 2;
+        if (!$new || !$old) {
+            warn qq{Bad color mapping "$definition"};
+        } elsif (!exists $ATTRIBUTES{$old}) {
+            warn qq{Unknown color mapping "$definition"};
+        } else {
+            $CUSTOM{$new} = $ATTRIBUTES{$old};
+        }
+    }
 }
 
 # Stores the current color stack maintained by PUSHCOLOR and POPCOLOR.  This
@@ -327,10 +355,13 @@ sub color {
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc $code;
-        if (!defined $ATTRIBUTES{$code}) {
+        if (defined $ATTRIBUTES{$code}) {
+            $attribute .= $ATTRIBUTES{$code} . q{;};
+        } elsif (defined $CUSTOM{$code}) {
+            $attribute .= $CUSTOM{$code} . q{;};
+        } else {
             croak("Invalid attribute name $code");
         }
-        $attribute .= $ATTRIBUTES{$code} . q{;};
     }
 
     # We added one too many semicolons for simplicity.  Remove the last one.
@@ -432,9 +463,9 @@ sub colorstrip {
 # true if they're all valid or false if any of them are invalid.
 sub colorvalid {
     my (@codes) = @_;
-    @codes = map { split } @codes;
+    @codes = map { split q{ }, lc $_ } @codes;
     for my $code (@codes) {
-        if (!defined $ATTRIBUTES{ lc $code }) {
+        if (!defined $ATTRIBUTES{$code} && !defined $CUSTOM{$code}) {
             return;
         }
     }
@@ -458,7 +489,7 @@ cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
 ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
 reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic
-aterm rxvt CPAN RGB
+aterm rxvt CPAN RGB Solarized Whitespace
 
 =head1 SYNOPSIS
 
@@ -807,6 +838,11 @@ attributes are.
 
 =over 4
 
+=item Bad color mapping %s
+
+(W) The specified color mapping from ANSI_COLORS_CUSTOM is not valid and
+could not be parsed.  It was ignored.
+
 =item Bad escape sequence %s
 
 (F) You passed an invalid ANSI escape sequence to uncolor().
@@ -852,11 +888,71 @@ color name.
 (F) The ANSI escape sequence passed to uncolor() contains escapes which
 aren't recognized and can't be translated to names.
 
+=item Unknown color mapping %s
+
+(W) The specified color mapping from ANSI_COLORS_CUSTOM names a color on
+the right side of the equal sign that was not recognized.  The environment
+variable maps custom color names to standard color names.  The color named
+on the right hand side must be a standard name.  The specified color
+mapping was ignored.
+
 =back
 
 =head1 ENVIRONMENT
 
 =over 4
+
+=item ANSI_COLORS_CUSTOM
+
+This environment variable allows the user to specify custom color names
+that will be understood by color(), colored(), and colorvalid().  None of
+the other functions will be affected, and no new color constants will be
+created.  The custom color names are simply aliases for existing color
+names.
+
+The format is:
+
+    ANSI_COLORS_CUSTOM='newcolor1=oldcolor1,newcolor2=oldcolor2'
+
+Whitespace is ignored.
+
+For example the L<Solarized|http://ethanschoonover.com/solarized> colors
+can be mapped with:
+
+    ANSI_COLORS_CUSTOM='\
+        base00=bright_yellow, on_base00=on_bright_yellow,\
+        base01=bright_green,  on_base01=on_bright_green, \
+        base02=black,         on_base02=on_black,        \
+        base03=bright_black,  on_base03=on_bright_black, \
+        base0=bright_blue,    on_base0=on_bright_blue,   \
+        base1=bright_cyan,    on_base1=on_bright_cyan,   \
+        base2=white,          on_base2=on_white,         \
+        base3=bright_white,   on_base3=on_bright_white,  \
+        orange=bright_red,    on_orange=on_bright_red,   \
+        violet=bright_magenta,on_violet=on_bright_magenta'
+
+This environment variable is read and applied when the Term::ANSIColor
+module is loaded and is then subsequently ignored.  Changes to
+ANSI_COLORS_CUSTOM after the module is loaded will have no effect.  This
+means that:
+
+    $ENV{ANSI_COLORS_CUSTOM} = 'custom=red';
+    use Term::ANSIColor 4.00;
+
+will not behave as expected because C<use> runs before other code.  If the
+calling program wants to set this variable, it should normally be done in
+a BEGIN block, or before Term::ANSIColor is loaded via C<require>.  For
+example:
+
+    BEGIN {
+        $ENV{ANSI_COLORS_CUSTOM} = 'custom=red';
+    }
+    use Term::ANSIColor 4.00;
+
+Normally it will be set in the environment by the user or by some calling
+process.
+
+Support for this environment variable was added in Term::ANSIColor 4.00.
 
 =item ANSI_COLORS_DISABLED
 

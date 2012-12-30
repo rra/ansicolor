@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+#
+# Test setting customized colors via the environment.
+#
+# Copyright 2012 Stephen Thirlwall
+# Copyright 2012 Russ Allbery <rra@stanford.edu>
+#
+# This program is free software; you may redistribute it and/or modify it
+# under the same terms as Perl itself.
+
+use strict;
+use warnings;
+
+use Test::More tests => 19;
+
+# Skip tests if Test::Warn is not installed.
+if (!eval { require Test::Warn }) {
+    plan skip_all => 'Test::Warn required to test custom colors';
+}
+Test::Warn->import;
+
+# Ensure we don't pick up a setting from the user's environment.
+delete $ENV{ANSI_COLORS_DISABLED};
+
+# Set up some custom color configuration.  The last four will produce warnings
+# on module load.
+my @CUSTOM_COLORS = (
+    ' custom_black = black',  'custom_red= red',
+    'custom_green =green ',   'custom_blue=blue',
+    'custom_unknown=unknown', '=no_new',
+    'no_old=',                'no_equals',
+);
+local $ENV{ANSI_COLORS_CUSTOM} = join q{,}, @CUSTOM_COLORS;
+
+# Load the module, which should produce those warnings.
+my $require_sub = sub { require_ok('Term::ANSIColor') };
+warnings_like(
+    $require_sub,
+    [
+        qr{ \A Unknown [ ] color [ ] mapping [ ] "custom_unknown=unknown"
+            [ ] at [ ] }xms,
+        qr{ \A Bad [ ] color [ ] mapping [ ] "=no_new" [ ] at [ ]   }xms,
+        qr{ \A Bad [ ] color [ ] mapping [ ] "no_old=" [ ] at [ ]   }xms,
+        qr{ \A Bad [ ] color [ ] mapping [ ] "no_equals" [ ] at [ ] }xms,
+    ],
+    'Correct warnings when loading module'
+);
+
+# Import the functions for convenience.
+Term::ANSIColor->import(qw(color colored colorvalid uncolor));
+
+# Check the custom colors all get assigned.  They use various spacing formats
+# and should all parse correctly.
+for my $original (qw(black red green blue)) {
+    my $custom = 'custom_' . $original;
+    ok(colorvalid($custom), "$custom is valid");
+    is(color($custom), color($original),
+        "...and matches $original with color");
+    is(
+        colored('test', $custom),
+        colored('test', $original),
+        "...and matches $original with colored"
+    );
+    is_deeply([uncolor(color($custom))],
+        [$original], "...and uncolor returns $original");
+}
+
+# custom_unknown is mapped to an unknown color and should not appear.
+is(colorvalid('custom_unknown'), undef, 'Unknown color mapping fails');
