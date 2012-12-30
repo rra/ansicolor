@@ -4,10 +4,11 @@
 #     2011, 2012 Russ Allbery <rra@stanford.edu>
 # Copyright 1996 Zenin
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# PUSH/POP support submitted 2007 by openmethods.com voice solutions
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
+#
+# PUSH/POP support submitted 2007 by openmethods.com voice solutions
 #
 # Ah, September, when the sysadmins turn colors and fall off the trees....
 #                               -- Dave Van Domelen
@@ -1208,6 +1209,9 @@ Allbery <rra@stanford.edu>, and then combined with the original idea by
 Russ with input from Zenin.  256-color support is based on work by Kurt
 Starsinic.  Russ Allbery now maintains this module.
 
+PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
+voice solutions.
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
@@ -1215,8 +1219,5 @@ Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
 Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>.  This program is
 free software; you may redistribute it and/or modify it under the same
 terms as Perl itself.
-
-PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
-voice solutions.
 
 =cut
