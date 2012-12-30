@@ -51,12 +51,7 @@
 	(uncolor): Support the three-part 256-color codes.
 	* t/basic256.t: New test for 256-color support.
 	* tests/generate-256: New script to generate 256-color test or
-	demonstration files.  The files it can generate are also included
-	in the distribution for viewing before installing the module.
-	* tests/color256-ansi: New test file showing the 16 ANSI colors.
-	* tests/color256-bg: New test file showing RGB backgrounds.
-	* tests/color256-fg: New test file showing RGB backgrounds.
-	* tests/color256-grey: New test file showing grey-scale colors.
+	demonstration files.
 
 2012-12-28  Russ Allbery  <rra@stanford.edu>
 
