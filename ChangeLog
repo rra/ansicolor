@@ -1,5 +1,11 @@
 2012-12-30  Russ Allbery  <rra@stanford.edu>
 
+	* ANSIColor.pm (AUTOLOAD): Only honor ANSI_COLORS_DISABLED if it
+	is set to a true value.
+	(color): Likewise.
+	(colored): Likewise.
+	* t/basic.t: Test that ANSI_COLORS_DISABLED must be true.
+
 	* t/synopsis.t: New test for SYNOPSIS syntax.
 
 	* ANSIColor.pm: Add COMPATIBILITY section to the documentation,

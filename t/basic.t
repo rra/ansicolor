@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 141;
+use Test::More tests => 145;
 
 # Load the module.
 BEGIN {
@@ -73,6 +73,16 @@ delete $ENV{ANSI_COLORS_DISABLED};
 # all the ones we're going to use to get full test coverage.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
 is((BLUE 'testing'), 'testing', 'ANSI_COLORS_DISABLED with existing constant');
+delete $ENV{ANSI_COLORS_DISABLED};
+
+# If ANSI_COLORS_DISABLED is set to a false value or the empty string, it
+# should not take effect.
+local $ENV{ANSI_COLORS_DISABLED} = 0;
+is(color('bold'), "\e[1m", 'ANSI_COLORS_DISABLED must be true');
+is((BOLD),        "\e[1m", '...likewise for constants');
+local $ENV{ANSI_COLORS_DISABLED} = q{};
+is(color('bold'), "\e[1m", '...likewise when set to an empty string');
+is((BOLD),        "\e[1m", '...likewise for constants');
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Make sure DARK is exported.  This was omitted in versions prior to 1.07.

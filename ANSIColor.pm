@@ -231,10 +231,10 @@ our @COLORSTACK;
 # called sub against the list of attributes, and if it's an all-caps version
 # of one of them, we define the sub on the fly and then run it.
 #
-# If the environment variable ANSI_COLORS_DISABLED is set, just return the
-# arguments without adding any escape sequences.  This is to make it easier to
-# write scripts that also work on systems without any ANSI support, like
-# Windows consoles.
+# If the environment variable ANSI_COLORS_DISABLED is set to a true value,
+# just return the arguments without adding any escape sequences.  This is to
+# make it easier to write scripts that also work on systems without any ANSI
+# support, like Windows consoles.
 #
 ## no critic (ClassHierarchies::ProhibitAutoloading)
 ## no critic (Subroutines::RequireArgUnpacking)
@@ -249,7 +249,7 @@ sub AUTOLOAD {
 
     # If colors are disabled, just return the input.  Do this without
     # installing a sub for (marginal, unbenchmarked) speed.
-    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED}) {
         return join q{}, @_;
     }
 
@@ -271,7 +271,7 @@ sub AUTOLOAD {
     ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
     my $eval_result = eval qq{
         sub $AUTOLOAD {
-            if (defined \$ENV{ANSI_COLORS_DISABLED}) {
+            if (\$ENV{ANSI_COLORS_DISABLED}) {
                 return join q{}, \@_;
             } elsif (\$AUTOLOCAL && \@_) {
                 return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
@@ -350,7 +350,7 @@ sub color {
     @codes = map { split } @codes;
 
     # Return the empty string if colors are disabled.
-    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED}) {
         return q{};
     }
 
@@ -432,7 +432,7 @@ sub colored {
     }
 
     # Return the string unmolested if colors are disabled.
-    if (defined $ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED}) {
         return $string;
     }
 
@@ -1000,12 +1000,12 @@ coloralias() for an equivalent facility that can be used at runtime.
 
 =item ANSI_COLORS_DISABLED
 
-If this environment variable is set, all of the functions defined by this
-module (color(), colored(), and all of the constants not previously used
-in the program) will not output any escape sequences and instead will just
-return the empty string or pass through the original text as appropriate.
-This is intended to support easy use of scripts using this module on
-platforms that don't support ANSI escape sequences.
+If this environment variable is set to a true value, all of the functions
+defined by this module (color(), colored(), and all of the constants not
+previously used in the program) will not output any escape sequences and
+instead will just return the empty string or pass through the original
+text as appropriate.  This is intended to support easy use of scripts
+using this module on platforms that don't support ANSI escape sequences.
 
 =back
 
