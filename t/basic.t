@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 140;
+use Test::More tests => 141;
 
 # Load the module.
 BEGIN {
@@ -56,8 +56,9 @@ is(
 # Basic tests for uncolor.
 is_deeply([uncolor('1;42', "\e[m", q{}, "\e[0m")],
     [qw(bold on_green clear)], 'uncolor');
-is_deeply([uncolor("\e[m")], [], 'uncolor("\\e[m")');
-is_deeply([uncolor(q{})],    [], 'uncolor("")');
+is_deeply([uncolor("\e[01m")], ['bold'], 'uncolor("\\e[01m")');
+is_deeply([uncolor("\e[m")],   [],       'uncolor("\\e[m")');
+is_deeply([uncolor(q{})],      [],       'uncolor("")');
 
 # Several tests for ANSI_COLORS_DISABLED.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
