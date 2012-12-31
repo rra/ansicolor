@@ -156,8 +156,9 @@ THANKS
   To Daniel Lindsley for the information about what Mac OS X Terminal
   supports.
 
-  To Joe Smith for the test files that exercise a wide variety of VT100
-  escape sequences including the ECMA-48 color control codes.
+  To Joe Smith for the original test files that exercise a wide variety of
+  VT100 escape sequences including the ECMA-48 color control codes.  These
+  have been replaced by an example script, but they were very useful.
 
   To James Bowlin for catching a bug in colored when $EACHLINE is set that
   caused it to not color lines consisting solely of 0.
