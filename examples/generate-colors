@@ -2,7 +2,7 @@
 #
 # Generate 256-color test files.
 #
-# Takes one or more of six arguments: basic, bright, fg256 (foregrond), bg256
+# Takes one or more of six arguments: basic, bright, fg256 (foreground), bg256
 # (background), grey, or ansi256.  Generates a test file for either basic ANSI
 # colors or 256-color emulators, testing that region of colors.
 #
