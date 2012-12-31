@@ -1,5 +1,10 @@
 2012-12-31  Russ Allbery  <rra@stanford.edu>
 
+	* examples/generate-colors: Add POD documentation.
+	* t/critic.t: Also check the examples directory.
+	* t/pod.t: Likewise.
+	* t/pod-spelling.t: Likewise.
+
 	* t/aliases-env.t: Fix logic for skipping tests when Test::Warn is
 	not installed.
 

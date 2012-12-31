@@ -56,11 +56,13 @@ local $ENV{PERLTIDY} = test_file_path('data/perltidyrc');
 my $profile = test_file_path('data/perlcriticrc');
 Test::Perl::Critic->import(-profile => $profile);
 
-# By default, Test::Perl::Critic only checks blib.  We also want to check t.
+# By default, Test::Perl::Critic only checks blib.  We also want to check
+# examples, t, and Makefile.PL.
 my @files = Perl::Critic::Utils::all_perl_files('blib');
 if (!@files) {
     @files = Perl::Critic::Utils::all_perl_files('lib');
 }
+push @files, Perl::Critic::Utils::all_perl_files('examples');
 push @files, Perl::Critic::Utils::all_perl_files('t');
 push @files, 'Makefile.PL';
 @files = grep { !m{ [.](?:in|tdy) }xms } @files;

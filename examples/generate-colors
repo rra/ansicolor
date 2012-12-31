@@ -210,3 +210,92 @@ for my $file (@ARGV) {
         die "Unknown test file: $file\n";
     }
 }
+
+__END__
+
+=for stopwords
+fg256 bg256 RGB rgb000 rgb222 rgb555 ansi256 CPAN Starsinic Allbery grey
+grey-scale
+
+=head1 NAME
+
+generate-colors - Generate color test patterns for ANSI terminal support
+
+=head1 SYNOPSIS
+
+B<generate-colors> I<type> [I<type> ...]
+
+=head1 REQUIREMENTS
+
+Perl 5.6 and Term::ANSIColor 4.00 or later.
+
+=head1 DESCRIPTION
+
+B<generate-colors> generates test and demonstration tables for ANSI color
+and text attribute support for eight-color, sixteen-color, and 256-color
+terminal emulators.  The I<type> command-line argument specifies a table
+to print to standard output.  Multiple I<type> arguments can be specified,
+and each of those tables will be printed in the order given.
+
+The supported values of I<type> are:
+
+=over 8
+
+=item basic
+
+The basic eight ANSI colors as both foreground and background, as well as
+examples of bold for each color and a separate table of the non-color text
+attributes supported by Term::ANSIColor.
+
+=item bright
+
+The "bright" ANSI colors from the sixteen-color palette (colors 8 through
+15) on all possible color backgrounds (colors 0 through 15).
+
+=item fg256
+
+All of the 216 colors in the 256-color palette that are specified by three
+RGB values (each from 0 to 5) as foreground colors, shown against three
+possible backgrounds (rgb000, rgb222, and rgb555).
+
+=item bg256
+
+The same as C<fg256> except showing all of the background colors for three
+different possible foreground colors (rgb000, rgb222, and rgb555).
+
+=item grey
+
+The 24 grey-scale colors in the 256-color palette, shown as both foreground
+and background.
+
+=item ansi256
+
+The 256-color palette devotes the lowest 16 colors to duplicating the colors
+from the sixteen-color palette.  This test table shows all sixteen as both
+foreground and background colors, but using the 256-color escape sequence
+format to specify them.  It's possible that this test will not work with
+some emulators that support C<basic> and C<bright> if 256-color support is
+not implemented.
+
+=back
+
+=head1 SEE ALSO
+
+L<Term::ANSIColor>
+
+This script is an example in the Term::ANSIColor distribution, available
+from its web site at L<http://www.eyrie.org/~eagle/software/ansicolor/> or
+from CPAN.
+
+=head1 AUTHORS
+
+Original script written by Kurt Starsinic.  It was restructured and updated
+by Russ Allbery to add the C<basic> and C<bright> test tables.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2012 Russ Allbery <rra@stanford.edu>.  Copyright 2012 Kurt
+Starsinic <kstarsinic@gmail.com>.  This program is free software; you may
+redistribute it and/or modify it under the same terms as Perl itself.
+
+=cut

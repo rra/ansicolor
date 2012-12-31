@@ -27,5 +27,7 @@ if (!eval { require Test::Spelling }) {
 }
 Test::Spelling->import;
 
-# Check all POD in the Perl distribution.
-all_pod_files_spelling_ok();
+# Check all POD in the Perl distribution.  Add the examples directory.
+my @files = all_pod_files();
+push @files, 'examples';
+all_pod_files_spelling_ok(@files);
