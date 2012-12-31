@@ -1,3 +1,8 @@
+2012-12-31  Russ Allbery  <rra@stanford.edu>
+
+	* t/aliases-env.t: Fix logic for skipping tests when Test::Warn is
+	not installed.
+
 2012-12-30  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 4.00 released.

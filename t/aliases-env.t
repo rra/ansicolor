@@ -11,13 +11,16 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More;
 
 # Skip tests if Test::Warn is not installed.
 if (!eval { require Test::Warn }) {
     plan skip_all => 'Test::Warn required to test custom colors';
 }
 Test::Warn->import;
+
+# Print out our plan.
+plan tests => 19;
 
 # Ensure we don't pick up a setting from the user's environment.
 delete $ENV{ANSI_COLORS_DISABLED};

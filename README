@@ -199,6 +199,9 @@ THANKS
   To Stephen Thirlwall for the initial implementation of custom color
   support.
 
+  To BlueT - Matthew Lien - 練喆明 for quick testing of 4.00 and reporting
+  a problem with skipping one of the tests.
+
   To Larry Wall, as always, for Perl.
 
 LICENSE
