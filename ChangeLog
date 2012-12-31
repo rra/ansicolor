@@ -1,5 +1,8 @@
 2012-12-31  Russ Allbery  <rra@stanford.edu>
 
+	* t/strict.t: During coverage checking, skip generic tests that
+	don't run module code for a significant speed-up.
+
 	* examples/generate-colors: Add POD documentation.
 	* t/critic.t: Also check the examples directory.
 	* t/pod.t: Likewise.

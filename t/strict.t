@@ -20,6 +20,16 @@ use Test::More;
 # Coverage level achieved.
 use constant COVERAGE_LEVEL => 100;
 
+# Non-fuctional, generic tests to skip for test coverage analysis.  Also skip
+# t/taint.t since Devel::Cover doesn't know how to run scripts requiring
+# taint checking.
+use constant COVERAGE_SKIP_TESTS => (
+    't/critic.t',       't/minimum-version.t',
+    't/pod-coverage.t', 't/pod-spelling.t',
+    't/pod.t',          't/synopsis.t',
+    't/taint.t',
+);
+
 # Skip tests if Test::Strict is not installed.
 if (!eval { require Test::Strict }) {
     plan skip_all => 'Test::Strict required to test Perl syntax';
@@ -46,9 +56,11 @@ SKIP: {
         skip 'Devel::Cover required to check test coverage', 1;
     }
 
-    # Skip t/taint.t since Test::Strict doesn't know how to run scripts that
-    # require taint checking properly.
-    $Test::Strict::TEST_SKIP = [File::Spec->canonpath('t/taint.t')];
+    # Skip the various generic tests that don't add to coverage.  Some of
+    # these load a lot of Perl code, which causes Devel::Cover to be very
+    # slow.
+    my @skip = map { File::Spec->canonpath($_) } COVERAGE_SKIP_TESTS;
+    $Test::Strict::TEST_SKIP = [@skip];
 
     # Disable POD coverage; that's handled separately and is confused by our
     # autoloading.
