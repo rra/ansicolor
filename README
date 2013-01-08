@@ -117,15 +117,13 @@ SUPPORT
 
   For bug tracking, this package uses the CPAN bug tracker at:
 
-      https://rt.cpan.org/
-
-  Look for the Term-ANSIColor distribution.
+      https://rt.cpan.org/Public/Dist/Display.html?Name=Term-ANSIColor
 
   I welcome bug reports and patches for this package at rra@stanford.edu
-  or via the CPAN bug tracker at <http://rt.cpan.org/>.  However, please
-  be aware that I tend to be extremely busy and work projects often take
-  priority.  I'll save your mail and get to it as soon as I can, but it
-  may take me a couple of months.
+  or via the CPAN bug tracker.  However, please be aware that I tend to be
+  extremely busy and work projects often take priority.  I'll save your
+  mail and get to it as soon as I can, but it may take me a couple of
+  months.
 
 SOURCE REPOSITORY
 
