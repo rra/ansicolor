@@ -1,5 +1,8 @@
 2013-01-07  Russ Allbery  <rra@stanford.edu>
 
+	* Makefile.PL: Add the minimum Perl version to the package
+	metadata.
+
 	* t/basic256.t: List the tag first in the import list for
 	compatibility with the Exporter from Perl 5.6.2.  Thanks to David
 	Cantrell for the testing and debugging.
