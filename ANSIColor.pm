@@ -729,7 +729,7 @@ C<rgb000> or C<rgb515>.  Similarly, the recognized background colors are:
   on_ansi0 .. on_ansi15
   on_grey0 .. on_grey23
 
-plus C<on_rgbI<RGB>> for for I<R>, I<G>, and I<B> values from 0 to 5.
+plus C<on_rgbI<RGB>> for I<R>, I<G>, and I<B> values from 0 to 5.
 
 For any of the above listed attributes, case is not significant.
 

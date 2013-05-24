@@ -1,3 +1,8 @@
+2013-05-23  Russ Allbery  <rra@stanford.edu>
+
+	* ANSIColor.pm: Fix duplicated word in the POD documentation.
+	Thanks to David Steinbrunner for the report.
+
 2013-01-07  Russ Allbery  <rra@stanford.edu>
 
 	* ANSIColor.pm: Version 4.02 released.
