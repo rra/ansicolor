@@ -244,7 +244,7 @@ sub AUTOLOAD {
 
     # Check if we were called with something that doesn't look like an
     # attribute.
-    if (!$attr || !defined $ATTRIBUTES{ lc $attr }) {
+    if (!($attr && defined $ATTRIBUTES{ lc $attr })) {
         croak("undefined subroutine &$AUTOLOAD called");
     }
 
