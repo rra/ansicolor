@@ -1,5 +1,11 @@
                    User-Visible Term::ANSIColor Changes
 
+Term::ANSIColor 4.03 (unreleased)
+
+    Switch the module build system to Module::Build, but still generate a
+    Makefile.PL file for backward compatibility and for the use of Perl
+    core.
+
 Term::ANSIColor 4.02 (2013-01-07)
 
     When testing 256-color support, list the tag first in the import list

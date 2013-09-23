@@ -64,7 +64,7 @@ if (!@files) {
 }
 push @files, Perl::Critic::Utils::all_perl_files('examples');
 push @files, Perl::Critic::Utils::all_perl_files('t');
-push @files, 'Makefile.PL';
+push @files, 'Build.PL';
 @files = grep { !m{ [.](?:in|tdy) }xms } @files;
 plan tests => scalar @files;
 
