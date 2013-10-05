@@ -1192,7 +1192,8 @@ ECMA-048 and the latter is available for free, there seems little reason
 to obtain the ISO standard.
 
 The 256-color control sequences are documented at
-L<http://www.xfree86.org/current/ctlseqs.html> (search for 256-color).
+L<http://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
+256-color).
 
 The CPAN module Term::ExtendedColor provides a different and more
 comprehensive interface for 256-color emulators that may be more
