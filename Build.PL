@@ -16,12 +16,12 @@ use Module::Build;
 
 # Basic package configuration.
 my $build = Module::Build->new(
-    module_name          => 'Term::ANSIColor',
-    dist_abstract        => 'Color output using ANSI escape sequences',
-    dist_author          => 'Russ Allbery <rra@cpan.org>',
-    dist_version_from    => 'lib/Term/ANSIColor.pm',
-    license              => 'perl',
-    meta_merge           => {
+    module_name       => 'Term::ANSIColor',
+    dist_abstract     => 'Color output using ANSI escape sequences',
+    dist_author       => 'Russ Allbery <rra@cpan.org>',
+    dist_version_from => 'lib/Term/ANSIColor.pm',
+    license           => 'perl',
+    meta_merge        => {
         resources => {
             repository => 'git://git.eyrie.org/perl/ansicolor.git',
             bugtracker =>
