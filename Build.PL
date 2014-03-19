@@ -21,6 +21,14 @@ my $build = Module::Build->new(
     dist_author          => 'Russ Allbery <rra@cpan.org>',
     dist_version_from    => 'lib/Term/ANSIColor.pm',
     license              => 'perl',
+    meta_merge           => {
+        resources => {
+            repository => 'git://git.eyrie.org/perl/ansicolor.git',
+            bugtracker =>
+'https://rt.cpan.org/Public/Dist/Display.html?Name=Term-ANSIColor',
+        },
+    },
+
     recursive_test_files => 1,
     create_makefile_pl   => 'traditional',
 
