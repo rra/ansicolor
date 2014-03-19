@@ -1,10 +1,14 @@
 /Build
+/Build.bat
 /MANIFEST.bak
 /Makefile
+/Makefile.PL
 /Makefile.old
 /META.yml
+/META.json
 /MYMETA.json
 /MYMETA.yml
+/Term-ANSIColor-*/
 /Term-ANSIColor-*.tar.gz
 /Term-ANSIColor-*.tar.gz.asc
 /_build/
