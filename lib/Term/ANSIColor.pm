@@ -589,7 +589,7 @@ aterm rxvt CPAN RGB Solarized Whitespace alphanumerics undef
 
     # Strip all color escape sequences.
     use Term::ANSIColor 2.01 qw(colorstrip);
-    print colorstrip '\e[1mThis is bold\e[0m', "\n";
+    print colorstrip "\e[1mThis is bold\e[0m", "\n";
 
     # Determine whether a color is valid.
     use Term::ANSIColor 2.02 qw(colorvalid);
