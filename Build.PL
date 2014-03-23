@@ -3,7 +3,7 @@
 # Build script for the Term::ANSIColor distribution.
 #
 # Copyright 1997, 1998, 2000, 2009, 2011, 2012, 2013
-#     Russ Allbery <rra@stanford.edu>
+#     Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -18,7 +18,7 @@ use Module::Build;
 my $build = Module::Build->new(
     module_name          => 'Term::ANSIColor',
     dist_abstract        => 'Color output using ANSI escape sequences',
-    dist_author          => 'Russ Allbery <rra@stanford.edu>',
+    dist_author          => 'Russ Allbery <rra@cpan.org>',
     dist_version_from    => 'lib/Term/ANSIColor.pm',
     license              => 'perl',
     recursive_test_files => 1,

@@ -6,7 +6,7 @@
 # processing and lose its value or leak $@ values to the calling program.
 # This is a regression test to ensure that this problem doesn't return.
 #
-# Copyright 2012, 2013 Russ Allbery <rra@stanford.edu>
+# Copyright 2012, 2013 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.

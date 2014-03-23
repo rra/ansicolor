@@ -3,7 +3,7 @@
 # Test suite for stringify interaction.
 #
 # Copyright 2011 Revilo Reegiles
-# Copyright 2011 Russ Allbery <rra@stanford.edu>
+# Copyright 2011 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.

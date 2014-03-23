@@ -11,7 +11,7 @@
 # module is.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012 Russ Allbery <rra@stanford.edu>
+# Copyright 2012 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -294,8 +294,8 @@ by Russ Allbery to add the C<basic> and C<bright> test tables.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2012 Russ Allbery <rra@stanford.edu>.  Copyright 2012 Kurt
-Starsinic <kstarsinic@gmail.com>.  This program is free software; you may
+Copyright 2012 Russ Allbery <rra@cpan.org>.  Copyright 2012 Kurt Starsinic
+<kstarsinic@gmail.com>.  This program is free software; you may
 redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut

@@ -6,7 +6,7 @@
 # it takes a long time, is sensitive to the versions of various libraries,
 # and will not interfere with functionality.
 #
-# Copyright 2012 Russ Allbery <rra@stanford.edu>
+# Copyright 2012 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.

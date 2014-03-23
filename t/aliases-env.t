@@ -3,7 +3,7 @@
 # Test setting color aliases via the environment.
 #
 # Copyright 2012 Stephen Thirlwall
-# Copyright 2012 Russ Allbery <rra@stanford.edu>
+# Copyright 2012 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
