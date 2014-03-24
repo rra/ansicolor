@@ -8,7 +8,7 @@ Comment: This file documents the copyright statements and licenses for
 
 Files: *
 Copyright: 1996 Zenin
-  1996-1998, 2000-2002, 2005-2006, 2008-2013 Russ Allbery <rra@cpan.org>
+  1996-1998, 2000-2002, 2005-2006, 2008-2014 Russ Allbery <rra@cpan.org>
   2011 Revilo Reegiles
   2012 Stephen Thirlwall
   2012 Kurt Starsinic <kstarsinic@gmail.com>
@@ -19,8 +19,11 @@ License: Perl
  Artistic License.  Please see your Perl distribution for the details and
  copies of the licenses.
 
-Files: t/data/perlcriticrc
-Copyright: 2011-2012
+Files: t/data/perlcriticrc t/docs/pod-coverage.t t/docs/pod-spelling.t
+ t/docs/pod.t t/docs/synopsis.t t/lib/Test/RRA.pm t/lib/Test/RRA/Config.pm
+ t/style/coverage.t t/style/critic.t t/style/minimum-version.t
+ t/style/strict.t
+Copyright: 2011-2014
     The Board of Trustees of the Leland Stanford Junior University
 License: Expat
  Permission is hereby granted, free of charge, to any person obtaining a

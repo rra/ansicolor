@@ -1191,10 +1191,10 @@ voice solutions.
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
-2006, 2008, 2009, 2010, 2011, 2012 Russ Allbery <rra@cpan.org>.  Copyright
-2012 Kurt Starsinic <kstarsinic@gmail.com>.  This program is free
-software; you may redistribute it and/or modify it under the same terms as
-Perl itself.
+2006, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Russ Allbery
+<rra@cpan.org>.  Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>.
+This program is free software; you may redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
