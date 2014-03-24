@@ -6,7 +6,8 @@ Term::ANSIColor 4.03 (unreleased)
     Makefile.PL file for backward compatibility and for the use of Perl
     core.
 
-    Fix typo in SYNOPSIS (colorstrip example). Thanks, Olivier Mengué.
+    Fix typo in SYNOPSIS (colorstrip example).  Thanks, Olivier Mengué.
+    (#94006)
 
 Term::ANSIColor 4.02 (2013-01-07)
 
