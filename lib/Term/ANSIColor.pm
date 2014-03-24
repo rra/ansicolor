@@ -1089,11 +1089,11 @@ Support for italic was added in Term::ANSIColor 3.02, included in Perl
 Support for colors 16 through 256 (the C<ansi>, C<rgb>, and C<grey>
 colors), the C<:constants256> import tag, the coloralias() function, and
 support for the ANSI_COLORS_ALIASES environment variable were added in
-Term::ANSIColor 4.00.
+Term::ANSIColor 4.00, included in Perl 5.17.8.
 
 $Term::ANSIColor::AUTOLOCAL was changed to take precedence over
 $Term::ANSIColor::AUTORESET, rather than the other way around, in
-Term::ANSIColor 4.00.
+Term::ANSIColor 4.00, included in Perl 5.17.8.
 
 =head1 RESTRICTIONS
 
