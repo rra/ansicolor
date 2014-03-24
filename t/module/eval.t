@@ -6,7 +6,7 @@
 # processing and lose its value or leak $@ values to the calling program.
 # This is a regression test to ensure that this problem doesn't return.
 #
-# Copyright 2012, 2013 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2013, 2014 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -32,7 +32,6 @@ is($@,            q{},         '... and $@ is empty');
 
 # Store something in $@ and ensure it doesn't get clobbered.
 ## no critic (BuiltinFunctions::ProhibitStringyEval)
-## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
 eval 'sub { syntax';
 is((BLINK 'test'), "\e[5mtest", 'BLINK works after eval failure');
 isnt($@, q{}, '... and $@ still contains something useful');
