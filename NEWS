@@ -1,6 +1,6 @@
                    User-Visible Term::ANSIColor Changes
 
-Term::ANSIColor 4.03 (unreleased)
+Term::ANSIColor 4.03 (2014-03-23)
 
     Switch the module build system to Module::Build, but still generate a
     Makefile.PL file for backward compatibility and for the use of Perl
