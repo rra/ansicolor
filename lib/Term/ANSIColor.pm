@@ -376,9 +376,9 @@ sub color {
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc($code);
-        if (defined $ATTRIBUTES{$code}) {
+        if (defined($ATTRIBUTES{$code})) {
             $attribute .= $ATTRIBUTES{$code} . q{;};
-        } elsif (defined $ALIASES{$code}) {
+        } elsif (defined($ALIASES{$code})) {
             $attribute .= $ALIASES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
@@ -538,7 +538,7 @@ sub colorvalid {
     my (@codes) = @_;
     @codes = map { split(q{ }, lc($_)) } @codes;
     for my $code (@codes) {
-        if (!defined $ATTRIBUTES{$code} && !defined $ALIASES{$code}) {
+        if (!defined($ATTRIBUTES{$code}) && !defined($ALIASES{$code})) {
             return;
         }
     }
