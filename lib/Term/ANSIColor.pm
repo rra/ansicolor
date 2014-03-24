@@ -1,7 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-#     2011, 2012, 2013 Russ Allbery <rra@cpan.org>
+#     2011, 2012, 2013, 2014 Russ Allbery <rra@cpan.org>
 # Copyright 1996 Zenin
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 #
@@ -562,11 +562,12 @@ __END__
 Term::ANSIColor - Color screen output using ANSI escape sequences
 
 =for stopwords
-cyan colorize namespace runtime TMTOWTDI cmd.exe 4nt.exe command.com NT
-ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining Zenin
-reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
-grey ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic
-aterm rxvt CPAN RGB Solarized Whitespace alphanumerics undef
+cyan colorize namespace runtime TMTOWTDI cmd.exe cmd.exe. 4nt.exe. 4nt.exe
+command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
+Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
+openmethods.com. grey ATTR urxvt mistyped prepending Bareword filehandle
+Cygwin Starsinic aterm rxvt CPAN RGB Solarized Whitespace alphanumerics
+undef
 
 =head1 SYNOPSIS
 
