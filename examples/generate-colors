@@ -11,7 +11,7 @@
 # module is.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -34,12 +34,9 @@ use constant COLORS     => qw(black red green yellow blue magenta cyan white);
 # with these because they can't be prototyped and hence can't be overridden.
 
 ## no critic (Subroutines::RequireArgUnpacking)
-sub print_checked  { print @_  or croak 'print failed';  return }
-sub printf_checked { printf @_ or croak 'printf failed'; return }
+sub print_checked  { print @_  or croak('print failed');  return }
+sub printf_checked { printf @_ or croak('printf failed'); return }
 ## use critic
-
-# Not useful for this file.
-## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
 
 # The sample background or foreground colors for 256-color tests.
 my @SAMPLES = qw(000 222 555);
@@ -48,7 +45,7 @@ my @SAMPLES = qw(000 222 555);
 my @RGB;
 for my $r (0 .. 5) {
     for my $g (0 .. 5) {
-        push @RGB, map { "$r$g$_" } 0 .. 5;
+        push(@RGB, map { "$r$g$_" } 0 .. 5);
     }
 }
 
@@ -60,7 +57,7 @@ for my $r (0 .. 5) {
 # Returns: Text centered within that width
 sub center {
     my ($text, $width) = @_;
-    my $padding  = $width - length $text;
+    my $padding  = $width - length($text);
     my $trailing = int($padding / 2);
     my $leading  = $padding - $trailing;
     return (q{ } x $leading) . $text . (q{ } x $trailing);
