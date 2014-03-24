@@ -9,6 +9,11 @@ Term::ANSIColor 4.03 (unreleased)
     Fix typo in SYNOPSIS (colorstrip example).  Thanks, Olivier Mengué.
     (#94006)
 
+    Skip POD and some other style tests unless doing automated or release
+    testing.  Skip POD spelling, coverage, and Perl::Critic tests unless
+    doing author testing.  Use the Lancaster Consensus environment
+    variables instead of RRA_MAINTAINER_TESTS.  (#93474)
+
 Term::ANSIColor 4.02 (2013-01-07)
 
     When testing 256-color support, list the tag first in the import list
