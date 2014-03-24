@@ -3,21 +3,22 @@
 # Test setting color aliases via the environment.
 #
 # Copyright 2012 Stephen Thirlwall
-# Copyright 2012 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
 
+use 5.006;
 use strict;
 use warnings;
 
-use Test::More;
+use lib 't/lib';
 
-# Skip tests if Test::Warn is not installed.
-if (!eval { require Test::Warn }) {
-    plan skip_all => 'Test::Warn required to test custom colors';
-}
-Test::Warn->import;
+use Test::More;
+use Test::RRA qw(use_prereq);
+
+# Load prerequisite modules.
+use_prereq('Test::Warn');
 
 # Print out our plan.
 plan tests => 19;
@@ -35,7 +36,7 @@ my @COLOR_ALIASES = (
     'red=green',              'custom_test=red=blue',
     'custom!test=red',
 );
-local $ENV{ANSI_COLORS_ALIASES} = join q{,}, @COLOR_ALIASES;
+local $ENV{ANSI_COLORS_ALIASES} = join(q{,}, @COLOR_ALIASES);
 
 # Load the module, which should produce those warnings.
 my $require_sub = sub { require_ok('Term::ANSIColor') };
