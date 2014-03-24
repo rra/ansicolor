@@ -14,6 +14,8 @@ Term::ANSIColor 4.03 (unreleased)
     doing author testing.  Use the Lancaster Consensus environment
     variables instead of RRA_MAINTAINER_TESTS.  (#93474)
 
+    Add SEE ALSO reference to Win32::Console::ANSI.  (#87295)
+
 Term::ANSIColor 4.02 (2013-01-07)
 
     When testing 256-color support, list the tag first in the import list

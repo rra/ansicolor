@@ -1178,28 +1178,6 @@ supported by this module.
 Most modern X terminal emulators support 256 colors.  Known to not support
 those colors are aterm, rxvt, Terminal.app, and TTY/VC.
 
-=head1 SEE ALSO
-
-ECMA-048 is available on-line (at least at the time of this writing) at
-L<http://www.ecma-international.org/publications/standards/Ecma-048.htm>.
-
-ISO 6429 is available from ISO for a charge; the author of this module
-does not own a copy of it.  Since the source material for ISO 6429 was
-ECMA-048 and the latter is available for free, there seems little reason
-to obtain the ISO standard.
-
-The 256-color control sequences are documented at
-L<http://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
-256-color).
-
-The CPAN module Term::ExtendedColor provides a different and more
-comprehensive interface for 256-color emulators that may be more
-convenient.
-
-The current version of this module is always available from its web site
-at L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of
-the Perl core distribution as of 5.6.0.
-
 =head1 AUTHORS
 
 Original idea (using constants) by Zenin, reimplemented using subs by Russ
@@ -1217,5 +1195,28 @@ Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
 2012 Kurt Starsinic <kstarsinic@gmail.com>.  This program is free
 software; you may redistribute it and/or modify it under the same terms as
 Perl itself.
+
+=head1 SEE ALSO
+
+The CPAN module L<Term::ExtendedColor> provides a different and more
+comprehensive interface for 256-color emulators that may be more
+convenient.  The CPAN module L<Win32::Console::ANSI> provides ANSI color
+(and other escape sequence) support in the Win32 Console environment.
+
+ECMA-048 is available on-line (at least at the time of this writing) at
+L<http://www.ecma-international.org/publications/standards/Ecma-048.htm>.
+
+ISO 6429 is available from ISO for a charge; the author of this module
+does not own a copy of it.  Since the source material for ISO 6429 was
+ECMA-048 and the latter is available for free, there seems little reason
+to obtain the ISO standard.
+
+The 256-color control sequences are documented at
+L<http://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
+256-color).
+
+The current version of this module is always available from its web site
+at L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of
+the Perl core distribution as of 5.6.0.
 
 =cut
