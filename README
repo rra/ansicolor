@@ -215,6 +215,10 @@ THANKS
   To David Cantrell for testing with Perl 5.6.2 and debugging why a test
   case didn't work with its version of Exporter.
 
+  To Olivier Mengué for fixing a SYNOPSIS quoting error and for various
+  other build fixes and recommendations about environment variables for
+  test control.
+
   To Larry Wall, as always, for Perl.
 
 LICENSE
