@@ -635,7 +635,7 @@ particular features and the versions of Perl that included them.
 
 =head2 Supported Colors
 
-Terminal emulators that support color divide into two types: ones that
+Terminal emulators that support color divide into three types: ones that
 support only eight colors, ones that support sixteen, and ones that
 support 256.  This module provides the ANSI escape codes all of them.
 These colors are referred to as ANSI colors 0 through 7 (normal), 8
