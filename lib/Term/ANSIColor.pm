@@ -637,7 +637,7 @@ particular features and the versions of Perl that included them.
 
 Terminal emulators that support color divide into three types: ones that
 support only eight colors, ones that support sixteen, and ones that
-support 256.  This module provides the ANSI escape codes all of them.
+support 256.  This module provides the ANSI escape codes for all of them.
 These colors are referred to as ANSI colors 0 through 7 (normal), 8
 through 15 (16-color), and 16 through 255 (256-color).
 
