@@ -8,6 +8,10 @@ Term::ANSIColor 4.04 (unreleased)
     tests the same build system used by Perl.  Update Makefile.PL with the
     additional metadata from the Module::Build build system.
 
+    For versions of Perl prior to 5.11, install the module into the Perl
+    core module directories, since in those versions site modules did not
+    take precedence over Perl core modules.
+
 Term::ANSIColor 4.03 (2014-03-23)
 
     Switch the module build system to Module::Build, but still generate a
