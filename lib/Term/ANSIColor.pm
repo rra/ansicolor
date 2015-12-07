@@ -538,7 +538,7 @@ sub colorvalid {
     my (@codes) = @_;
     @codes = map { split(q{ }, lc) } @codes;
     for my $code (@codes) {
-        if (!defined($ATTRIBUTES{$code}) && !defined($ALIASES{$code})) {
+        if (!(defined($ATTRIBUTES{$code}) || defined($ALIASES{$code}))) {
             return;
         }
     }
