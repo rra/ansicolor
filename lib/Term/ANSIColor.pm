@@ -1,7 +1,7 @@
 # Term::ANSIColor -- Color screen output using ANSI escape sequences.
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-#     2011, 2012, 2013, 2014 Russ Allbery <rra@cpan.org>
+#     2011, 2012, 2013, 2014, 2015 Russ Allbery <rra@cpan.org>
 # Copyright 1996 Zenin
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 #
@@ -475,7 +475,7 @@ sub colored {
     # empty segments, and then colorize each of the line sections.
     if (defined($EACHLINE)) {
         my @text = map { ($_ ne $EACHLINE) ? $attr . $_ . "\e[0m" : $_ }
-          grep { length($_) > 0 }
+          grep { length > 0 }
           split(m{ (\Q$EACHLINE\E) }xms, $string);
         return join(q{}, @text);
     } else {
@@ -536,7 +536,7 @@ sub colorstrip {
 # Returns: True if all the attributes are valid, false otherwise.
 sub colorvalid {
     my (@codes) = @_;
-    @codes = map { split(q{ }, lc($_)) } @codes;
+    @codes = map { split(q{ }, lc) } @codes;
     for my $code (@codes) {
         if (!defined($ATTRIBUTES{$code}) && !defined($ALIASES{$code})) {
             return;
@@ -1190,9 +1190,13 @@ voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996 Zenin.  Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005,
-2006, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Russ Allbery
-<rra@cpan.org>.  Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>.
+Copyright 1996 Zenin
+
+Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
+2011, 2012, 2013, 2014, 2015 Russ Allbery <rra@cpan.org>
+
+Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
+
 This program is free software; you may redistribute it and/or modify it
 under the same terms as Perl itself.
 
