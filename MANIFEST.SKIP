@@ -4,15 +4,9 @@
 ^\.git/
 
 # Avoid generated build files.
+^Makefile$
 \bblib/
-
-# Avoid Module::Build generated and utility files.
-\bBuild$
-\b_build/
-\bBuild.bat$
-\bBuild.COM$
-\bBUILD.COM$
-\bbuild.com$
+^pm_to_blib$
 
 # Avoid temp and backup files.
 ~$

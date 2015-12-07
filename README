@@ -86,10 +86,6 @@ REQUIREMENTS
 
 INSTALLATION
 
-  WARNING: Installation of this package will replace the Term::ANSIColor
-  that came with Perl.  You may want to save a backup copy of the standard
-  version first.
-
   Follow the standard installation procedure for Perl modules, which is to
   type the following commands:
 
