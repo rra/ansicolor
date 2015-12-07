@@ -12,6 +12,8 @@ Term::ANSIColor 4.04 (unreleased)
     core module directories, since in those versions site modules did not
     take precedence over Perl core modules.
 
+    Rename NEWS to Changes to match the normal Perl convention.
+
 Term::ANSIColor 4.03 (2014-03-23)
 
     Switch the module build system to Module::Build, but still generate a

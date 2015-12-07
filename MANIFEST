@@ -1,11 +1,11 @@
 .gitignore
+Changes
 examples/generate-colors
 lib/Term/ANSIColor.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-NEWS
 README
 t/data/perl.conf
 t/data/perlcriticrc
