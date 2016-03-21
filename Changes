@@ -12,6 +12,11 @@ Term::ANSIColor 4.05 (unreleased)
     environments, and the impact is slight.)  Thanks, Nicolas R.
     (#111552)
 
+    Provide a mailto address in bug tracking metadata, use the shorter
+    form of the RT bug tracker URL, and fix the license value to match the
+    new metadata specification.  Rework Makefile.PL so that the munging
+    for older versions of ExtUtils::MakeMaker is less intrusive.
+
 Term::ANSIColor 4.04 (2015-12-06)
 
     Revert the build system back to ExtUtils::MakeMaker.  This is the

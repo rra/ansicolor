@@ -5,7 +5,7 @@
 # backards-compatible Makefile.PL, this way normal releases test the same
 # build system that is used for Perl core.
 #
-# Copyright 1999, 2000, 2001, 2008, 2010, 2012, 2014, 2015
+# Copyright 1999, 2000, 2001, 2008, 2010, 2012, 2014, 2015, 2016
 #     Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
@@ -19,17 +19,20 @@ use Config;
 use ExtUtils::MakeMaker;
 use File::Spec;
 
-my $BUGS = 'https://rt.cpan.org/Public/Dist/Display.html?Name=Term::ANSIColor';
+my $BUGS = 'https://rt.cpan.org/Dist/Display.html?Name=Term-ANSIColor';
 
-# Generate the actual Makefile.  Pick an arbitrary module to pull the version
-# from, since they should all have the same version.
-WriteMakefile(
-    NAME         => 'Term::ANSIColor',
-    ABSTRACT     => 'Color output using ANSI escape sequences',
-    AUTHOR       => 'Russ Allbery <rra@cpan.org>',
-    VERSION_FROM => 'lib/Term/ANSIColor.pm',
+# The hash of all the metadata.  This will be modified before WriteMakefile to
+# remove keys not supported by the local version of ExtUtils::MakeMaker.
+my %metadata = (
+    NAME             => 'Term::ANSIColor',
+    ABSTRACT         => 'Color output using ANSI escape sequences',
+    AUTHOR           => 'Russ Allbery <rra@cpan.org>',
+    LICENSE          => 'perl_5',
+    VERSION_FROM     => 'lib/Term/ANSIColor.pm',
+    MIN_PERL_VERSION => '5.006',
 
-    # ExtUtils::MakeMaker doesn't pick up nested test directories by default.
+    # Older versions of ExtUtils::MakeMaker don't pick up nested test
+    # directories by default.
     test => { TESTS => 't/*/*.t' },
 
     # For older versions of Perl, we have to force installation into the Perl
@@ -37,25 +40,36 @@ WriteMakefile(
     # modules.
     INSTALLDIRS => $] lt '5.011' ? 'perl' : 'site',
 
-    # For ExtUtils::MakeMaker 6.31 and later, we can specify the license.
-    ($ExtUtils::MakeMaker::VERSION >= 6.31 ? (
-        LICENSE => 'perl',
-    ) : ()),
-
-    # For ExtUtils::MakeMaker 6.46 or later, we can provide some additional
-    # metadata.
-    ($ExtUtils::MakeMaker::VERSION >= 6.46 ? (
-        META_ADD => {
-            resources => {
-                repository => 'git://git.eyrie.org/perl/ansicolor.git',
-                bugtracker => $BUGS,
+    # Additional metadata.
+    META_ADD => {
+        'meta-spec' => { version => 2 },
+        resources   => {
+            bugtracker => {
+                mailto => 'bug-podlators@rt.cpan.org',
+                web    => $BUGS,
+            },
+            homepage   => 'http://www.eyrie.org/~eagle/software/ansicolor/',
+            repository => {
+                url  => 'git://github.com/rra/ansicolor.git',
+                web  => 'https://github.com/rra/ansicolor',
+                type => 'git',
             },
         },
-    ) : ()),
-
-    # For ExtUtils::MakeMaker 6.48 and later, we can specify the minimum Perl
-    # version required.
-    ($ExtUtils::MakeMaker::VERSION >= 6.48 ? (
-        MIN_PERL_VERSION => '5.006',
-    ) : ()),
+    },
 );
+
+# Remove keys that aren't supported by this version of ExtUtils::MakeMaker.
+# This hash maps keys to the minimum supported version.
+my %supported = (
+    LICENSE          => 6.31,
+    META_ADD         => 6.46,
+    MIN_PERL_VERSION => 6.48,
+);
+for my $key (keys(%supported)) {
+    if ($ExtUtils::MakeMaker::VERSION < $supported{$key}) {
+        delete $metadata{$key};
+    }
+}
+
+# Generate the actual Makefile.
+WriteMakefile(%metadata);
