@@ -41,7 +41,7 @@ our $AUTOLOAD;
 # against circular module loading (not that we load any modules, but
 # consistency is good).
 BEGIN {
-    $VERSION = '4.04';
+    $VERSION = '4.05';
 
     # All of the basic supported constants, used in %EXPORT_TAGS.
     my @colorlist = qw(

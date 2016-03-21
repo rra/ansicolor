@@ -1,6 +1,6 @@
                    User-Visible Term::ANSIColor Changes
 
-Term::ANSIColor 4.05 (unreleased)
+Term::ANSIColor 4.05 (2016-03-20)
 
     Color aliases are now restricted to ASCII alphanumerics, due to the
     below change.
