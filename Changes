@@ -1,5 +1,16 @@
                    User-Visible Term::ANSIColor Changes
 
+Term::ANSIColor 4.05 (unreleased)
+
+    Color aliases are now restricted to ASCII alphanumerics, due to the
+    below change.
+
+    Delay loading of the Carp module and avoid using [:upper:], \w, and \d
+    in regular expressions to reduce the amount of memory this module
+    consumes.  (Normally, I wouldn't worry about this, but this module is
+    very light-weight and can be useful even in highly space-constrained
+    environments, and the impact is slight.)  Thanks, Nicolas R.
+
 Term::ANSIColor 4.04 (2015-12-06)
 
     Revert the build system back to ExtUtils::MakeMaker.  This is the
