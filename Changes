@@ -10,6 +10,7 @@ Term::ANSIColor 4.05 (unreleased)
     consumes.  (Normally, I wouldn't worry about this, but this module is
     very light-weight and can be useful even in highly space-constrained
     environments, and the impact is slight.)  Thanks, Nicolas R.
+    (#111552)
 
 Term::ANSIColor 4.04 (2015-12-06)
 
