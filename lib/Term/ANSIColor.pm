@@ -1233,6 +1233,8 @@ The CPAN module L<Term::ExtendedColor> provides a different and more
 comprehensive interface for 256-color emulators that may be more
 convenient.  The CPAN module L<Win32::Console::ANSI> provides ANSI color
 (and other escape sequence) support in the Win32 Console environment.
+The CPAN module L<Term::Chrome> provides a different interface using
+objects and operator overloading.
 
 ECMA-048 is available on-line (at least at the time of this writing) at
 L<http://www.ecma-international.org/publications/standards/Ecma-048.htm>.
