@@ -45,7 +45,7 @@ my %metadata = (
         'meta-spec' => { version => 2 },
         resources   => {
             bugtracker => {
-                mailto => 'bug-podlators@rt.cpan.org',
+                mailto => 'bug-Term-ANSIColor@rt.cpan.org',
                 web    => $BUGS,
             },
             homepage   => 'http://www.eyrie.org/~eagle/software/ansicolor/',
