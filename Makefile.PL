@@ -48,7 +48,7 @@ my %metadata = (
                 mailto => 'bug-Term-ANSIColor@rt.cpan.org',
                 web    => $BUGS,
             },
-            homepage   => 'http://www.eyrie.org/~eagle/software/ansicolor/',
+            homepage   => 'https://www.eyrie.org/~eagle/software/ansicolor/',
             repository => {
                 url  => 'git://github.com/rra/ansicolor.git',
                 web  => 'https://github.com/rra/ansicolor',

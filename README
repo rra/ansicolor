@@ -102,7 +102,7 @@ SUPPORT
 
   The Term::ANSIColor web page at:
 
-      http://www.eyrie.org/~eagle/software/ansicolor/
+      https://www.eyrie.org/~eagle/software/ansicolor/
 
   will always have the current version of this package, the current
   documentation, and pointers to any additional resources.
@@ -122,15 +122,15 @@ SOURCE REPOSITORY
   Term::ANSIColor is maintained using Git.  You can access the current
   source by cloning the repository at:
 
-      git://git.eyrie.org/perl/ansicolor.git
+      https://git.eyrie.org/git/perl/ansicolor.git
 
   or view the repository on the web at:
 
-      http://git.eyrie.org/?p=perl/ansicolor.git
+      https://git.eyrie.org/?p=perl/ansicolor.git
 
   You can also use GitHub via:
 
-      http://github.com/rra/podlators
+      https://github.com/rra/podlators
 
   The eyrie.org repository is the canonical one, maintained by the author,
   but using GitHub is probably more convenient for most purposes.  Pull

@@ -3,7 +3,7 @@
 # Default options for perltidy for proper Perl code reformatting.
 #
 # The canonical version of this file is maintained in the rra-c-util package,
-# which can be found at <http://www.eyrie.org/~eagle/software/rra-c-util/>.
+# which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.
 
 -bbao           # put line breaks before any operator
 -nbbc           # don't force blank lines before comments (bad for else blocks)

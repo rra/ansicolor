@@ -1266,7 +1266,7 @@ L<http://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
 256-color).
 
 The current version of this module is always available from its web site
-at L<http://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part of
-the Perl core distribution as of 5.6.0.
+at L<https://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part
+of the Perl core distribution as of 5.6.0.
 
 =cut

@@ -11,7 +11,7 @@
 # module is.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012, 2014 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014, 2016 Russ Allbery <rra@cpan.org>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -281,8 +281,8 @@ not implemented.
 L<Term::ANSIColor>
 
 This script is an example in the Term::ANSIColor distribution, available
-from its web site at L<http://www.eyrie.org/~eagle/software/ansicolor/> or
-from CPAN.
+from its web site at L<https://www.eyrie.org/~eagle/software/ansicolor/>
+or from CPAN.
 
 =head1 AUTHORS
 
