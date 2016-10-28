@@ -32,6 +32,7 @@
         "url": "https://git.eyrie.org/git/perl/ansicolor.git",
         "browse": "https://git.eyrie.org/?p=perl/ansicolor.git",
         "github": "rra/ansicolor",
+        "openhub": "https://www.openhub.net/p/ansicolor",
     },
     "quote": {
         "author": "Dave van Domelen",
