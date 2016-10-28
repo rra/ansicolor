@@ -1,6 +1,6 @@
                    User-Visible Term::ANSIColor Changes
 
-Term::ANSIColor 4.06 (unreleased)
+Term::ANSIColor 4.06 (2016-10-28)
 
     Add aliases ansi16 through ansi255 and on_ansi16 through on_ansi255
     (plus the corresponding constants) for the grey and rgb colors so that
