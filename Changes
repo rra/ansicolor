@@ -6,7 +6,7 @@ Term::ANSIColor 4.06 (unreleased)
     (plus the corresponding constants) for the grey and rgb colors so that
     one can refer to all of the 256 ANSI colors with consistent names.
     These are aliases; the colors returned by uncolor will still use the
-    grey and rgb names.
+    grey and rgb names.  (#118267)
 
 Term::ANSIColor 4.05 (2016-03-20)
 
