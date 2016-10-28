@@ -14,6 +14,7 @@ t/docs/pod-coverage.t
 t/docs/pod-spelling.t
 t/docs/pod.t
 t/docs/synopsis.t
+t/docs/urls.t
 t/lib/Test/RRA.pm
 t/lib/Test/RRA/Config.pm
 t/module/aliases-env.t
@@ -27,3 +28,4 @@ t/style/critic.t
 t/style/minimum-version.t
 t/style/strict.t
 t/taint/basic.t
+THANKS
