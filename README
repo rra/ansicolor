@@ -1,9 +1,12 @@
-                           Term::ANSIColor 4.05
-              (A simple ANSI text attribute control module)
+                           Term::ANSIColor 4.06
+               (simple ANSI text attribute control module)
+                Maintained by Russ Allbery <rra@cpan.org>
 
-  This program is free software; you may redistribute it and/or modify it
-  under the same terms as Perl itself.  Please see the section LICENSE
-  below for more information.
+  Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2016 Russ Allbery
+  <rra@cpan.org>.  Copyright 1996 Zenin.  Copyright 2012 Kurt Starsinic
+  <kstarsinic@gmail.com>.  This software is distributed under the same
+  terms as Perl itself.  Please see the section LICENSE below for more
+  information.
 
 BLURB
 
@@ -38,8 +41,6 @@ DESCRIPTION
   with functions that I wrote.  I offered to maintain a combined module
   that included both approaches.
 
-  See the POD documentation for complete details, features, and usage.
-
 REQUIREMENTS
 
   Term::ANSIColor is written in pure Perl and has no module dependencies
@@ -59,44 +60,42 @@ REQUIREMENTS
   Term::ANSIColor module documentation.  If you have any additions to the
   table in the documentation, please send them to me.
 
-  The test suite requires Perl and Test::More (part of Perl since 5.6.2).
-  It also makes use Test::Warn if it is available, but skips the relevant
-  tests if that module is not installed.
+  The test suite requires Test::More (part of Perl since 5.6.2).  The
+  following additional Perl modules will be used by the test suite if
+  present:
+
+  * Devel::Cover
+  * Test::MinimumVersion
+  * Test::Perl::Critic
+  * Test::Pod
+  * Test::Pod::Coverage
+  * Test::Spelling
+  * Test::Strict
+  * Test::Synopsis
+  * Test::Warn
+
+  All are available on CPAN.  Those tests will be skipped if the modules
+  are not available.
 
   To enable tests that don't detect functionality problems but are used to
   sanity-check the release, set the environment variable RELEASE_TESTING
   to a true value.  To enable tests that may be sensitive to the local
   environment or that produce a lot of false positives without uncovering
   many problems, set the environment variable AUTHOR_TESTING to a true
-  value.  For these tests, the additional Perl modules:
+  value.
 
-      Devel::Cover
-      Perl::Critic
-      Test::MinimumVersion
-      Test::Perl::Critic
-      Test::Pod
-      Test::Pod::Coverage
-      Test::Spelling
-      Test::Strict
-      Test::Synopsis
+BUILDING AND INSTALLATION
 
-  and their dependencies as well as a spell-checking program (several are
-  supported by Test::Spelling) are required.  These modules are all
-  available from CPAN.
-
-INSTALLATION
-
-  Follow the standard installation procedure for Perl modules, which is to
-  type the following commands:
+  Term::ANSIColor uses ExtUtils::MakeMaker and can be installed using the
+  same process as any other ExtUtils::MakeMaker module:
 
       perl Makefile.PL
       make
       make test
       make install
 
-  You'll probably need to do the last as root.  If instead you wish to
-  install the module by hand, simply copy it into a directory named Term
-  in your Perl library directory.
+  You'll probably need to do the last as root unless you're installing
+  into a local Perl module tree in your home directory.
 
 SUPPORT
 
@@ -107,30 +106,28 @@ SUPPORT
   will always have the current version of this package, the current
   documentation, and pointers to any additional resources.
 
-  For bug tracking, this package uses the CPAN bug tracker at:
+  For bug tracking, use the CPAN bug tracker at:
 
-      https://rt.cpan.org/Public/Dist/Display.html?Name=Term-ANSIColor
+      https://rt.cpan.org/Dist/Display.html?Name=Term-ANSIColor
 
-  I welcome bug reports and patches for this package at rra@cpan.org
-  or via the CPAN bug tracker.  However, please be aware that I tend to be
-  extremely busy and work projects often take priority.  I'll save your
-  mail and get to it as soon as I can, but it may take me a couple of
-  months.
+  However, please be aware that I tend to be extremely busy and work
+  projects often take priority.  I'll save your report and get to it as
+  soon as I can, but it may take me a couple of months.
 
 SOURCE REPOSITORY
 
   Term::ANSIColor is maintained using Git.  You can access the current
-  source by cloning the repository at:
+  source on GitHub at:
+
+      https://github.com/rra/ansicolor
+
+  or by cloning the repository at:
 
       https://git.eyrie.org/git/perl/ansicolor.git
 
-  or view the repository on the web at:
+  or view the repository via the web at:
 
       https://git.eyrie.org/?p=perl/ansicolor.git
-
-  You can also use GitHub via:
-
-      https://github.com/rra/podlators
 
   The eyrie.org repository is the canonical one, maintained by the author,
   but using GitHub is probably more convenient for most purposes.  Pull
@@ -140,12 +137,12 @@ SOURCE REPOSITORY
 
 LICENSE
 
-  The Term-ANSIColor distribution as a whole is covered by the following
+  The Term::ANSIColor package as a whole is covered by the following
   copyright statement and license:
 
+    Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2016
+        Russ Allbery <rra@cpan.org>
     Copyright 1996 Zenin
-    Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009,
-        2010, 2011, 2012, 2013, 2014, 2015, 2016 Russ Allbery <rra@cpan.org>
     Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 
     This program is free software; you may redistribute it and/or modify
@@ -156,12 +153,11 @@ LICENSE
 
     PUSH/POP support submitted 2007 by openmethods.com voice solutions
 
-  All individual files without an explicit exception below are released
-  under this license.  Some files may have additional copyright holders as
-  noted in those files.  There is detailed information about the licensing
-  of each file in the LICENSE file in this distribution.
-
   Some files in this distribution are individually released under
   different licenses, all of which are compatible with the above general
   package license but which may require preservation of additional
-  notices.  All required notices are preserved in the LICENSE file.
+  notices.  All required notices, and detailed information about the
+  licensing of each file, are recorded in the LICENSE file.
+
+  For any copyright range specified by files in this package as YYYY-ZZZZ,
+  the range specifies every single year in that closed interval.
