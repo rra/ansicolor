@@ -30,6 +30,7 @@ my %metadata = (
     LICENSE          => 'perl_5',
     VERSION_FROM     => 'lib/Term/ANSIColor.pm',
     MIN_PERL_VERSION => '5.006',
+    realclean        => { FILES => 'MANIFEST.bak cover_db' },
 
     # Older versions of ExtUtils::MakeMaker don't pick up nested test
     # directories by default.
