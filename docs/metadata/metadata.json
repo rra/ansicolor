@@ -33,6 +33,9 @@
         "browse": "https://git.eyrie.org/?p=perl/ansicolor.git",
         "github": "rra/ansicolor",
     },
+    "quote": {
+        "author": "Dave van Domelen",
+    },
     "distribution": {
         "section": "devel",
         "tarname": "Term-ANSIColor",
