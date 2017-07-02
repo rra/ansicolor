@@ -1,5 +1,12 @@
                    User-Visible Term::ANSIColor Changes
 
+Term::ANSIColor 4.07 (unreleased)
+
+    Document bad interactions between colored output to standard output
+    and standard error when standard output is line-buffered in a couple
+    of places in the manual and suggest setting autoflush() or EACHLINE
+    as a fix.  (#121974)
+
 Term::ANSIColor 4.06 (2016-10-28)
 
     Add aliases ansi16 through ansi255 and on_ansi16 through on_ansi255

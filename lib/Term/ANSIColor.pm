@@ -1,7 +1,7 @@
 # Color screen output using ANSI escape sequences.
 #
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-#     2011, 2012, 2013, 2014, 2015, 2016 Russ Allbery <rra@cpan.org>
+#     2011, 2012, 2013, 2014, 2015, 2016, 2017 Russ Allbery <rra@cpan.org>
 # Copyright 1996 Zenin
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 #
@@ -808,6 +808,13 @@ default background color for the next line.  Programs like pagers can also
 be confused by attributes that span lines.  Normally you'll want to set
 $Term::ANSIColor::EACHLINE to C<"\n"> to use this feature.
 
+Particularly consider setting $Term::ANSIColor::EACHLINE if you are
+interleaving output to standard output and standard error and you aren't
+flushing standard output (via C<autoflush()> or setting C<$|>).  If you
+don't, the code to reset the color may unexpectedly sit in the standard
+output buffer rather than going to the display, causing standard error
+output to appear in the wrong color.
+
 =item uncolor(ESCAPE)
 
 uncolor() performs the opposite translation as color(), turning escape
@@ -1141,6 +1148,14 @@ constants, were added in Term::ANSIColor 4.06.
 
 =head1 RESTRICTIONS
 
+Both C<colored()> and many uses of the color constants will add the reset
+escape sequence after a newline.  If a program mixes colored output to
+standard output with output to standard error, this can result in the
+standard error text having the wrong color because the reset escape
+sequence hasn't yet been flushed to the display (since standard output to
+a terminal is line-buffered by default).  To avoid this, either set
+C<autoflush()> on STDOUT or set $Term::ANSIColor::EACHLINE to C<"\n">.
+
 It would be nice if one could leave off the commas around the constants
 entirely and just say:
 
@@ -1237,7 +1252,7 @@ voice solutions.
 Copyright 1996 Zenin
 
 Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-2011, 2012, 2013, 2014, 2015, 2016 Russ Allbery <rra@cpan.org>
+2011, 2012, 2013, 2014, 2015, 2016, 2017 Russ Allbery <rra@cpan.org>
 
 Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 
