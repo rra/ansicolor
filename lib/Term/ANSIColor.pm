@@ -478,7 +478,7 @@ sub colored {
     my ($first, @rest) = @_;
     my ($string, @codes);
     if (ref($first) && ref($first) eq 'ARRAY') {
-        @codes = @{$first};
+        @codes  = @{$first};
         $string = join(q{}, @rest);
     } else {
         $string = $first;

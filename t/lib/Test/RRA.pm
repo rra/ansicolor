@@ -93,7 +93,7 @@ sub is_file_contents {
     my $tmpname = $tmp->filename;
     print {$tmp} $got or BAIL_OUT("Cannot write to $tmpname: $!\n");
     my @command = ('diff', '-u', $expected, $tmpname);
-    my $diff = IPC::System::Simple::capturex([0 .. 1], @command);
+    my $diff    = IPC::System::Simple::capturex([0 .. 1], @command);
     diag($diff);
 
     # Remove the temporary file and report failure.
@@ -172,7 +172,7 @@ sub use_prereq {
             use $module $version \@imports;
             1;
         };
-        $error = $@;
+        $error  = $@;
         $sigdie = $SIG{__DIE__} || undef;
     }
 
