@@ -18,11 +18,11 @@ perl:
 
 env: AUTHOR_TESTING=1
 before_install:
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Devel::Cover
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Perl::Critic
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::MinimumVersion
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Perl::Critic
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Pod
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Pod::Coverage
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Strict
-  - [ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Synopsis
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Devel::Cover"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Perl::Critic"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::MinimumVersion"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Perl::Critic"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Pod"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Pod::Coverage"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Strict"
+  - "[ "$TRAVIS_PERL_VERSION" != "5.28" ] || cpanm Test::Synopsis"
