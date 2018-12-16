@@ -4,6 +4,8 @@
 # configuration file to store some package-specific data.  This module loads
 # that configuration and provides the namespace for the configuration
 # settings.
+#
+# SPDX-License-Identifier: MIT
 
 package Test::RRA::Config;
 
@@ -34,7 +36,7 @@ BEGIN {
     # This version should match the corresponding rra-c-util release, but with
     # two digits for the minor version, including a leading zero if necessary,
     # so that it will sort properly.
-    $VERSION = '6.02';
+    $VERSION = '8.00';
 }
 
 # If C_TAP_BUILD or C_TAP_SOURCE are set in the environment, look for
@@ -185,9 +187,9 @@ Russ Allbery <eagle@eyrie.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2015, 2016 Russ Allbery <eagle@eyrie.org>
+Copyright 2015-2016 Russ Allbery <eagle@eyrie.org>
 
-Copyright 2013, 2014 The Board of Trustees of the Leland Stanford Junior
+Copyright 2013-2014 The Board of Trustees of the Leland Stanford Junior
 University
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -220,3 +222,7 @@ The C TAP Harness test driver and libraries for TAP-based C testing are
 available from L<https://www.eyrie.org/~eagle/software/c-tap-harness/>.
 
 =cut
+
+# Local Variables:
+# copyright-at-end-flag: t
+# End:

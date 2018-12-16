@@ -5,8 +5,7 @@
 # Copyright 2012 Stephen Thirlwall
 # Copyright 2012, 2014 Russ Allbery <rra@cpan.org>
 #
-# This program is free software; you may redistribute it and/or modify it
-# under the same terms as Perl itself.
+# SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 use 5.006;
 use strict;
@@ -14,8 +13,9 @@ use warnings;
 
 use lib 't/lib';
 
-use Test::More;
 use Test::RRA qw(use_prereq);
+
+use Test::More;
 
 # Load prerequisite modules.
 use_prereq('Test::Warn');

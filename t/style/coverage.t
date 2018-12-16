@@ -6,7 +6,7 @@
 # which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.
 #
 # Written by Russ Allbery <eagle@eyrie.org>
-# Copyright 2013, 2014
+# Copyright 2013-2014
 #     The Board of Trustees of the Leland Stanford Junior University
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -26,6 +26,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
+#
+# SPDX-License-Identifier: MIT
 
 use 5.006;
 use strict;
@@ -33,10 +35,11 @@ use warnings;
 
 use lib 't/lib';
 
-use File::Spec;
-use Test::More;
 use Test::RRA qw(skip_unless_author use_prereq);
 use Test::RRA::Config qw($COVERAGE_LEVEL @COVERAGE_SKIP_TESTS);
+
+use File::Spec;
+use Test::More;
 
 # Skip code coverage unless author tests are enabled since it takes a long
 # time, is sensitive to versions of various libraries, and does not detect

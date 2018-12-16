@@ -7,6 +7,11 @@ Term::ANSIColor 4.07 (unreleased)
     of places in the manual and suggest setting autoflush() or EACHLINE
     as a fix.  (#121974)
 
+    Update to rra-c-util 8.0:
+
+    * Update perlcritic configuration.
+    * Add SPDX-License-Identifier headers to all significant files.
+
 Term::ANSIColor 4.06 (2016-10-28)
 
     Add aliases ansi16 through ansi255 and on_ansi16 through on_ansi255

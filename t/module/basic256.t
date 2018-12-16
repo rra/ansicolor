@@ -3,10 +3,9 @@
 # Tests for 256-color support.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012, 2013, 2016 Russ Allbery <rra@cpan.org>
+# Copyright 2012-2013, 2016 Russ Allbery <rra@cpan.org>
 #
-# This program is free software; you may redistribute it and/or modify it
-# under the same terms as Perl itself.
+# SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 use strict;
 use warnings;

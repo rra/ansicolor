@@ -315,7 +315,6 @@ sub AUTOLOAD {
     $@ = $eval_err;
 
     # Dispatch to the newly-created sub.
-    ## no critic (References::ProhibitDoubleSigils)
     goto &$AUTOLOAD;
 }
 ## use critic

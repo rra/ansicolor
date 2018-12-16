@@ -5,11 +5,9 @@
 # backards-compatible Makefile.PL, this way normal releases test the same
 # build system that is used for Perl core.
 #
-# Copyright 1999, 2000, 2001, 2008, 2010, 2012, 2014, 2015, 2016
-#     Russ Allbery <rra@cpan.org>
+# Copyright 1999-2001, 2008, 2010, 2012, 2014-2016 Russ Allbery <rra@cpan.org>
 #
-# This program is free software; you may redistribute it and/or modify it
-# under the same terms as Perl itself.
+# SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 use 5.006;
 use strict;
