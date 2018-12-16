@@ -22,7 +22,3 @@ before_install:
   - cpanm Test::Pod::Coverage
   - cpanm Test::Strict
   - cpanm Test::Synopsis
-
-branches:
-  only:
-    - master
