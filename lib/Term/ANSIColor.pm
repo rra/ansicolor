@@ -1136,9 +1136,9 @@ $Term::ANSIColor::AUTOLOCAL was changed to take precedence over
 $Term::ANSIColor::AUTORESET, rather than the other way around, in
 Term::ANSIColor 4.00, included in Perl 5.17.8.
 
-C<ansi16> through C<ansi255>, as aliases for the C<rgb> and C<grey>
-colors, and the corresponding C<on_ansi> names and C<ANSI> and C<ON_ANSI>
-constants, were added in Term::ANSIColor 4.06.
+C<ansi16> through C<ansi255>, as aliases for the C<rgb> and C<grey> colors,
+and the corresponding C<on_ansi> names and C<ANSI> and C<ON_ANSI> constants
+were added in Term::ANSIColor 4.06, included in Perl 5.25.7.
 
 =head1 RESTRICTIONS
 
