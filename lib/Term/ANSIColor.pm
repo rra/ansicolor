@@ -1074,7 +1074,7 @@ The format is:
 
 Whitespace is ignored.
 
-For example the L<Solarized|http://ethanschoonover.com/solarized> colors
+For example the L<Solarized|https://ethanschoonover.com/solarized> colors
 can be mapped with:
 
     ANSI_COLORS_ALIASES='\
@@ -1264,7 +1264,7 @@ The CPAN module L<Term::Chrome> provides a different interface using
 objects and operator overloading.
 
 ECMA-048 is available on-line (at least at the time of this writing) at
-L<http://www.ecma-international.org/publications/standards/Ecma-048.htm>.
+L<https://www.ecma-international.org/publications/standards/Ecma-048.htm>.
 
 ISO 6429 is available from ISO for a charge; the author of this module
 does not own a copy of it.  Since the source material for ISO 6429 was
@@ -1272,7 +1272,7 @@ ECMA-048 and the latter is available for free, there seems little reason
 to obtain the ISO standard.
 
 The 256-color control sequences are documented at
-L<http://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
+L<https://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
 256-color).
 
 The current version of this module is always available from its web site
