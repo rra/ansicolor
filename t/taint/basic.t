@@ -26,7 +26,7 @@ BEGIN {
 # Generate a tainted constant name.  PATH is always tainted, and tainting is
 # sticky, so we can prepend the name to whatever PATH holds and then chop it
 # off again.
-my $constant = substr 'BOLD' . $ENV{PATH}, 0, length 'BOLD';
+my $constant = substr('BOLD' . $ENV{PATH}, 0, length('BOLD'));
 
 # Using that as a constant should now work without any tainting problems.
 ## no critic (TestingAndDebugging::ProhibitNoStrict)
