@@ -593,7 +593,7 @@ command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
 Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 openmethods.com. grey ATTR urxvt mistyped prepending Bareword filehandle
 Cygwin Starsinic aterm rxvt CPAN RGB Solarized Whitespace alphanumerics
-undef
+undef CLICOLOR
 
 =head1 SYNOPSIS
 
@@ -659,6 +659,9 @@ This module has two interfaces, one through color() and colored() and the
 other through constants.  It also offers the utility functions uncolor(),
 colorstrip(), colorvalid(), and coloralias(), which have to be explicitly
 imported to be used (see L</SYNOPSIS>).
+
+If you are using Term::ANSIColor in a console command, consider supporting the
+CLICOLOR standard.  See L</"Supporting CLICOLOR"> for more information.
 
 See L</COMPATIBILITY> for the versions of Term::ANSIColor that introduced
 particular features and the versions of Perl that included them.
@@ -971,6 +974,31 @@ will not, and a subsequent pop won't restore the correct attributes.
 PUSHCOLOR pushes the attributes set by its argument, which is normally a
 string of color constants.  It can't ask the terminal what the current
 attributes are.
+
+=head2 Supporting CLICOLOR
+
+L<https://bixense.com/clicolors/> proposes a standard for enabling and
+disabling color output from console commands using two environment variables,
+CLICOLOR and CLICOLOR_FORCE.  Term::ANSIColor cannot automatically support
+this standard, since the correct action depends on where the output is going
+and Term::ANSIColor may be used in a context where colors should always be
+generated even if CLICOLOR is set in the environment.  But you can use the
+supported environment variable ANSI_COLORS_DISABLED to implement CLICOLOR in
+your own programs with code like this:
+
+    if (exists($ENV{CLICOLOR}) && $ENV{CLICOLOR} == 0) {
+        if (!$ENV{CLICOLOR_FORCE}) {
+            $ENV{ANSI_COLORS_DISABLED} = 1;
+        }
+    }
+
+If you are using the constant interface, be sure to include this code before
+you use any color constants (such as at the very top of your script), since
+this environment variable is only honored the first time a color constant is
+seen.
+
+Be aware that this will export ANSI_COLORS_DISABLED to any child processes of
+your program as well.
 
 =head1 DIAGNOSTICS
 
