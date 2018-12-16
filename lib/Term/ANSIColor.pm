@@ -1,17 +1,12 @@
 # Color screen output using ANSI escape sequences.
 #
-# Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-#     2011, 2012, 2013, 2014, 2015, 2016, 2017 Russ Allbery <rra@cpan.org>
-# Copyright 1996 Zenin
-# Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-#
-# This program is free software; you may redistribute it and/or modify it
-# under the same terms as Perl itself.
-#
-# PUSH/POP support submitted 2007 by openmethods.com voice solutions
+# This module provides utility functions (in two different forms) for coloring
+# output with ANSI escape sequences.
 #
 # Ah, September, when the sysadmins turn colors and fall off the trees....
 #                               -- Dave Van Domelen
+#
+# SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 ##############################################################################
 # Modules and declarations
@@ -1249,10 +1244,10 @@ voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996 Zenin
+Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018 Russ Allbery
+<rra@cpan.org>
 
-Copyright 1996, 1997, 1998, 2000, 2001, 2002, 2005, 2006, 2008, 2009, 2010,
-2011, 2012, 2013, 2014, 2015, 2016, 2017 Russ Allbery <rra@cpan.org>
+Copyright 1996 Zenin
 
 Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
 
@@ -1285,3 +1280,7 @@ at L<https://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part
 of the Perl core distribution as of 5.6.0.
 
 =cut
+
+# Local Variables:
+# copyright-at-end-flag: t
+# End:
