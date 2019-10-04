@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 # Load the module.
 BEGIN {
@@ -89,4 +89,12 @@ subtest "Aliasing to a color that doesn't exist, or to another alias" => sub {
         qr{ \A Invalid [ ] attribute [ ] name [ ] "alert" [ ] at [ ] }xms,
         '...with the right error'
     );
+};
+
+subtest 'multicolor alias' => sub {
+    is(coloralias('alert', 'red', 'on_white'), 'red on_white', 'coloralias works and returns color');
+    is(color('alert'), color('red', 'on_white'), 'alert now works as a color');
+    is(colored('test', 'alert'), "\e[31;47mtest\e[0m", '..and colored works');
+    ok(colorvalid('alert'), '...and alert is now a valid color');
+    is(coloralias('alert'), 'red on_white', 'coloralias with one arg returns value');
 };

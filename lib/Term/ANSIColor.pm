@@ -394,14 +394,18 @@ sub color {
         return q{};
     }
 
+    # expand aliases
+    @codes = map { 
+        my $code = $ALIASES{$_} || $_;
+        ref $code ? @$code : $code;
+    } @codes;
+
     # Build the attribute string from semicolon-separated numbers.
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc($code);
         if (defined($ATTRIBUTES{$code})) {
             $attribute .= $ATTRIBUTES{$code} . q{;};
-        } elsif (defined($ALIASES{$code})) {
-            $attribute .= $ALIASES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
         }
@@ -515,13 +519,13 @@ sub colored {
 #  Throws: Text exceptions for invalid alias names, attempts to use a
 #          standard color name as an alias, or an unknown standard color name
 sub coloralias {
-    my ($alias, $color) = @_;
-    if (!defined($color)) {
-        if (!exists $ALIASES{$alias}) {
-            return;
-        } else {
-            return $ATTRIBUTES_R{ $ALIASES{$alias} };
-        }
+    my ($alias, @color) = @_;
+    unless (@color) {
+        return unless exists $ALIASES{$alias};
+
+        $alias = $ALIASES{$alias};
+        $alias = join ' ', @$alias if ref $alias;
+        return $alias;
     }
 
     # Avoid \w here to not load Unicode character tables, which increases the
@@ -532,14 +536,18 @@ sub coloralias {
         croak(qq{Invalid alias name "$alias"});
     } elsif ($ATTRIBUTES{$alias}) {
         croak(qq{Cannot alias standard color "$alias"});
-    } elsif (!exists $ATTRIBUTES{$color}) {
-        croak(qq{Invalid attribute name "$color"});
     }
+    
+    croak(qq{Invalid attribute name "$_"})
+        for grep { !exists $ATTRIBUTES{$_} } @color;
+
     ## use critic
 
     # Set the alias and return.
-    $ALIASES{$alias} = $ATTRIBUTES{$color};
-    return $color;
+    # if the color is only one element, just pass it directly
+    # to keep the old interface intact
+    $ALIASES{$alias} = @color == 1 ? $color[0] : \@color;
+    return join ' ', @color;
 }
 
 # Given a string, strip the ANSI color codes out of that string and return the
@@ -831,10 +839,13 @@ together in scalar context.  Its arguments are not modified.
 colorvalid() takes attribute strings the same as color() and returns true
 if all attributes are known and false otherwise.
 
-=item coloralias(ALIAS[, ATTR])
+=item coloralias(ALIAS[, ATTR ... ])
+
+    coloralias( 'info, 'blue' );
+    coloralias( 'alert', 'red', 'on_white' );
 
 If ATTR is specified, coloralias() sets up an alias of ALIAS for the
-standard color ATTR.  From that point forward, ALIAS can be passed into
+standard colors ATTR.  From that point forward, ALIAS can be passed into
 color(), colored(), and colorvalid() and will have the same meaning as
 ATTR.  One possible use of this facility is to give more meaningful names
 to the 256-color RGB colors.  Only ASCII alphanumerics, C<.>, C<_>, and
