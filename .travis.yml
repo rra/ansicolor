@@ -1,11 +1,12 @@
 # Configuration for Travis-CI continuous integration.
 #
-# Copyright 2015-2017, 2019 Russ Allbery <eagle@eyrie.org>
+# Copyright 2015-2017, 2019-2020 Russ Allbery <eagle@eyrie.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 language: perl
 perl:
+  - "5.30"
   - "5.28"
   - "5.26"
   - "5.24"
@@ -27,11 +28,11 @@ perl:
 
 env: AUTHOR_TESTING=1
 before_install:
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Devel::Cover
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Perl::Critic         || true
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::MinimumVersion || true
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::Perl::Critic   || true
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::Pod
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::Pod::Coverage
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::Strict
-  - test "$TRAVIS_PERL_VERSION" != "5.28" || cpanm Test::Synopsis
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Devel::Cover
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Perl::Critic         || true
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::MinimumVersion || true
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::Perl::Critic   || true
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::Pod
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::Pod::Coverage
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::Strict
+  - test "$TRAVIS_PERL_VERSION" != "5.30" || cpanm Test::Synopsis
