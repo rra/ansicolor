@@ -2,6 +2,10 @@
 
 Term::ANSIColor 4.07 (unreleased)
 
+    Drop support for Perl 5.6.  The minimum supported version is now Perl
+    5.8.  Perl 5.6 isn't supported by Travis-CI and is only spottily
+    tested, so true support is dubious.
+
     Document bad interactions between colored output to standard output
     and standard error when standard output is line-buffered in a couple
     of places in the manual and suggest setting autoflush() or EACHLINE
@@ -12,7 +16,7 @@ Term::ANSIColor 4.07 (unreleased)
     non-output uses, there's no easy way to support CLICOLOR in the module
     automatically.)
 
-    Update to rra-c-util 8.0:
+    Update to rra-c-util 8.1:
 
     * Update perlcritic configuration.
     * Add SPDX-License-Identifier headers to all significant files.

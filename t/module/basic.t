@@ -2,11 +2,12 @@
 #
 # Basic test suite for the Term::ANSIColor Perl module.
 #
-# Copyright 1997-1998, 2000-2002, 2005-2006, 2009-2010, 2012, 2014
+# Copyright 1997-1998, 2000-2002, 2005-2006, 2009-2010, 2012, 2014, 2020
 #     Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
+use 5.008;
 use strict;
 use warnings;
 

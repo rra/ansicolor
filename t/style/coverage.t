@@ -6,7 +6,7 @@
 # which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.
 #
 # Written by Russ Allbery <eagle@eyrie.org>
-# Copyright 2013-2014
+# Copyright 2013-2014, 2019
 #     The Board of Trustees of the Leland Stanford Junior University
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -29,7 +29,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-use 5.006;
+use 5.008;
 use strict;
 use warnings;
 

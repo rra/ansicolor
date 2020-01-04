@@ -3,10 +3,11 @@
 # Test suite for stringify interaction.
 #
 # Copyright 2011 Revilo Reegiles
-# Copyright 2011, 2014 Russ Allbery <rra@cpan.org>
+# Copyright 2011, 2014, 2020 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
+use 5.008;
 use strict;
 use warnings;
 
