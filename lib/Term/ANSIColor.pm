@@ -903,6 +903,11 @@ possible use of this facility is to give more meaningful names to the
 256-color RGB colors.  Only ASCII alphanumerics, C<.>, C<_>, and C<-> are
 allowed in alias names.
 
+If ATTR includes aliases, those aliases will be expanded at definition time
+and their values will be used to define the new alias.  This means that if you
+define an alias A in terms of another alias B, and then later redefine alias
+B, the value of alias A will not change.
+
 If ATTR is not specified, coloralias() returns the standard attribute or
 attributes to which ALIAS is aliased, if any, or undef if ALIAS does not
 exist.  If it is aliased to multiple attributes, the return value will be a
