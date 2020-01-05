@@ -22,7 +22,7 @@ use warnings;
 
 use Exporter ();
 
-# use Exporter plus @ISA instead of use base for 5.6 compatibility.
+# use Exporter plus @ISA instead of use base to reduce memory usage.
 ## no critic (ClassHierarchies::ProhibitExplicitISA)
 
 # Declare variables that should be set in BEGIN for robustness.
