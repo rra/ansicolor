@@ -404,22 +404,24 @@ sub color {
     @codes = map { defined($ALIASES{$_}) ? @{ $ALIASES{$_} } : $_ } @codes;
 
     # Build the attribute string from semicolon-separated numbers.
+    ## no critic (RegularExpressions::ProhibitEnumeratedClasses)
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc($code);
-        if ($code =~ m{ \A (on_)? r ([0-9]+) g ([0-9]+) b ([0-9]+) \z }xms) {
+        if (defined($ATTRIBUTES{$code})) {
+            $attribute .= $ATTRIBUTES{$code} . q{;};
+        } elsif ($code =~ m{ \A (on_)? r([0-9]+) g([0-9]+) b([0-9]+) \z }xms) {
             my ($r, $g, $b) = ($2 + 0, $3 + 0, $4 + 0);
             if ($r > 255 || $g > 255 || $b > 255) {
                 croak("Invalid attribute name $code");
             }
             my $prefix = $1 ? '48' : '38';
             $attribute .= "$prefix;2;$r;$g;$b;";
-        } elsif (defined($ATTRIBUTES{$code})) {
-            $attribute .= $ATTRIBUTES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
         }
     }
+    ## use critic
 
     # We added one too many semicolons for simplicity.  Remove the last one.
     chop($attribute);
