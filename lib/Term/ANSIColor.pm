@@ -185,15 +185,16 @@ for my $code (16 .. 255) {
 our %ALIASES;
 if (exists $ENV{ANSI_COLORS_ALIASES}) {
     my $spec = $ENV{ANSI_COLORS_ALIASES};
-    $spec =~ s{\s+}{}xmsg;
+    $spec =~ s{ \A \s+ }{}xms;
+    $spec =~ s{ \s+ \z }{}xms;
 
     # Error reporting here is an interesting question.  Use warn rather than
     # carp because carp would report the line of the use or require, which
     # doesn't help anyone understand what's going on, whereas seeing this code
     # will be more helpful.
     ## no critic (ErrorHandling::RequireCarping)
-    for my $definition (split m{,}xms, $spec) {
-        my ($new, $old) = split m{=}xms, $definition, 2;
+    for my $definition (split(m{\s*,\s*}xms, $spec)) {
+        my ($new, $old) = split(m{\s*=\s*}xms, $definition, 2);
         if (!$new || !$old) {
             warn qq{Bad color mapping "$definition"};
         } else {
@@ -387,12 +388,15 @@ sub LOCALCOLOR {
 #  Throws: Text exception for any invalid attribute
 sub color {
     my (@codes) = @_;
-    @codes = map { split } @codes;
 
     # Return the empty string if colors are disabled.
     if ($ENV{ANSI_COLORS_DISABLED}) {
         return q{};
     }
+
+    # Split on whitespace and expand aliases.
+    @codes = map { split } @codes;
+    @codes = map { defined($ALIASES{$_}) ? @{ $ALIASES{$_} } : $_ } @codes;
 
     # Build the attribute string from semicolon-separated numbers.
     my $attribute = q{};
@@ -400,8 +404,6 @@ sub color {
         $code = lc($code);
         if (defined($ATTRIBUTES{$code})) {
             $attribute .= $ATTRIBUTES{$code} . q{;};
-        } elsif (defined($ALIASES{$code})) {
-            $attribute .= $ALIASES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
         }
@@ -508,19 +510,20 @@ sub colored {
 # Define a new color alias, or return the value of an existing alias.
 #
 # $alias - The color alias to define
-# $color - The standard color the alias will correspond to (optional)
+# @color - The color attributes the alias will correspond to (optional)
 #
-# Returns: The standard color value of the alias
+# Returns: The standard color value of the alias as a string (may be multiple
+#              attributes separated by spaces)
 #          undef if one argument was given and the alias was not recognized
 #  Throws: Text exceptions for invalid alias names, attempts to use a
 #          standard color name as an alias, or an unknown standard color name
 sub coloralias {
-    my ($alias, $color) = @_;
-    if (!defined($color)) {
-        if (!exists $ALIASES{$alias}) {
-            return;
+    my ($alias, @color) = @_;
+    if (!@color) {
+        if (exists($ALIASES{$alias})) {
+            return join(q{ }, @{ $ALIASES{$alias} });
         } else {
-            return $ATTRIBUTES_R{ $ALIASES{$alias} };
+            return;
         }
     }
 
@@ -532,14 +535,23 @@ sub coloralias {
         croak(qq{Invalid alias name "$alias"});
     } elsif ($ATTRIBUTES{$alias}) {
         croak(qq{Cannot alias standard color "$alias"});
-    } elsif (!exists $ATTRIBUTES{$color}) {
-        croak(qq{Invalid attribute name "$color"});
     }
     ## use critic
 
+    # Split on whitespace and expand aliases.
+    @color = map { split } @color;
+    @color = map { defined($ALIASES{$_}) ? @{ $ALIASES{$_} } : $_ } @color;
+
+    # Check that all of the attributes are valid.
+    for my $attribute (@color) {
+        if (!exists($ATTRIBUTES{$attribute})) {
+            croak(qq{Invalid attribute name "$attribute"});
+        }
+    }
+
     # Set the alias and return.
-    $ALIASES{$alias} = $ATTRIBUTES{$color};
-    return $color;
+    $ALIASES{$alias} = [@color];
+    return join(q{ }, @color);
 }
 
 # Given a string, strip the ANSI color codes out of that string and return the
@@ -831,17 +843,21 @@ together in scalar context.  Its arguments are not modified.
 colorvalid() takes attribute strings the same as color() and returns true
 if all attributes are known and false otherwise.
 
-=item coloralias(ALIAS[, ATTR])
+=item coloralias(ALIAS[, ATTR ...])
 
-If ATTR is specified, coloralias() sets up an alias of ALIAS for the
-standard color ATTR.  From that point forward, ALIAS can be passed into
-color(), colored(), and colorvalid() and will have the same meaning as
-ATTR.  One possible use of this facility is to give more meaningful names
-to the 256-color RGB colors.  Only ASCII alphanumerics, C<.>, C<_>, and
-C<-> are allowed in alias names.
+If ATTR is specified, it is interpreted as a list of space-separated strings
+naming attributes or existing aliases.  In this case, coloralias() sets up an
+alias of ALIAS for the set of attributes given by ATTR.  From that point
+forward, ALIAS can be passed into color(), colored(), and colorvalid() and
+will have the same meaning as the sequence of attributes given in ATTR.  One
+possible use of this facility is to give more meaningful names to the
+256-color RGB colors.  Only ASCII alphanumerics, C<.>, C<_>, and C<-> are
+allowed in alias names.
 
-If ATTR is not specified, coloralias() returns the standard color name to
-which ALIAS is aliased, if any, or undef if ALIAS does not exist.
+If ATTR is not specified, coloralias() returns the standard attribute or
+attributes to which ALIAS is aliased, if any, or undef if ALIAS does not
+exist.  If it is aliased to multiple attributes, the return value will be a
+single string and the attributes will be separated by spaces.
 
 This is the same facility used by the ANSI_COLORS_ALIASES environment
 variable (see L</ENVIRONMENT> below) but can be used at runtime, not just
@@ -907,6 +923,8 @@ want to mix both, you need to include C<:constants> as well.  You may want
 to explicitly import at least C<RESET>, as in:
 
     use Term::ANSIColor 4.00 qw(RESET :constants256);
+
+Aliases are not supported by the constant interface.
 
 When using the constants, if you don't want to have to remember to add the
 C<, RESET> at the end of each print line, you can set
@@ -1099,7 +1117,8 @@ The format is:
 
     ANSI_COLORS_ALIASES='newcolor1=oldcolor1,newcolor2=oldcolor2'
 
-Whitespace is ignored.
+Whitespace is ignored.  The alias value can be a single attribute or a
+space-separated list of attributes.
 
 For example the L<Solarized|https://ethanschoonover.com/solarized> colors
 can be mapped with:
@@ -1167,6 +1186,10 @@ Term::ANSIColor 4.00, included in Perl 5.17.8.
 C<ansi16> through C<ansi255>, as aliases for the C<rgb> and C<grey> colors,
 and the corresponding C<on_ansi> names and C<ANSI> and C<ON_ANSI> constants
 were added in Term::ANSIColor 4.06, included in Perl 5.25.7.
+
+Support for defining aliases in terms of other aliases and for aliases mapping
+to multiple attributes instead of only a single attribute was added in
+Term::ANSIColor 5.00.
 
 =head1 RESTRICTIONS
 
@@ -1247,14 +1270,13 @@ table.  It is not believed to be fully supported by any of the terminals
 listed, although it's displayed as green in the Linux console, but it is
 reportedly supported by urxvt.
 
-Note that codes 6 (rapid blink) and 9 (strike-through) are specified in
-ANSI X3.64 and ECMA-048 but are not commonly supported by most displays
-and emulators and therefore aren't supported by this module at the present
-time.  ECMA-048 also specifies a large number of other attributes,
-including a sequence of attributes for font changes, Fraktur characters,
-double-underlining, framing, circling, and overlining.  As none of these
-attributes are widely supported or useful, they also aren't currently
-supported by this module.
+Note that codes 6 (rapid blink) and 9 (strike-through) are specified in ANSI
+X3.64 and ECMA-048 but are not commonly supported by most displays and
+emulators and therefore aren't supported by this module.  ECMA-048 also
+specifies a large number of other attributes, including a sequence of
+attributes for font changes, Fraktur characters, double-underlining, framing,
+circling, and overlining.  As none of these attributes are widely supported or
+useful, they also aren't currently supported by this module.
 
 Most modern X terminal emulators support 256 colors.  Known to not support
 those colors are aterm, rxvt, Terminal.app, and TTY/VC.
@@ -1271,7 +1293,7 @@ voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018 Russ Allbery
+Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018, 2020 Russ Allbery
 <rra@cpan.org>
 
 Copyright 1996 Zenin
