@@ -17,7 +17,7 @@ use Test::More tests => 6;
 ## no critic (Modules::ProhibitMultiplePackages)
 package Test::Stringify;
 use overload '""' => 'stringify';
-sub new { return bless({}, 'Test::Stringify') }
+sub new       { return bless({}, 'Test::Stringify') }
 sub stringify { return "Foo Bar\n" }
 
 # Back to the main package.

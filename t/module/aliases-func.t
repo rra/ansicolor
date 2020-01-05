@@ -30,15 +30,15 @@ like(
 
 # Basic alias functionality.
 is(coloralias('alert', 'red'), 'red', 'coloralias works and returns color');
-is(color('alert'), color('red'), 'alert now works as a color');
+is(color('alert'),           color('red'),      'alert now works as a color');
 is(colored('test', 'alert'), "\e[31mtest\e[0m", '..and colored works');
 ok(colorvalid('alert'), '...and alert is now a valid color');
 is(coloralias('alert'), 'red', 'coloralias with one arg returns value');
 
 # The alias can be changed.
 is(coloralias('alert', 'green'), 'green', 'changing the alias works');
-is(coloralias('alert'), 'green',        '...and changed the mapping');
-is(color('alert'),      color('green'), '...and now returns its new value');
+is(coloralias('alert'),          'green', '...and changed the mapping');
+is(color('alert'), color('green'), '...and now returns its new value');
 
 # Aliasing to an alias expands the underlying alias.
 is(coloralias('warning', 'alert'), 'green', 'aliasing to an alias works');
