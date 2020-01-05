@@ -3,6 +3,11 @@
 # This module provides utility functions (in two different forms) for coloring
 # output with ANSI escape sequences.
 #
+# This module is sometimes used in low-memory environments, so avoid use of
+# \d, \w, [:upper:], and similar constructs in the most important functions
+# (color, colored, AUTOLOAD, and the generated constant functions) since
+# loading the Unicode attribute files consumes a lot of memory.
+#
 # Ah, September, when the sysadmins turn colors and fall off the trees....
 #                               -- Dave Van Domelen
 #
@@ -402,7 +407,7 @@ sub color {
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc($code);
-        if ($code =~ m{ \A (on_)? r (\d+) g (\d+) b (\d+) \z }xms) {
+        if ($code =~ m{ \A (on_)? r ([0-9]+) g ([0-9]+) b ([0-9]+) \z }xms) {
             my ($r, $g, $b) = ($2 + 0, $3 + 0, $4 + 0);
             if ($r > 255 || $g > 255 || $b > 255) {
                 croak("Invalid attribute name $code");
