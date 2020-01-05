@@ -402,7 +402,14 @@ sub color {
     my $attribute = q{};
     for my $code (@codes) {
         $code = lc($code);
-        if (defined($ATTRIBUTES{$code})) {
+        if ($code =~ m{ \A (on_)? r (\d+) g (\d+) b (\d+) \z }xms) {
+            my ($r, $g, $b) = ($2 + 0, $3 + 0, $4 + 0);
+            if ($r > 255 || $g > 255 || $b > 255) {
+                croak("Invalid attribute name $code");
+            }
+            my $prefix = $1 ? '48' : '38';
+            $attribute .= "$prefix;2;$r;$g;$b;";
+        } elsif (defined($ATTRIBUTES{$code})) {
             $attribute .= $ATTRIBUTES{$code} . q{;};
         } else {
             croak("Invalid attribute name $code");
@@ -440,20 +447,38 @@ sub uncolor {
             croak("Bad escape sequence $escape");
         }
 
-        # Pull off 256-color codes (38;5;n or 48;5;n) as a unit.
-        push(@nums, $attrs =~ m{ ( 0*[34]8;0*5;\d+ | \d+ ) (?: ; | \z ) }xmsg);
+        # Pull off 256-color codes (38;5;n or 48;5;n) and true color codes
+        # (38;2;n;n;n or 48;2;n;n;n) as a unit.
+        my $regex = qr{
+            (
+                0*[34]8 ; 0*2 ; \d+ ; \d+ ; \d+
+              | 0*[34]8 ; 0*5 ; \d+
+              | \d+
+            )
+            (?: ; | \z )
+        }xms;
+        push(@nums, $attrs =~ m{$regex}xmsg);
     }
 
     # Now, walk the list of numbers and convert them to attribute names.
     # Strip leading zeroes from any of the numbers.  (xterm, at least, allows
     # leading zeroes to be added to any number in an escape sequence.)
     for my $num (@nums) {
-        $num =~ s{ ( \A | ; ) 0+ (\d) }{$1$2}xmsg;
-        my $name = $ATTRIBUTES_R{$num};
-        if (!defined($name)) {
-            croak("No name for escape sequence $num");
+        if ($num =~ m{ \A 0*([34])8 ; 0*2 ; (\d+) ; (\d+) ; (\d+) \z }xms) {
+            my ($r, $g, $b) = ($2 + 0, $3 + 0, $4 + 0);
+            if ($r > 255 || $g > 255 || $b > 255) {
+                croak("No name for escape sequence $num");
+            }
+            my $prefix = ($1 == 4) ? 'on_' : q{};
+            push(@result, "${prefix}r${r}g${g}b${b}");
+        } else {
+            $num =~ s{ ( \A | ; ) 0+ (\d) }{$1$2}xmsg;
+            my $name = $ATTRIBUTES_R{$num};
+            if (!defined($name)) {
+                croak("No name for escape sequence $num");
+            }
+            push(@result, $name);
         }
-        push(@result, $name);
     }
 
     # Return the attribute names.
@@ -580,9 +605,12 @@ sub colorvalid {
     my (@codes) = @_;
     @codes = map { split(q{ }, lc) } @codes;
     for my $code (@codes) {
-        if (!(defined($ATTRIBUTES{$code}) || defined($ALIASES{$code}))) {
-            return;
+        next if defined($ATTRIBUTES{$code});
+        next if defined($ALIASES{$code});
+        if ($code =~ m{ \A (?: on_ )? r (\d+) g (\d+) b (\d+) \z }xms) {
+            next if ($1 <= 255 && $2 <= 255 && $3 <= 255);
         }
+        return;
     }
     return 1;
 }
@@ -605,7 +633,7 @@ command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
 Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 openmethods.com. grey ATTR urxvt mistyped prepending Bareword filehandle
 Cygwin Starsinic aterm rxvt CPAN RGB Solarized Whitespace alphanumerics
-undef CLICOLOR
+undef CLICOLOR NNN GGG RRR
 
 =head1 SYNOPSIS
 
@@ -680,11 +708,12 @@ particular features and the versions of Perl that included them.
 
 =head2 Supported Colors
 
-Terminal emulators that support color divide into three types: ones that
-support only eight colors, ones that support sixteen, and ones that
-support 256.  This module provides the ANSI escape codes for all of them.
-These colors are referred to as ANSI colors 0 through 7 (normal), 8
-through 15 (16-color), and 16 through 255 (256-color).
+Terminal emulators that support color divide into four types: ones that
+support only eight colors, ones that support sixteen, ones that support 256,
+and ones that support 24-bit color.  This module provides the ANSI escape
+codes for all of them.  These colors are referred to as ANSI colors 0 through
+7 (normal), 8 through 15 (16-color), 16 through 255 (256-color), and true
+color (called direct-color by B<xterm>).
 
 Unfortunately, interpretation of colors 0 through 7 often depends on
 whether the emulator supports eight colors or sixteen colors.  Emulators
@@ -707,6 +736,16 @@ C<red> is color 1 and C<bright_red> is color 9.  The same applies for
 background colors: C<on_red> is the normal color and C<on_bright_red> is
 the bright color.  Capitalize these strings for the constant interface.
 
+There is unfortunately no way to know whether the current emulator
+supports more than eight colors, which makes the choice of colors
+difficult.  The most conservative choice is to use only the regular
+colors, which are at least displayed on all emulators.  However, they will
+appear dark in sixteen-color terminal emulators, including most common
+emulators in UNIX X environments.  If you know the display is one of those
+emulators, you may wish to use the bright variants instead.  Even better,
+offer the user a way to configure the colors for a given application to
+fit their terminal emulator.
+
 For 256-color emulators, this module additionally provides C<ansi0>
 through C<ansi15>, which are the same as colors 0 through 15 in
 sixteen-color emulators but use the 256-color escape syntax, C<grey0>
@@ -720,15 +759,12 @@ completely on non-256-color terminals or may be misinterpreted and produce
 random behavior.  Additional attributes such as blink, italic, or bold may
 not work with the 256-color palette.
 
-There is unfortunately no way to know whether the current emulator
-supports more than eight colors, which makes the choice of colors
-difficult.  The most conservative choice is to use only the regular
-colors, which are at least displayed on all emulators.  However, they will
-appear dark in sixteen-color terminal emulators, including most common
-emulators in UNIX X environments.  If you know the display is one of those
-emulators, you may wish to use the bright variants instead.  Even better,
-offer the user a way to configure the colors for a given application to
-fit their terminal emulator.
+For true color emulators, this module supports attributes of the form C<<
+rI<NNN>gI<NNN>bI<NNN> >> and C<< on_rI<NNN>gI<NNN>bI<NNN> >> for all values of
+I<NNN> between 0 and 255.  These represent foreground and background colors,
+respectively, with the RGB values given by the I<NNN> numbers.  These colors
+may be ignored completely on non-true-color terminals or may be misinterpreted
+and produce random behavior.
 
 =head2 Function Interface
 
@@ -774,6 +810,12 @@ C<rgb000> or C<rgb515>.  Similarly, the recognized background colors are:
   on_grey0 .. on_grey23
 
 plus C<on_rgbI<RGB>> for I<R>, I<G>, and I<B> values from 0 to 5.
+
+For true color terminals, the recognized foreground colors are C<<
+rI<RRR>gI<GGG>bI<BBB> >> for I<RRR>, I<GGG>, and I<BBB> values between 0 and
+255.  Similarly, the recognized background colors are C<<
+on_rI<RRR>gI<GGG>bI<BBB> >> for I<RRR>, I<GGG>, and I<BBB> values between 0
+and 255.
 
 For any of the above listed attributes, case is not significant.
 
@@ -924,7 +966,7 @@ to explicitly import at least C<RESET>, as in:
 
     use Term::ANSIColor 4.00 qw(RESET :constants256);
 
-Aliases are not supported by the constant interface.
+True color and aliases are not supported by the constant interface.
 
 When using the constants, if you don't want to have to remember to add the
 C<, RESET> at the end of each print line, you can set
@@ -947,13 +989,14 @@ over $Term::ANSIColor::AUTORESET, and the latter is ignored.
 
 The subroutine interface has the advantage over the constants interface in
 that only two subroutines are exported into your namespace, versus
-thirty-eight in the constants interface.  On the flip side, the constants
-interface has the advantage of better compile time error checking, since
-misspelled names of colors or attributes in calls to color() and colored()
-won't be caught until runtime whereas misspelled names of constants will
-be caught at compile time.  So, pollute your namespace with almost two
-dozen subroutines that you may not even use that often, or risk a silly
-bug by mistyping an attribute.  Your choice, TMTOWTDI after all.
+thirty-eight in the constants interface, and aliases and true color attributes
+are supported.  On the flip side, the constants interface has the advantage of
+better compile time error checking, since misspelled names of colors or
+attributes in calls to color() and colored() won't be caught until runtime
+whereas misspelled names of constants will be caught at compile time.  So,
+pollute your namespace with almost two dozen subroutines that you may not even
+use that often, or risk a silly bug by mistyping an attribute.  Your choice,
+TMTOWTDI after all.
 
 =head2 The Color Stack
 
@@ -1187,7 +1230,8 @@ C<ansi16> through C<ansi255>, as aliases for the C<rgb> and C<grey> colors,
 and the corresponding C<on_ansi> names and C<ANSI> and C<ON_ANSI> constants
 were added in Term::ANSIColor 4.06, included in Perl 5.25.7.
 
-Support for defining aliases in terms of other aliases and for aliases mapping
+Support for true color (the C<rNNNgNNNbNNN> and C<on_rNNNgNNNbNNN>
+attributes), defining aliases in terms of other aliases, and aliases mapping
 to multiple attributes instead of only a single attribute was added in
 Term::ANSIColor 5.00.
 
@@ -1281,6 +1325,9 @@ useful, they also aren't currently supported by this module.
 Most modern X terminal emulators support 256 colors.  Known to not support
 those colors are aterm, rxvt, Terminal.app, and TTY/VC.
 
+For information on true color support in various terminal emulators, see
+L<True Colour support|https://gist.github.com/XVilka/8346728>.
+
 =head1 AUTHORS
 
 Original idea (using constants) by Zenin, reimplemented using subs by Russ
@@ -1323,6 +1370,10 @@ to obtain the ISO standard.
 The 256-color control sequences are documented at
 L<https://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
 256-color).
+
+Information about true color support in various terminal emulators and test
+programs you can run to check the true color support in your terminal emulator
+are available at L<https://gist.github.com/XVilka/8346728>.
 
 The current version of this module is always available from its web site
 at L<https://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part

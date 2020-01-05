@@ -6,6 +6,11 @@ Term::ANSIColor 5.00 (unreleased)
     5.8.  Perl 5.6 isn't supported by Travis-CI and is only spottily
     tested, so true support is dubious.
 
+    Add suport for true color (24-bit color) via new rNNNgNNNbNNN and
+    on_rNNNgNNNbNNN attributes.  These are only supported via the function
+    interface, not in the constant interface.  Based on work by Lars
+    Dɪᴇᴄᴋᴏᴡ 迪拉斯.
+
     Allow color aliases to map to multiple attributes instead of only one
     attribute.  Based on work by Yanick Champoux.
 
