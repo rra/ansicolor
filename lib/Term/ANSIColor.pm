@@ -25,7 +25,7 @@ use warnings;
 
 # Also uses Carp but loads it on demand to reduce memory usage.
 
-use Exporter ();
+use Exporter;
 
 # use Exporter plus @ISA instead of use base to reduce memory usage.
 ## no critic (ClassHierarchies::ProhibitExplicitISA)
@@ -173,7 +173,7 @@ for my $n (0 .. 23) {
 
 # Reverse lookup.  Alphabetically first name for a sequence is preferred.
 our %ATTRIBUTES_R;
-for my $attr (reverse sort keys %ATTRIBUTES) {
+for my $attr (reverse(sort(keys(%ATTRIBUTES)))) {
     $ATTRIBUTES_R{ $ATTRIBUTES{$attr} } = $attr;
 }
 
@@ -188,7 +188,7 @@ for my $code (16 .. 255) {
 
 # Import any custom colors set in the environment.
 our %ALIASES;
-if (exists $ENV{ANSI_COLORS_ALIASES}) {
+if (exists($ENV{ANSI_COLORS_ALIASES})) {
     my $spec = $ENV{ANSI_COLORS_ALIASES};
     $spec =~ s{ \A \s+ }{}xms;
     $spec =~ s{ \s+ \z }{}xms;
