@@ -275,7 +275,7 @@ sub AUTOLOAD {
 
     # If colors are disabled, just return the input.  Do this without
     # installing a sub for (marginal, unbenchmarked) speed.
-    if ($ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED} or $ENV{NO_COLOR}) {
         return join(q{}, @_);
     }
 
