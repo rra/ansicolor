@@ -1204,6 +1204,15 @@ instead will just return the empty string or pass through the original
 text as appropriate.  This is intended to support easy use of scripts
 using this module on platforms that don't support ANSI escape sequences.
 
+=item NO_COLOR
+
+If this environment variable is set to a true value, all of the functions
+defined by this module (color(), colored(), and all of the constants not
+previously used in the program) will not output any escape sequences and
+instead will just return the empty string or pass through the original
+text as appropriate.  This is intended to make scripts
+using this module compliant with the L<https://no-color.org> manifest.
+
 =back
 
 =head1 COMPATIBILITY
