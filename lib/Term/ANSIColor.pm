@@ -250,10 +250,10 @@ sub croak {
 # called sub against the list of attributes, and if it's an all-caps version
 # of one of them, we define the sub on the fly and then run it.
 #
-# If the environment variable ANSI_COLORS_DISABLED is set to a true value,
-# just return the arguments without adding any escape sequences.  This is to
-# make it easier to write scripts that also work on systems without any ANSI
-# support, like Windows consoles.
+# If the environment variable ANSI_COLORS_DISABLED is set to a true value, or
+# if the variable NO_COLOR is set, just return the arguments without adding
+# any escape sequences.  This is to make it easier to write scripts that also
+# work on systems without any ANSI support, like Windows consoles.
 #
 # Avoid using character classes like [:upper:] and \w here, since they load
 # Unicode character tables and consume a ton of memory.  All of our constants
@@ -275,7 +275,7 @@ sub AUTOLOAD {
 
     # If colors are disabled, just return the input.  Do this without
     # installing a sub for (marginal, unbenchmarked) speed.
-    if ($ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
         return join(q{}, @_);
     }
 
@@ -297,7 +297,7 @@ sub AUTOLOAD {
     ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
     my $eval_result = eval qq{
         sub $AUTOLOAD {
-            if (\$ENV{ANSI_COLORS_DISABLED}) {
+            if (\$ENV{ANSI_COLORS_DISABLED} || defined(\$ENV{NO_COLOR})) {
                 return join(q{}, \@_);
             } elsif (\$AUTOLOCAL && \@_) {
                 return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
@@ -395,7 +395,7 @@ sub color {
     my (@codes) = @_;
 
     # Return the empty string if colors are disabled.
-    if ($ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
         return q{};
     }
 
@@ -520,7 +520,7 @@ sub colored {
     }
 
     # Return the string unmolested if colors are disabled.
-    if ($ENV{ANSI_COLORS_DISABLED}) {
+    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
         return $string;
     }
 
@@ -1198,11 +1198,20 @@ coloralias() for an equivalent facility that can be used at runtime.
 =item ANSI_COLORS_DISABLED
 
 If this environment variable is set to a true value, all of the functions
-defined by this module (color(), colored(), and all of the constants not
-previously used in the program) will not output any escape sequences and
-instead will just return the empty string or pass through the original
-text as appropriate.  This is intended to support easy use of scripts
-using this module on platforms that don't support ANSI escape sequences.
+defined by this module (color(), colored(), and all of the constants) will not
+output any escape sequences and instead will just return the empty string or
+pass through the original text as appropriate.  This is intended to support
+easy use of scripts using this module on platforms that don't support ANSI
+escape sequences.
+
+=item NO_COLOR
+
+If this environment variable is set to any value, it suppresses generation of
+escape sequences the same as if ANSI_COLORS_DISABLED is set to a true value.
+This implements the L<https://no-color.org/> informal standard.  Programs that
+want to enable color despite NO_COLOR being set will need to unset that
+environment variable before any constant or function provided by this module
+is used.
 
 =back
 
@@ -1246,6 +1255,8 @@ Support for true color (the C<rNNNgNNNbNNN> and C<on_rNNNgNNNbNNN>
 attributes), defining aliases in terms of other aliases, and aliases mapping
 to multiple attributes instead of only a single attribute was added in
 Term::ANSIColor 5.00.
+
+Support for NO_COLOR was added in Term::ANSIColor 5.01.
 
 =head1 RESTRICTIONS
 
@@ -1386,6 +1397,11 @@ L<https://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
 Information about true color support in various terminal emulators and test
 programs you can run to check the true color support in your terminal emulator
 are available at L<https://gist.github.com/XVilka/8346728>.
+
+L<CLICOLORS|https://bixense.com/clicolors/> and
+L<NO_COLOR|https://no-color.org/> are useful standards to be aware of, and
+ideally follow, for any application using color.  Term::ANSIColor complies
+with the latter.
 
 The current version of this module is always available from its web site
 at L<https://www.eyrie.org/~eagle/software/ansicolor/>.  It is also part

@@ -2,6 +2,9 @@
 
 Term::ANSIColor 5.01 (unreleased)
 
+    Add support for NO_COLOR <https://no-color.org/> to suppress all
+    formatting sequences.  Thanks, Andrea Telatin.
+
     Document that aliases are expanded during alias definition, and thus
     an alias defined in terms of another alias will not change if the
     other alias is redefined.
