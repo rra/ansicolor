@@ -658,8 +658,8 @@ undef CLICOLOR NNN GGG RRR
 
     # Map escape sequences back to color names.
     use Term::ANSIColor 1.04 qw(uncolor);
-    my $names = uncolor('01;31');
-    print join(q{ }, @{$names}), "\n";
+    my @names = uncolor('01;31');
+    print join(q{ }, @names), "\n";
 
     # Strip all color escape sequences.
     use Term::ANSIColor 2.01 qw(colorstrip);
