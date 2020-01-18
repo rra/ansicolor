@@ -1,6 +1,6 @@
 {
     "name": "Term::ANSIColor",
-    "version": "5.00",
+    "version": "5.01",
     "synopsis": "simple ANSI text attribute control module",
     "maintainer": "Russ Allbery <rra@cpan.org>",
     "copyrights": [

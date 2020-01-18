@@ -1,4 +1,4 @@
-# Term::ANSIColor 5.00
+# Term::ANSIColor 5.01
 
 [![Build
 status](https://travis-ci.org/rra/ansicolor.svg?branch=master)](https://travis-ci.org/rra/ansicolor)

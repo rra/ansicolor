@@ -1,6 +1,6 @@
                    User-Visible Term::ANSIColor Changes
 
-Term::ANSIColor 5.01 (unreleased)
+Term::ANSIColor 5.01 (2020-01-17)
 
     Add support for NO_COLOR <https://no-color.org/> to suppress all
     formatting sequences.  Thanks, Andrea Telatin.
