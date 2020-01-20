@@ -3,7 +3,8 @@
 [![Build
 status](https://travis-ci.org/rra/ansicolor.svg?branch=master)](https://travis-ci.org/rra/ansicolor)
 [![CPAN
-version](https://img.shields.io/cpan/v/Term-ANSIColor.svg)](https://metacpan.org/release/Term-ANSIColor)
+version](https://img.shields.io/cpan/v/Term-ANSIColor)](https://metacpan.org/release/Term-ANSIColor)
+[![License](https://img.shields.io/cpan/l/Term-ANSIColor)](https://github.com/rra/ansicolor/blob/master/LICENSE)
 
 Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2020 Russ Allbery
 <rra@cpan.org>.  Copyright 1996 Zenin.  Copyright 2012 Kurt Starsinic
