@@ -161,7 +161,8 @@ $Term::ANSIColor::AUTORESET = 0;
 
 # Test push and pop support with the syntax from the original openmethods.com
 # submission, which uses a different coding style.
-is(PUSHCOLOR(RED ON_GREEN), "\e[31m\e[42m", 'PUSHCOLOR with explict argument');
+is(PUSHCOLOR(RED ON_GREEN), "\e[31m\e[42m",
+    'PUSHCOLOR with explicit argument');
 is(PUSHCOLOR(BLUE), "\e[34m", '...and another explicit argument');
 is(
     RESET . BLUE . 'text',

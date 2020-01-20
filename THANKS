@@ -64,7 +64,7 @@ case.
 To Kent Fredric for the request for italic and the report of a terminal
 emulator that supports it.
 
-To Simon Wistow for reporting that Term::ANSIColor was inadvertantly
+To Simon Wistow for reporting that Term::ANSIColor was inadvertently
 clobbering $@ when generating constant subs.
 
 To Kurt Starsinic for the initial implementation of 256-color support.
