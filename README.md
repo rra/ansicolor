@@ -64,22 +64,6 @@ For a terminal emulator compatibility list, see the Term::ANSIColor module
 documentation.  If you have any additions to the table in the
 documentation, please send them to me.
 
-The following additional Perl modules will be used by the test suite if
-present:
-
-* Devel::Cover
-* Test::MinimumVersion
-* Test::Perl::Critic
-* Test::Pod
-* Test::Pod::Coverage
-* Test::Spelling
-* Test::Strict
-* Test::Synopsis
-* Test::Warn
-
-All are available on CPAN.  Those tests will be skipped if the modules are
-not available.
-
 ## Building and Installation
 
 Term::ANSIColor uses ExtUtils::MakeMaker and can be installed using the
@@ -108,6 +92,22 @@ If a test vails, you can run a single test with verbose output via:
 ```
     prove -vb <path-to-test>
 ```
+
+The following additional Perl modules will be used by the test suite if
+present:
+
+* Devel::Cover
+* Test::MinimumVersion
+* Test::Perl::Critic
+* Test::Pod
+* Test::Pod::Coverage
+* Test::Spelling
+* Test::Strict
+* Test::Synopsis
+* Test::Warn
+
+All are available on CPAN.  Those tests will be skipped if the modules are
+not available.
 
 To enable tests that don't detect functionality problems but are used to
 sanity-check the release, set the environment variable `RELEASE_TESTING`

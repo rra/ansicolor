@@ -1,6 +1,7 @@
 .github/workflows/build.yaml
 .gitignore
 Changes
+cpanfile
 docs/metadata/blurb
 docs/metadata/description
 docs/metadata/metadata.json
@@ -8,6 +9,7 @@ docs/metadata/notices
 docs/metadata/quote
 docs/metadata/README
 docs/metadata/requirements
+docs/metadata/test/suffix
 examples/generate-colors
 lib/Term/ANSIColor.pm
 LICENSE
