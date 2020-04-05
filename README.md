@@ -1,7 +1,7 @@
 # Term::ANSIColor 5.01
 
 [![Build
-status](https://travis-ci.org/rra/ansicolor.svg?branch=master)](https://travis-ci.org/rra/ansicolor)
+status](https://github.com/rra/ansicolor/workflows/build/badge.svg)](https://github.com/rra/ansicolor/actions)
 [![CPAN
 version](https://img.shields.io/cpan/v/Term-ANSIColor)](https://metacpan.org/release/Term-ANSIColor)
 [![License](https://img.shields.io/cpan/l/Term-ANSIColor)](https://github.com/rra/ansicolor/blob/master/LICENSE)

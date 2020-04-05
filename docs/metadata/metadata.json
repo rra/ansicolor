@@ -33,7 +33,9 @@
         "browse": "https://git.eyrie.org/?p=perl/ansicolor.git",
         "github": "rra/ansicolor",
         "openhub": "https://www.openhub.net/p/ansicolor",
-        "travis": "rra/ansicolor",
+        "status": {
+            "workflow": "build",
+        },
     },
     "quote": {
         "author": "Dave van Domelen",
@@ -43,9 +45,6 @@
         "tarname": "Term-ANSIColor",
         "version": "term-ansicolor",
         "cpan": "Term-ANSIColor",
-        "ignore": [
-            "\\A[.]travis[.]yml\\z",
-        ],
     },
     "docs": {
         "user": [

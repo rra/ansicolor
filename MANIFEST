@@ -1,3 +1,4 @@
+.github/workflows/build.yaml
 .gitignore
 Changes
 docs/metadata/blurb
