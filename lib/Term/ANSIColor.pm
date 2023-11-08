@@ -41,7 +41,7 @@ our $AUTOLOAD;
 # against circular module loading (not that we load any modules, but
 # consistency is good).
 BEGIN {
-    $VERSION = '5.01';
+    $VERSION = '5.02';
 
     # All of the basic supported constants, used in %EXPORT_TAGS.
     my @colorlist = qw(
@@ -653,7 +653,7 @@ undef CLICOLOR NNN GGG RRR
     print "This text is normal.\n";
     print colored(['yellow on_magenta'], 'Yellow on magenta.', "\n");
     print colored(['red on_bright_yellow'], 'Red on bright yellow.', "\n");
-    print colored(['bright_red on_black'], 'Bright red on black.', "\n");
+    print colored(['bright_red', 'on_black'], 'Bright red on black.', "\n");
     print "\n";
 
     # Map escape sequences back to color names.
@@ -702,15 +702,16 @@ undef CLICOLOR NNN GGG RRR
 
 =head1 DESCRIPTION
 
-This module has two interfaces, one through color() and colored() and the
-other through constants.  It also offers the utility functions uncolor(),
-colorstrip(), colorvalid(), and coloralias(), which have to be explicitly
-imported to be used (see L</SYNOPSIS>).
+This module has two interfaces, one through C<color()> and C<colored()>,
+and the other through constants.  It also offers the utility functions
+C<uncolor()>, C<colorstrip()>, C<colorvalid()>, and C<coloralias()>,
+which have to be explicitly imported to be used (see L</SYNOPSIS>).
 
-If you are using Term::ANSIColor in a console command, consider supporting the
-CLICOLOR standard.  See L</"Supporting CLICOLOR"> for more information.
+If you are using C<Term::ANSIColor> in a console command, consider supporting
+the C<CLICOLOR> standard.
+See L</"Supporting CLICOLOR"> for more information.
 
-See L</COMPATIBILITY> for the versions of Term::ANSIColor that introduced
+See L</COMPATIBILITY> for the versions of C<Term::ANSIColor> that introduced
 particular features and the versions of Perl that included them.
 
 =head2 Supported Colors
