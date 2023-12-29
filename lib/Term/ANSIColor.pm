@@ -1363,7 +1363,7 @@ voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018, 2020 Russ Allbery
+Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018, 2020, 2023 Russ Allbery
 <rra@cpan.org>
 
 Copyright 1996 Zenin
@@ -1383,7 +1383,7 @@ The CPAN module L<Term::Chrome> provides a different interface using
 objects and operator overloading.
 
 ECMA-048 is available on-line (at least at the time of this writing) at
-L<https://www.ecma-international.org/publications/standards/Ecma-048.htm>.
+L<https://ecma-international.org/publications-and-standards/standards/ecma-48/>.
 
 ISO 6429 is available from ISO for a charge; the author of this module
 does not own a copy of it.  Since the source material for ISO 6429 was
