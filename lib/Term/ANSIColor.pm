@@ -454,7 +454,7 @@ sub uncolor {
             croak("Bad escape sequence $escape");
         }
 
-        # Pull off 256-color codes (38;5;n or 48;5;n) and true color codes
+        # Pull off 256-color codes (38;5;n or 48;5;n) and truecolor codes
         # (38;2;n;n;n or 48;2;n;n;n) as a unit.
         my $regex = qr{
             (
@@ -640,7 +640,7 @@ command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
 Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
 openmethods.com. grey ATTR urxvt mistyped prepending Bareword filehandle
 Cygwin Starsinic aterm rxvt CPAN RGB Solarized Whitespace alphanumerics
-undef CLICOLOR NNN GGG RRR
+undef CLICOLOR NNN GGG RRR strikethrough truecolor
 
 =head1 SYNOPSIS
 
@@ -766,7 +766,7 @@ completely on non-256-color terminals or may be misinterpreted and produce
 random behavior.  Additional attributes such as blink, italic, or bold may
 not work with the 256-color palette.
 
-For true color emulators, this module supports attributes of the form C<<
+For truecolor emulators, this module supports attributes of the form C<<
 rI<NNN>gI<NNN>bI<NNN> >> and C<< on_rI<NNN>gI<NNN>bI<NNN> >> for all values of
 I<NNN> between 0 and 255.  These represent foreground and background colors,
 respectively, with the RGB values given by the I<NNN> numbers.  These colors
@@ -818,7 +818,7 @@ C<rgb000> or C<rgb515>.  Similarly, the recognized background colors are:
 
 plus C<on_rgbI<RGB>> for I<R>, I<G>, and I<B> values from 0 to 5.
 
-For true color terminals, the recognized foreground colors are C<<
+For truecolor terminals, the recognized foreground colors are C<<
 rI<RRR>gI<GGG>bI<BBB> >> for I<RRR>, I<GGG>, and I<BBB> values between 0 and
 255.  Similarly, the recognized background colors are C<<
 on_rI<RRR>gI<GGG>bI<BBB> >> for I<RRR>, I<GGG>, and I<BBB> values between 0
@@ -1001,7 +1001,7 @@ over $Term::ANSIColor::AUTORESET, and the latter is ignored.
 
 The subroutine interface has the advantage over the constants interface in
 that only two subroutines are exported into your namespace, versus
-thirty-eight in the constants interface, and aliases and true color attributes
+thirty-eight in the constants interface, and aliases and truecolor attributes
 are supported.  On the flip side, the constants interface has the advantage of
 better compile time error checking, since misspelled names of colors or
 attributes in calls to color() and colored() won't be caught until runtime
@@ -1251,12 +1251,14 @@ C<ansi16> through C<ansi255>, as aliases for the C<rgb> and C<grey> colors,
 and the corresponding C<on_ansi> names and C<ANSI> and C<ON_ANSI> constants
 were added in Term::ANSIColor 4.06, included in Perl 5.25.7.
 
-Support for true color (the C<rNNNgNNNbNNN> and C<on_rNNNgNNNbNNN>
-attributes), defining aliases in terms of other aliases, and aliases mapping
-to multiple attributes instead of only a single attribute was added in
-Term::ANSIColor 5.00.
+Support for truecolor (the C<rNNNgNNNbNNN> and C<on_rNNNgNNNbNNN> attributes),
+defining aliases in terms of other aliases, and aliases mapping to multiple
+attributes instead of only a single attribute was added in Term::ANSIColor
+5.00.  The next version to be incorporated into Perl, 5.01, was included in
+Perl 5.31.8.
 
-Support for NO_COLOR was added in Term::ANSIColor 5.01.
+Support for NO_COLOR was added in Term::ANSIColor 5.01, included in Perl
+5.31.8.
 
 =head1 RESTRICTIONS
 
@@ -1312,10 +1314,10 @@ Jean Delvare provided the following table of different common terminal
 emulators and their support for the various attributes and others have
 helped me flesh it out:
 
-              clear    bold     faint   under    blink   reverse  conceal
+              clear    bold     dark    under    blink   reverse  conceal
  ------------------------------------------------------------------------
- xterm         yes      yes      no      yes      yes      yes      yes
- linux         yes      yes      yes    bold      yes      yes      no
+ xterm         yes      yes      yes     yes      yes      yes      yes
+ linux         yes      yes      yes    color   reverse    yes      no
  rxvt          yes      yes      no      yes  bold/black   yes      no
  dtterm        yes      yes      yes     yes    reverse    yes      yes
  teraterm      yes    reverse    no      yes    rev/red    yes      no
@@ -1325,31 +1327,34 @@ helped me flesh it out:
  Cygwin SSH    yes      yes      no     color    color    color     yes
  Terminal.app  yes      yes      no      yes      yes      yes      yes
 
+Not shown is italic, which is supported by xterm and reportedly urxvt, and is
+shown as green in the Linux console.
+
 Windows is Windows telnet, Cygwin SSH is the OpenSSH implementation under
 Cygwin on Windows NT, and Mac Terminal is the Terminal application in Mac
 OS X.  Where the entry is other than yes or no, that emulator displays the
 given attribute as something else instead.  Note that on an aixterm, clear
 doesn't reset colors; you have to explicitly set the colors back to what
-you want.  More entries in this table are welcome.
+you want.
 
-Support for code 3 (italic) is rare and therefore not mentioned in that
-table.  It is not believed to be fully supported by any of the terminals
-listed, although it's displayed as green in the Linux console, but it is
-reportedly supported by urxvt.
+More entries in this table are welcome.
 
-Note that codes 6 (rapid blink) and 9 (strike-through) are specified in ANSI
-X3.64 and ECMA-048 but are not commonly supported by most displays and
-emulators and therefore aren't supported by this module.  ECMA-048 also
-specifies a large number of other attributes, including a sequence of
-attributes for font changes, Fraktur characters, double-underlining, framing,
-circling, and overlining.  As none of these attributes are widely supported or
-useful, they also aren't currently supported by this module.
+Code 6 (rapid blink) is specified in ANSI X3.64 and ECMA-048.  xterm appears
+to handle it identically to blink, and the Linux console does not implement
+it.  It is not supported by this module.
+
+Code 9 (crossed-out or strikethrough) and code 21 (double underline) are
+supported by at least xterm, but are not currently supported by this module.
+
+ECMA-048 also specifies a large number of other attributes, including font
+changes, Fraktur characters, framing, circling, and overlining.  Currently,
+none of these are supported by this module.
 
 Most modern X terminal emulators support 256 colors.  Known to not support
 those colors are aterm, rxvt, Terminal.app, and TTY/VC.
 
-For information on true color support in various terminal emulators, see
-L<True Colour support|https://gist.github.com/XVilka/8346728>.
+For information on truecolor support in various terminal emulators, see
+L<truecolor support|https://github.com/termstandard/colors>.
 
 =head1 AUTHORS
 
@@ -1363,8 +1368,8 @@ voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018, 2020, 2023 Russ Allbery
-<rra@cpan.org>
+Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2018, 2020, 2023-2024 Russ
+Allbery <rra@cpan.org>
 
 Copyright 1996 Zenin
 
@@ -1394,9 +1399,9 @@ The 256-color control sequences are documented at
 L<https://invisible-island.net/xterm/ctlseqs/ctlseqs.html> (search for
 256-color).
 
-Information about true color support in various terminal emulators and test
-programs you can run to check the true color support in your terminal emulator
-are available at L<https://gist.github.com/XVilka/8346728>.
+Information about truecolor support in various terminal emulators and test
+programs you can run to check the truecolor support in your terminal emulator
+are available at L<https://github.com/termstandard/colors>.
 
 L<CLICOLORS|https://bixense.com/clicolors/> and
 L<NO_COLOR|https://no-color.org/> are useful standards to be aware of, and

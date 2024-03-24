@@ -1,5 +1,13 @@
                    User-Visible Term::ANSIColor Changes
 
+Term::ANSIColor 5.02 (unreleased)
+
+    Update the NOTES discussion of supported ECMA-048 attributes to
+    correct multiple inaccuracies and avoid making claims about which
+    attributes are commonly supported.
+
+    Update the URL for information about truecolor support.
+
 Term::ANSIColor 5.01 (2020-01-17)
 
     Add support for NO_COLOR <https://no-color.org/> to suppress all
