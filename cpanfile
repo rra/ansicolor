@@ -1,11 +1,14 @@
 on 'test' => sub {
-    requires 'Devel::Cover';
-    requires 'Test::MinimumVersion';
-    requires 'Test::Perl::Critic';
-    requires 'Test::Pod';
-    requires 'Test::Pod::Coverage';
-    requires 'Test::Pod::Spelling';
-    requires 'Test::Strict';
-    requires 'Test::Synopsis';
     requires 'Test::Warn';
+    suggests 'Devel::Cover';
+    suggests 'Perl::Critic::Community';
+    suggests 'Test::CPAN::Changes';
+    suggests 'Test::Kwalitee';
+    suggests 'Test::MinimumVersion';
+    suggests 'Test::Perl::Critic';
+    suggests 'Test::Pod';
+    suggests 'Test::Pod::Coverage';
+    suggests 'Test::Pod::Spelling';
+    suggests 'Test::Strict';
+    suggests 'Test::Synopsis';
 };

@@ -2,13 +2,13 @@ name: build
 
 on:
   push:
-    branches:
-      - "*"
+    branches-ignore:
+      - "dependabot/**"
     tags:
       - "release/*"
   pull_request:
     branches:
-      - master
+      - "main"
 
 jobs:
   perl:
@@ -43,8 +43,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: perl -V
         run: perl -V
-      - name: Install Dependencies
-        run: cpm install -g --show-build-log-on-failure
+      - uses: perl-actions/install-with-cpm@v1.7
+        with:
+          cpanfile: "cpanfile"
+          args: "--with-suggests"
+          sudo: false
       - name: Makefile.PL
         run: perl Makefile.PL
       - name: make test
