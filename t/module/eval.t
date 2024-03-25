@@ -6,12 +6,11 @@
 # processing and lose its value or leak $@ values to the calling program.
 # This is a regression test to ensure that this problem doesn't return.
 #
-# Copyright 2012-2014, 2020 Russ Allbery <rra@cpan.org>
+# Copyright 2012-2014, 2020, 2024 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
-use 5.008;
-use strict;
+use 5.012;
 use warnings;
 
 use Test::More tests => 17;
@@ -29,7 +28,7 @@ BEGIN {
 
 # Ensure that using a constant doesn't leak anything in $@.
 is((BOLD 'test'), "\e[1mtest", 'BOLD works');
-is($@,            q{},         '... and $@ is empty');
+is($@, q{}, '... and $@ is empty');
 
 # Store something in $@ and ensure it doesn't get clobbered.
 ## no critic (BuiltinFunctions::ProhibitStringyEval)
@@ -40,28 +39,32 @@ isnt($@, q{}, '... and $@ still contains something useful');
 # Do some additional unnecessary testing so that coverage analysis works
 # properly.  First, check disabled colors.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
-is(BOLD,  q{}, 'ANSI_COLORS_DISABLED works for BOLD');
+is(BOLD, q{}, 'ANSI_COLORS_DISABLED works for BOLD');
 is(BLINK, q{}, '...and for BLINK');
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Now, NO_COLOR.
 local $ENV{NO_COLOR} = 'foo';
-is(BOLD,  q{}, 'NO_COLOR works for BOLD');
+is(BOLD, q{}, 'NO_COLOR works for BOLD');
 is(BLINK, q{}, '...and for BLINK');
 delete $ENV{NO_COLOR};
 
 # Now, AUTORESET.
 $Term::ANSIColor::AUTORESET = 1;
+#<<<
 is((BOLD 't'),  "\e[1mt\e[0m", 'AUTORESET works for BOLD');
 is((BLINK 't'), "\e[5mt\e[0m", '...and for BLINK');
 is((BOLD),      "\e[1m",       'AUTORESET without text for BOLD');
 is((BLINK),     "\e[5m",       '...and for BLINK');
+#>>>
 $Term::ANSIColor::AUTORESET = 0;
 
 # And, finally, AUTOLOCAL.
 $Term::ANSIColor::AUTOLOCAL = 1;
+#<<<
 is((BOLD 't'),  "\e[1mt\e[0m", 'AUTOLOCAL works for BOLD');
 is((BLINK 't'), "\e[5mt\e[0m", '...and for BLINK');
 is((BOLD),      "\e[1m",       'AUTOLOCAL without text for BOLD');
 is((BLINK),     "\e[5m",       '...and for BLINK');
+#>>>
 $Term::ANSIColor::AUTOLOCAL = 0;

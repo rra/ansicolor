@@ -1,6 +1,12 @@
                    Revision hisory for Term::ANSIColor
 
-5.02 - Not Released
+v6.0.0 - Not Released
+
+ - Drop support for Perl 5.8 and 5.10.  Term::ANSIColor now requires Perl
+   5.12 or later.
+
+ - Term::ANSIColor now uses semantic versioning for the package and module
+   versions, with a v prefix to work with Perl's packaging system.
 
  - Update the NOTES discussion of supported ECMA-048 attributes to correct
    multiple inaccuracies and avoid making claims about which attributes

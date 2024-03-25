@@ -35,6 +35,6 @@ my $constant = substr('BOLD' . $ENV{PATH}, 0, length('BOLD'));
 {
     no strict 'refs';
     is(&{$constant}(), "\e[1m", 'Constant subs are not tainted');
-    is(BOLD(),         "\e[1m", '...and we can call the sub again');
+    is(BOLD(), "\e[1m", '...and we can call the sub again');
     ok(defined(&Term::ANSIColor::BOLD), '...and it is now defined');
 }

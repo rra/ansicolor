@@ -11,7 +11,7 @@
 # module is.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012, 2014, 2016 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014, 2016, 2024 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
@@ -33,7 +33,7 @@ use constant COLORS     => qw(black red green yellow blue magenta cyan white);
 # with these because they can't be prototyped and hence can't be overridden.
 
 ## no critic (Subroutines::RequireArgUnpacking)
-sub print_checked  { print @_  or croak('print failed');  return }
+sub print_checked { print @_ or croak('print failed'); return }
 sub printf_checked { printf @_ or croak('printf failed'); return }
 ## use critic
 
@@ -56,9 +56,9 @@ for my $r (0 .. 5) {
 # Returns: Text centered within that width
 sub center {
     my ($text, $width) = @_;
-    my $padding  = $width - length($text);
+    my $padding = $width - length($text);
     my $trailing = int($padding / 2);
-    my $leading  = $padding - $trailing;
+    my $leading = $padding - $trailing;
     return (q{ } x $leading) . $text . (q{ } x $trailing);
 }
 
@@ -126,8 +126,12 @@ sub print_fg256_test {
     for my $bg (@SAMPLES) {
         for my $i (0 .. $#RGB) {
             if (($i % 18) == 0) {
-                printf_checked("%s\nbg %03d %s",
-                    color('reset'), $bg, color("on_rgb$bg"));
+                printf_checked(
+                    "%s\nbg %03d %s",
+                    color('reset'),
+                    $bg,
+                    color("on_rgb$bg"),
+                );
             }
             printf_checked('%s%03d ', color("rgb$RGB[$i]"), $RGB[$i]);
         }
@@ -145,8 +149,12 @@ sub print_bg256_test {
     for my $fg (@SAMPLES) {
         for my $i (0 .. $#RGB) {
             if (($i % 18) == 0) {
-                printf_checked("%s\nfg %03d %s",
-                    color('reset'), $fg, color("rgb$fg"));
+                printf_checked(
+                    "%s\nfg %03d %s",
+                    color('reset'),
+                    $fg,
+                    color("rgb$fg"),
+                );
             }
             printf_checked('%s%03d ', color("on_rgb$RGB[$i]"), $RGB[$i]);
         }
@@ -223,7 +231,7 @@ B<generate-colors> I<type> [I<type> ...]
 
 =head1 REQUIREMENTS
 
-Perl 5.6 and Term::ANSIColor 4.00 or later.
+Perl 5.12 and Term::ANSIColor 4.00 or later.
 
 =head1 DESCRIPTION
 

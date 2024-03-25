@@ -17,10 +17,9 @@
 # Modules and declarations
 ##############################################################################
 
-package Term::ANSIColor;
+package Term::ANSIColor v6.0.0;
 
-use 5.008;
-use strict;
+use 5.012;
 use warnings;
 
 # Also uses Carp but loads it on demand to reduce memory usage.
@@ -32,7 +31,7 @@ use Exporter;
 
 # Declare variables that should be set in BEGIN for robustness.
 ## no critic (Modules::ProhibitAutomaticExportation)
-our (@EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA, $VERSION);
+our (@EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA);
 
 # We use autoloading, which sets this variable to the name of the called sub.
 our $AUTOLOAD;
@@ -41,23 +40,21 @@ our $AUTOLOAD;
 # against circular module loading (not that we load any modules, but
 # consistency is good).
 BEGIN {
-    $VERSION = '5.01';
-
     # All of the basic supported constants, used in %EXPORT_TAGS.
     my @colorlist = qw(
-      CLEAR           RESET             BOLD            DARK
-      FAINT           ITALIC            UNDERLINE       UNDERSCORE
-      BLINK           REVERSE           CONCEALED
+        CLEAR           RESET             BOLD            DARK
+        FAINT           ITALIC            UNDERLINE       UNDERSCORE
+        BLINK           REVERSE           CONCEALED
 
-      BLACK           RED               GREEN           YELLOW
-      BLUE            MAGENTA           CYAN            WHITE
-      ON_BLACK        ON_RED            ON_GREEN        ON_YELLOW
-      ON_BLUE         ON_MAGENTA        ON_CYAN         ON_WHITE
+        BLACK           RED               GREEN           YELLOW
+        BLUE            MAGENTA           CYAN            WHITE
+        ON_BLACK        ON_RED            ON_GREEN        ON_YELLOW
+        ON_BLUE         ON_MAGENTA        ON_CYAN         ON_WHITE
 
-      BRIGHT_BLACK    BRIGHT_RED        BRIGHT_GREEN    BRIGHT_YELLOW
-      BRIGHT_BLUE     BRIGHT_MAGENTA    BRIGHT_CYAN     BRIGHT_WHITE
-      ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
-      ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
+        BRIGHT_BLACK    BRIGHT_RED        BRIGHT_GREEN    BRIGHT_YELLOW
+        BRIGHT_BLUE     BRIGHT_MAGENTA    BRIGHT_CYAN     BRIGHT_WHITE
+        ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
+        ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
     );
 
     # 256-color constants, used in %EXPORT_TAGS.
@@ -72,9 +69,9 @@ BEGIN {
     }
 
     # Exported symbol configuration.
-    @ISA         = qw(Exporter);
-    @EXPORT      = qw(color colored);
-    @EXPORT_OK   = qw(uncolor colorstrip colorvalid coloralias);
+    @ISA = qw(Exporter);
+    @EXPORT = qw(color colored);
+    @EXPORT_OK = qw(uncolor colorstrip colorvalid coloralias);
     %EXPORT_TAGS = (
         constants    => \@colorlist,
         constants256 => \@colorlist256,
@@ -148,18 +145,18 @@ our %ATTRIBUTES = (
 # The first 16 256-color codes are duplicates of the 16 ANSI colors.  The rest
 # are RBG and greyscale values.
 for my $code (0 .. 15) {
-    $ATTRIBUTES{"ansi$code"}    = "38;5;$code";
+    $ATTRIBUTES{"ansi$code"} = "38;5;$code";
     $ATTRIBUTES{"on_ansi$code"} = "48;5;$code";
 }
 
 # 256-color RGB colors.  Red, green, and blue can each be values 0 through 5,
 # and the resulting 216 colors start with color 16.
-for my $r (0 .. 5) {
-    for my $g (0 .. 5) {
-        for my $b (0 .. 5) {
-            my $code = 16 + (6 * 6 * $r) + (6 * $g) + $b;
-            $ATTRIBUTES{"rgb$r$g$b"}    = "38;5;$code";
-            $ATTRIBUTES{"on_rgb$r$g$b"} = "48;5;$code";
+for my $red (0 .. 5) {
+    for my $green (0 .. 5) {
+        for my $blue (0 .. 5) {
+            my $code = 16 + (6 * 6 * $red) + (6 * $green) + $blue;
+            $ATTRIBUTES{"rgb$red$green$blue"} = "38;5;$code";
+            $ATTRIBUTES{"on_rgb$red$green$blue"} = "48;5;$code";
         }
     }
 }
@@ -167,7 +164,7 @@ for my $r (0 .. 5) {
 # The last 256-color codes are 24 shades of grey.
 for my $n (0 .. 23) {
     my $code = $n + 232;
-    $ATTRIBUTES{"grey$n"}    = "38;5;$code";
+    $ATTRIBUTES{"grey$n"} = "38;5;$code";
     $ATTRIBUTES{"on_grey$n"} = "48;5;$code";
 }
 
@@ -182,7 +179,7 @@ for my $attr (reverse(sort(keys(%ATTRIBUTES)))) {
 # this after creating %ATTRIBUTES_R since we want to use the canonical names
 # when reversing a color.
 for my $code (16 .. 255) {
-    $ATTRIBUTES{"ansi$code"}    = "38;5;$code";
+    $ATTRIBUTES{"ansi$code"} = "38;5;$code";
     $ATTRIBUTES{"on_ansi$code"} = "48;5;$code";
 }
 
@@ -512,11 +509,11 @@ sub colored {
     my ($first, @rest) = @_;
     my ($string, @codes);
     if (ref($first) && ref($first) eq 'ARRAY') {
-        @codes  = @{$first};
+        @codes = @{$first};
         $string = join(q{}, @rest);
     } else {
         $string = $first;
-        @codes  = @rest;
+        @codes = @rest;
     }
 
     # Return the string unmolested if colors are disabled.
@@ -594,6 +591,7 @@ sub coloralias {
 #
 # Returns: (array)  The strings stripped of ANSI color escape sequences
 #          (scalar) The same, concatenated
+## no critic (Wantarray)
 sub colorstrip {
     my (@string) = @_;
     for my $string (@string) {
@@ -601,6 +599,7 @@ sub colorstrip {
     }
     return wantarray ? @string : join(q{}, @string);
 }
+## use critic
 
 # Given a list of color attributes (arguments for color, for instance), return
 # true if they're all valid or false if any of them are invalid.

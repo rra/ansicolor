@@ -3,12 +3,11 @@
 # Test setting color aliases via the environment.
 #
 # Copyright 2012 Stephen Thirlwall
-# Copyright 2012, 2014, 2020 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014, 2020, 2024 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
-use 5.008;
-use strict;
+use 5.012;
 use warnings;
 
 use lib 't/lib';
@@ -29,6 +28,7 @@ delete $ENV{NO_COLOR};
 
 # Set up some custom color configuration.  Some will produce warnings on
 # module load.
+#<<<
 my @COLOR_ALIASES = (
     ' custom_black = black',  'custom_red= red',
     'custom_green =green ',   'custom_blue=blue',
@@ -37,6 +37,7 @@ my @COLOR_ALIASES = (
     'no_equals',              'red=green',
     'custom_test=red=blue',   'custom!test=red',
 );
+#>>>
 local $ENV{ANSI_COLORS_ALIASES} = join(q{,}, @COLOR_ALIASES);
 
 # Load the module, which should produce those warnings.
@@ -56,7 +57,7 @@ warnings_like(
         qr{ \A Invalid [ ] alias [ ] name [ ] "custom!test" [ ] in [ ]
             "custom!test=red" [ ] at [ ] }xms,
     ],
-    'Correct warnings when loading module'
+    'Correct warnings when loading module',
 );
 
 # Import the functions for convenience.
@@ -67,15 +68,21 @@ Term::ANSIColor->import(qw(color colored colorvalid uncolor));
 for my $original (qw(black red green blue)) {
     my $custom = 'custom_' . $original;
     ok(colorvalid($custom), "$custom is valid");
-    is(color($custom), color($original),
-        "...and matches $original with color");
+    is(
+        color($custom),
+        color($original),
+        "...and matches $original with color",
+    );
     is(
         colored('test', $custom),
         colored('test', $original),
-        "...and matches $original with colored"
+        "...and matches $original with colored",
     );
-    is_deeply([uncolor(color($custom))],
-        [$original], "...and uncolor returns $original");
+    is_deeply(
+        [uncolor(color($custom))],
+        [$original],
+        "...and uncolor returns $original",
+    );
 }
 
 # An alias can map to multiple colors.
@@ -83,12 +90,12 @@ ok(colorvalid('custom_multiple'), 'custom_multiple is valid');
 is(
     color('custom_multiple'),
     color('blue', 'on_green'),
-    '...and works with color'
+    '...and works with color',
 );
 is(
     colored('test', 'custom_multiple'),
     colored('test', 'blue', 'on_green'),
-    '...and works with colored'
+    '...and works with colored',
 );
 
 # custom_unknown is mapped to an unknown color and should not appear.

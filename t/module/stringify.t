@@ -3,12 +3,11 @@
 # Test suite for stringify interaction.
 #
 # Copyright 2011 Revilo Reegiles
-# Copyright 2011, 2014, 2020 Russ Allbery <rra@cpan.org>
+# Copyright 2011, 2014, 2020, 2024 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
-use 5.008;
-use strict;
+use 5.012;
 use warnings;
 
 use Test::More tests => 6;
@@ -16,8 +15,8 @@ use Test::More tests => 6;
 # Create a dummy class that implements stringification.
 ## no critic (Modules::ProhibitMultiplePackages)
 package Test::Stringify;
-use overload '""' => 'stringify';
-sub new       { return bless({}, 'Test::Stringify') }
+use overload '""' => 'stringify', bool => sub { 1 }, fallback => 1;
+sub new { return bless({}, 'Test::Stringify') }
 sub stringify { return "Foo Bar\n" }
 
 # Back to the main package.
@@ -51,5 +50,5 @@ $result = colored(\%foo, 'bold blue');
 like(
     $result,
     qr{ \e\[1;34m HASH\(.*\) \e\[0m }xms,
-    'colored with a hash reference'
+    'colored with a hash reference',
 );
