@@ -1,0 +1,126 @@
+# Package metadata for Term::ANSIColor.
+#
+# This file contains configuration for DocKnot used to generate
+# documentation files (like README.md) and web pages.  Other documentation
+# in this package is generated automatically from these files as part of
+# the release process.  For more information, see DocKnot's documentation.
+#
+# DocKnot is available from <https://www.eyrie.org/~eagle/software/docknot/>.
+#
+# Copyright 1998, 2000-2005, 2007-2016, 2020, 2024
+#
+# SPDX-License-Identifier: MIT
+
+format: v1
+
+name: Term::ANSIColor
+maintainer: Russ Allbery <rra@cpan.org>
+version: v6.0.0
+synopsis: simple ANSI text attribute control module
+
+license:
+  name: Perl
+  notices: |
+    PUSH/POP support submitted 2007 by openmethods.com voice solutions
+copyrights:
+  - holder: Russ Allbery <rra@cpan.org>
+    years: 1996-1998, 2000-2002, 2005-2006, 2008-2020, 2024
+  - holder: Zenin
+    years: '1996'
+  - holder: Kurt Starsinic <kstarsinic@gmail.com>
+    years: '2012'
+
+build:
+  type: ExtUtils::MakeMaker
+distribution:
+  cpan: Term-ANSIColor
+  section: perl
+  tarname: Term-ANSIColor
+  version: term-ansicolor
+support:
+  email: rra@cpan.org
+  github: rra/ansicolor
+  web: https://www.eyrie.org/~eagle/software/ansicolor/
+vcs:
+  browse: https://git.eyrie.org/?p=perl/ansicolor.git
+  github: rra/ansicolor
+  openhub: https://www.openhub.net/p/ansicolor
+  status:
+    workflow: build
+  type: Git
+  url: https://git.eyrie.org/git/perl/ansicolor.git
+
+quote:
+  author: Dave van Domelen
+  text: |
+    Ah, September, when the sysadmins turn colors and fall off the trees....
+docs:
+  user:
+  - name: docs
+    title: Module documentation
+  - name: thanks
+    title: Thanks and credits
+
+blurb: |
+  Term::ANSIColor provides constants and simple functions for setting ANSI
+  text attributes, most notably colors.  It can be used to set the current
+  text attributes or to apply a set of attributes to a string and reset the
+  current text attributes at the end of that string.  Eight-color,
+  sixteen-color, 256-color, and truecolor (24-bit color) escape sequences are
+  all supported.
+
+description: |
+  This Perl module is a simple and convenient interface to the ANSI X3.64
+  (ECMA-48, ISO 6429) terminal escape sequences for color and other formatting
+  attributes such as bold or underline.  The sequences are provided in two
+  forms, either as constants for each attribute or via a function that takes
+  the names of attributes and returns the appropriate escape codes or wraps
+  them around the provided text.  Also supported are the extended colors used
+  for sixteen-color, 256-color, and truecolor emulators.
+
+  This module is very stable, and I've used it in a wide variety of
+  applications.  Perl 5.6.0 and later include it in the core distribution, so
+  you don't need to download and install it yourself unless you need a newer
+  version than comes with your version of Perl.  I continue to maintain it as
+  a separate module, and the version included in Perl is resynced with mine
+  before each release.
+
+  The original module came out of a discussion in comp.lang.perl.misc and is
+  a combination of two approaches, one with constants by Zenin and one with
+  functions that I wrote.  I offered to maintain a combined module that
+  included both approaches.
+
+requirements: |
+  This module requires Perl 5.12 or later.  It has no other dependencies.
+
+  In order to see color, you will need to use a terminal window that supports
+  the ANSI escape sequences for color.  Any recent version of xterm, most
+  xterm derivatives and replacements, and most telnet and SSH clients for
+  Windows and Macintosh should work, as will the MacOS X Terminal application
+  (although Terminal.app reportedly doesn't support 256 colors).  The console
+  windows for Windows NT and Windows 2000 will not work, as they do not even
+  attempt to support ANSI X3.64, but I have heard newer versions of Windows
+  have improved support.
+
+  For a terminal emulator compatibility list, see the Term::ANSIColor module
+  documentation.  If you have any additions to the table in the documentation,
+  please send them to me.
+
+test:
+  lancaster: true
+  suffix: |
+    The following additional Perl modules will be used by the test suite if
+    present:
+
+    * Devel::Cover
+    * Test::MinimumVersion
+    * Test::Perl::Critic
+    * Test::Pod
+    * Test::Pod::Coverage
+    * Test::Spelling
+    * Test::Strict
+    * Test::Synopsis
+    * Test::Warn
+
+    All are available on CPAN.  Those tests will be skipped if the modules are
+    not available.

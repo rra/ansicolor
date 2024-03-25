@@ -1,4 +1,4 @@
-# Term::ANSIColor 5.01
+# Term::ANSIColor
 
 [![Build
 status](https://github.com/rra/ansicolor/workflows/build/badge.svg)](https://github.com/rra/ansicolor/actions)
@@ -6,7 +6,7 @@ status](https://github.com/rra/ansicolor/workflows/build/badge.svg)](https://git
 version](https://img.shields.io/cpan/v/Term-ANSIColor)](https://metacpan.org/release/Term-ANSIColor)
 [![License](https://img.shields.io/cpan/l/Term-ANSIColor)](https://github.com/rra/ansicolor/blob/master/LICENSE)
 
-Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2020 Russ Allbery
+Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2020, 2024 Russ Allbery
 <rra@cpan.org>.  Copyright 1996 Zenin.  Copyright 2012 Kurt Starsinic
 <kstarsinic@gmail.com>.  This software is distributed under the same terms
 as Perl itself.  Please see the section [License](#license) below for more
@@ -18,28 +18,26 @@ Term::ANSIColor provides constants and simple functions for setting ANSI
 text attributes, most notably colors.  It can be used to set the current
 text attributes or to apply a set of attributes to a string and reset the
 current text attributes at the end of that string.  Eight-color,
-sixteen-color, 256-color, and true color (24-bit color) escape sequences
+sixteen-color, 256-color, and truecolor (24-bit color) escape sequences
 are all supported.
 
 ## Description
 
-This Perl module is a simple and convenient interface to the ANSI terminal
-escape sequences for color (from ECMA-48, also included in ISO 6429).  The
-color sequences are provided in two forms, either as constants for each
-color or via a function that takes the names of colors and returns the
-appropriate escape codes or wraps them around the provided text.  The
-non-color text style codes from ANSI X3.64 (bold, dark, underline, and
-reverse, for example), which were also included in ECMA-48 and ISO 6429,
-are also supported.  Also supported are the extended colors used for
-sixteen-color and 256-color emulators.
+This Perl module is a simple and convenient interface to the ANSI X3.64
+(ECMA-48, ISO 6429) terminal escape sequences for color and other
+formatting attributes such as bold or underline.  The sequences are
+provided in two forms, either as constants for each attribute or via a
+function that takes the names of attributes and returns the appropriate
+escape codes or wraps them around the provided text.  Also supported are
+the extended colors used for sixteen-color, 256-color, and truecolor
+emulators.
 
 This module is very stable, and I've used it in a wide variety of
-applications.  It has been included in the core Perl distribution starting
-with version 5.6.0, so you don't need to download and install it yourself
-unless you have an old version of Perl or need a newer version of the
-module than comes with your version of Perl.  I continue to maintain it as
-a separate module, and the version included in Perl is resynced with mine
-before each release.
+applications.  Perl 5.6.0 and later include it in the core distribution,
+so you don't need to download and install it yourself unless you need a
+newer version than comes with your version of Perl.  I continue to
+maintain it as a separate module, and the version included in Perl is
+resynced with mine before each release.
 
 The original module came out of a discussion in comp.lang.perl.misc and is
 a combination of two approaches, one with constants by Zenin and one with
@@ -48,9 +46,7 @@ included both approaches.
 
 ## Requirements
 
-Term::ANSIColor is written in pure Perl and has no module dependencies
-that aren't found in Perl core.  It should work with any version of Perl
-after 5.8.
+This module requires Perl 5.12 or later.  It has no other dependencies.
 
 In order to see color, you will need to use a terminal window that
 supports the ANSI escape sequences for color.  Any recent version of
@@ -58,7 +54,8 @@ xterm, most xterm derivatives and replacements, and most telnet and SSH
 clients for Windows and Macintosh should work, as will the MacOS X
 Terminal application (although Terminal.app reportedly doesn't support 256
 colors).  The console windows for Windows NT and Windows 2000 will not
-work, as they do not even attempt to support ANSI X3.64.
+work, as they do not even attempt to support ANSI X3.64, but I have heard
+newer versions of Windows have improved support.
 
 For a terminal emulator compatibility list, see the Term::ANSIColor module
 documentation.  If you have any additions to the table in the
@@ -123,11 +120,11 @@ page](https://www.eyrie.org/~eagle/software/ansicolor/) will always have
 the current version of this package, the current documentation, and
 pointers to any additional resources.
 
-For bug tracking, use the [CPAN bug
-tracker](https://rt.cpan.org/Dist/Display.html?Name=Term-ANSIColor).
-However, please be aware that I tend to be extremely busy and work
-projects often take priority.  I'll save your report and get to it as soon
-as I can, but it may take me a couple of months.
+For bug tracking, use the [issue tracker on
+GitHub](https://github.com/rra/ansicolor/issues).  However, please be
+aware that I tend to be extremely busy and work projects often take
+priority.  I'll save your report and get to it as soon as I can, but it
+may take me a couple of months.
 
 ## Source Repository
 
@@ -142,16 +139,14 @@ web](https://git.eyrie.org/?p=perl/ansicolor.git).
 
 The eyrie.org repository is the canonical one, maintained by the author,
 but using GitHub is probably more convenient for most purposes.  Pull
-requests are gratefully reviewed and normally accepted.  It's probably
-better to use the CPAN bug tracker than GitHub issues, though, to keep all
-Perl module issues in the same place.
+requests are gratefully reviewed and normally accepted.
 
 ## License
 
 The Term::ANSIColor package as a whole is covered by the following
 copyright statement and license:
 
-> Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2020
+> Copyright 1996-1998, 2000-2002, 2005-2006, 2008-2020, 2024
 >     Russ Allbery <rra@cpan.org>
 >
 > Copyright 1996
