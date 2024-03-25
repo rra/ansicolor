@@ -1,337 +1,332 @@
-                   User-Visible Term::ANSIColor Changes
+                   Revision hisory for Term::ANSIColor
 
-Term::ANSIColor 5.02 (unreleased)
+5.02 - Not Released
 
-    Update the NOTES discussion of supported ECMA-048 attributes to
-    correct multiple inaccuracies and avoid making claims about which
-    attributes are commonly supported.
+ - Update the NOTES discussion of supported ECMA-048 attributes to correct
+   multiple inaccuracies and avoid making claims about which attributes
+   are commonly supported.  Thanks to G. Branden Robinson for pointing out
+   that xterm now supports italic.
 
-    Update the URL for information about truecolor support.
+ - Update the URL for information about truecolor support.
 
-Term::ANSIColor 5.01 (2020-01-17)
+5.01 - 2020-01-17
 
-    Add support for NO_COLOR <https://no-color.org/> to suppress all
-    formatting sequences.  Thanks, Andrea Telatin.
+ - Add support for NO_COLOR <https://no-color.org/> to suppress all
+   formatting sequences.  Thanks, Andrea Telatin.
 
-    Document that aliases are expanded during alias definition, and thus
-    an alias defined in terms of another alias will not change if the
-    other alias is redefined.
+ - Document that aliases are expanded during alias definition, and thus an
+   alias defined in terms of another alias will not change if the other
+   alias is redefined.
 
-    Fix SYNOPSIS example of uncolor.  The function returns a list, not a
-    reference to a list.  Thanks, Joe Smith.  (#131414)
+ - Fix SYNOPSIS example of uncolor.  The function returns a list, not a
+   reference to a list.  Thanks, Joe Smith.  (#131414)
 
-Term::ANSIColor 5.00 (2020-01-05)
+5.00 - 2020-01-05
 
-    Drop support for Perl 5.6.  The minimum supported version is now Perl
-    5.8.  Perl 5.6 isn't supported by Travis-CI and is only spottily
-    tested, so true support is dubious.
+ - Drop support for Perl 5.6.  The minimum supported version is now Perl
+   5.8.  Perl 5.6 isn't supported by Travis-CI and is only spottily
+   tested, so true support is dubious.
 
-    Add support for true color (24-bit color) via new rNNNgNNNbNNN and
-    on_rNNNgNNNbNNN attributes.  These are only supported via the function
-    interface, not in the constant interface.  Based on work by Lars
-    Dɪᴇᴄᴋᴏᴡ 迪拉斯.  (#130083)
+ - Add support for true color (24-bit color) via new rNNNgNNNbNNN and
+   on_rNNNgNNNbNNN attributes.  These are only supported via the function
+   interface, not in the constant interface.  Based on work by Lars
+   Dɪᴇᴄᴋᴏᴡ 迪拉斯.  (#130083)
 
-    Allow color aliases to map to multiple attributes instead of only one
-    attribute.  Based on work by Yanick Champoux.
+ - Allow color aliases to map to multiple attributes instead of only one
+   attribute.  Based on work by Yanick Champoux.
 
-    Aliases may now be defined in terms of other aliases.
+ - Aliases may now be defined in terms of other aliases.
 
-    Document bad interactions between colored output to standard output
-    and standard error when standard output is line-buffered in a couple
-    of places in the manual and suggest setting autoflush() or EACHLINE
-    as a fix.  (#121974)
+ - Document bad interactions between colored output to standard output and
+   standard error when standard output is line-buffered in a couple of
+   places in the manual and suggest setting autoflush() or EACHLINE as a
+   fix.  (#121974)
 
-    Document how to support CLICOLOR <https://bixense.com/clicolors/> in
-    programs using Term::ANSIColor.  (Due to backward compatibility and
-    non-output uses, there's no easy way to support CLICOLOR in the module
-    automatically.)
+ - Document how to support CLICOLOR <https://bixense.com/clicolors/> in
+   programs using Term::ANSIColor.  (Due to backward compatibility and
+   non-output uses, there's no easy way to support CLICOLOR in the module
+   automatically.)
 
-    Update to rra-c-util 8.1:
+4.06 - 2016-10-28
 
-    * Update perlcritic configuration.
-    * Add SPDX-License-Identifier headers to all significant files.
+ - Add aliases ansi16 through ansi255 and on_ansi16 through on_ansi255
+   (plus the corresponding constants) for the grey and rgb colors so that
+   one can refer to all of the 256 ANSI colors with consistent names.
+   These are aliases; the colors returned by uncolor will still use the
+   grey and rgb names.  (#118267)
 
-Term::ANSIColor 4.06 (2016-10-28)
+4.05 - 2016-03-20
 
-    Add aliases ansi16 through ansi255 and on_ansi16 through on_ansi255
-    (plus the corresponding constants) for the grey and rgb colors so that
-    one can refer to all of the 256 ANSI colors with consistent names.
-    These are aliases; the colors returned by uncolor will still use the
-    grey and rgb names.  (#118267)
+ - Color aliases are now restricted to ASCII alphanumerics, due to the
+   below change.
 
-Term::ANSIColor 4.05 (2016-03-20)
+ - Delay loading of the Carp module and avoid using [:upper:], \w, and \d
+   in regular expressions to reduce the amount of memory this module
+   consumes.  (Normally, I wouldn't worry about this, but this module is
+   very light-weight and can be useful even in highly space-constrained
+   environments, and the impact is slight.)  Thanks, Nicolas R.  (#111552)
 
-    Color aliases are now restricted to ASCII alphanumerics, due to the
-    below change.
+ - Provide a mailto address in bug tracking metadata, use the shorter form
+   of the RT bug tracker URL, and fix the license value to match the new
+   metadata specification.  Rework Makefile.PL so that the munging for
+   older versions of ExtUtils::MakeMaker is less intrusive.
 
-    Delay loading of the Carp module and avoid using [:upper:], \w, and \d
-    in regular expressions to reduce the amount of memory this module
-    consumes.  (Normally, I wouldn't worry about this, but this module is
-    very light-weight and can be useful even in highly space-constrained
-    environments, and the impact is slight.)  Thanks, Nicolas R.
-    (#111552)
+4.04 - 2015-12-06
 
-    Provide a mailto address in bug tracking metadata, use the shorter
-    form of the RT bug tracker URL, and fix the license value to match the
-    new metadata specification.  Rework Makefile.PL so that the munging
-    for older versions of ExtUtils::MakeMaker is less intrusive.
+ - Revert the build system back to ExtUtils::MakeMaker.  This is the build
+   system actually used in Perl core, so this removes a level of
+   indirectly generated files and means that normal module development
+   tests the same build system used by Perl.  Update Makefile.PL with the
+   additional metadata from the Module::Build build system.
 
-Term::ANSIColor 4.04 (2015-12-06)
+ - For versions of Perl prior to 5.11, install the module into the Perl
+   core module directories, since in those versions site modules did not
+   take precedence over Perl core modules.
 
-    Revert the build system back to ExtUtils::MakeMaker.  This is the
-    build system actually used in Perl core, so this removes a level of
-    indirectly generated files and means that normal module development
-    tests the same build system used by Perl.  Update Makefile.PL with the
-    additional metadata from the Module::Build build system.
+ - Rename NEWS to Changes to match the normal Perl convention.
 
-    For versions of Perl prior to 5.11, install the module into the Perl
-    core module directories, since in those versions site modules did not
-    take precedence over Perl core modules.
+4.03 - 2014-03-23
 
-    Rename NEWS to Changes to match the normal Perl convention.
+ - Switch the module build system to Module::Build, but still generate a
+   Makefile.PL file for backward compatibility and for the use of Perl
+   core.
 
-Term::ANSIColor 4.03 (2014-03-23)
+ - Fix typo in SYNOPSIS (colorstrip example) and duplicated word.  Thanks,
+   Olivier Mengué and David Steinbrunner.  (#85480, #94006)
 
-    Switch the module build system to Module::Build, but still generate a
-    Makefile.PL file for backward compatibility and for the use of Perl
-    core.
+ - Skip POD and some other style tests unless doing automated or release
+   testing.  Skip POD spelling, coverage, and Perl::Critic tests unless
+   doing author testing.  Use the Lancaster Consensus environment
+   variables instead of RRA_MAINTAINER_TESTS.  (#93474)
 
-    Fix typo in SYNOPSIS (colorstrip example) and duplicated word.
-    Thanks, Olivier Mengué and David Steinbrunner.  (#85480, #94006)
+ - Add SEE ALSO reference to Win32::Console::ANSI.  (#87295)
 
-    Skip POD and some other style tests unless doing automated or release
-    testing.  Skip POD spelling, coverage, and Perl::Critic tests unless
-    doing author testing.  Use the Lancaster Consensus environment
-    variables instead of RRA_MAINTAINER_TESTS.  (#93474)
+4.02 - 2013-01-07
 
-    Add SEE ALSO reference to Win32::Console::ANSI.  (#87295)
+ - When testing 256-color support, list the tag first in the import list
+   for compatibility with the Exporter from Perl 5.6.2.  Thanks to David
+   Cantrell for the testing and debugging.
 
-Term::ANSIColor 4.02 (2013-01-07)
+ - Add the minimum Perl version to the package metadata.
 
-    When testing 256-color support, list the tag first in the import list
-    for compatibility with the Exporter from Perl 5.6.2.  Thanks to David
-    Cantrell for the testing and debugging.
+4.01 - 2012-12-31
 
-    Add the minimum Perl version to the package metadata.
+ - Fix logic for skipping tests when Test::Warn is not installed.
 
-Term::ANSIColor 4.01 (2012-12-31)
+4.00 - 2012-12-30
 
-    Fix logic for skipping tests when Test::Warn is not installed.
+ - Add constants (with tag :constants256) and attributes for 256-color
+   emulators.  Thanks, Kurt Starsinic.
 
-Term::ANSIColor 4.00 (2012-12-30)
+ - Add support for custom color names configured with either a new
+   function, coloralias, or the ANSI_COLORS_ALIASES environment variable
+   as set during module load.  Thanks, Stephen Tirlwall.
 
-    Add constants (with tag :constants256) and attributes for 256-color
-    emulators.  Thanks, Kurt Starsinic.
+ - Only honor ANSI_COLORS_DISABLED if it is set to a true value.
 
-    Add support for custom color names configured with either a new
-    function, coloralias, or the ANSI_COLORS_ALIASES environment variable
-    as set during module load.  Thanks, Stephen Tirlwall.
+ - The module now requires Perl 5.6 or later and makes use of Perl 5.6
+   features.
 
-    Only honor ANSI_COLORS_DISABLED if it is set to a true value.
+ - Replace the AUTOLOAD support for ANSI_COLORS_DISABLED with generation
+   of constant subs that check for ANSI_COLORS_DISABLED when they're
+   called.  This fixes behavior if the constant were used before the
+   environment variable was set and then used again afterwards.
 
-    The module now requires Perl 5.6 or later and makes use of Perl 5.6
-    features.
+ - PUSHCOLOR now takes an array like all the other constant functions and
+   joins all arguments together before manipulating them, making behavior
+   more consistent in some edge cases.
 
-    Replace the AUTOLOAD support for ANSI_COLORS_DISABLED with generation
-    of constant subs that check for ANSI_COLORS_DISABLED when they're
-    called.  This fixes behavior if the constant were used before the
-    environment variable was set and then used again afterwards.
+ - $AUTOLOCAL now takes precedence over $AUTORESET, reversing the previous
+   behavior.  It is also now properly documented.
 
-    PUSHCOLOR now takes an array like all the other constant functions and
-    joins all arguments together before manipulating them, making behavior
-    more consistent in some edge cases.
+ - Add a COMPATIBILITY section to the documentation collecting all
+   information about when features were introduced and adding the version
+   of Perl that they shipped with.  Add appropriate version numbers to the
+   use statements in the SYNOPSIS.
 
-    $AUTOLOCAL now takes precedence over $AUTORESET, reversing the
-    previous behavior.  It is also now properly documented.
+ - Add a new generate-colors example script that can generate various test
+   and demonstration files, including for 256 colors and various
+   attributes.  Remove the VT100 test files, which had an unclear license.
+   generate-colors can now generate better tests for everything of
+   significance to this package.
 
-    Add a COMPATIBILITY section to the documentation collecting all
-    information about when features were introduced and adding the version
-    of Perl that they shipped with.  Add appropriate version numbers to
-    the use statements in the SYNOPSIS.
+3.02 - 2012-03-18
 
-    Add a new generate-colors example script that can generate various
-    test and demonstration files, including for 256 colors and various
-    attributes.  Remove the VT100 test files, which had an unclear
-    license.  generate-colors can now generate better tests for everything
-    of significance to this package.
+ - In AUTOLOAD, only return pass-through behavior if the function that was
+   called was one of our constants, rather than turning every unknown
+   function in the Term::ANSIColor namespace into a passthrough join
+   function when colors are disabled.
 
-Term::ANSIColor 3.02 (2012-03-18)
+ - Add the italic attribute and the ITALIC constant.  Document that
+   support for it is rare.
 
-    In AUTOLOAD, only return pass-through behavior if the function that
-    was called was one of our constants, rather than turning every unknown
-    function in the Term::ANSIColor namespace into a passthrough join
-    function when colors are disabled.
+ - Preserve an existing value of $@ when generating a constant sub and
+   restore it afterwards.  Diagnose errors in creating the constant sub
+   and die instead of ignoring them.
 
-    Add the italic attribute and the ITALIC constant.  Document that
-    support for it is rare.
+3.01 - 2011-07-20
 
-    Preserve an existing value of $@ when generating a constant sub and
-    restore it afterwards.  Diagnose errors in creating the constant sub
-    and die instead of ignoring them.
+ - In colored, only interpret an initial array reference as a list of
+   colors, not any initial reference, allowing the colored function to
+   work properly on objects with stringification defined.  Thanks, Revilo
+   Reegiles.
 
-Term::ANSIColor 3.01 (2011-07-20)
+ - Warn in the documentation that attributes are not supported in and will
+   not work with Perl formats.
 
-    In colored, only interpret an initial array reference as a list of
-    colors, not any initial reference, allowing the colored function to
-    work properly on objects with stringification defined.  Thanks, Revilo
-    Reegiles.
+3.00 - 2010-01-04
 
-    Warn in the documentation that attributes are not supported in and
-    will not work with Perl formats.
+ - Add bright versions of the basic eight foreground and background colors
+   using the 9x and 10x codes, supported by emulators with 16 color
+   support.
 
-Term::ANSIColor 3.00 (2010-01-04)
+ - Reword the explanation of bright and regular colors, and provide some
+   advice about which to use.
 
-    Add bright versions of the basic eight foreground and background
-    colors using the 9x and 10x codes, supported by emulators with 16
-    color support.
+ - Reorganize the documentation and be clearer about the function
+   interface parameters.
 
-    Reword the explanation of bright and regular colors, and provide some
-    advice about which to use.
+2.02 - 2009-08-30
 
-    Reorganize the documentation and be clearer about the function
-    interface parameters.
+ - Add the new function colorvalid, which takes an attribute and returns
+   whether it's a known attribute.
 
-Term::ANSIColor 2.02 (2009-08-30)
+ - Add FAINT as a synonym for DARK and export it when constants are
+   requested.
 
-    Add the new function colorvalid, which takes an attribute and returns
-    whether it's a known attribute.
+ - Update the terminal compatibility matrix to reflect that xterm now
+   supports blink.
 
-    Add FAINT as a synonym for DARK and export it when constants are
-    requested.
+2.01 - 2009-07-04
 
-    Update the terminal compatibility matrix to reflect that xterm now
-    supports blink.
+ - Add the new function colorstrip, which removes ANSI color codes from
+   strings.  Thanks, Paul Miller.
 
-Term::ANSIColor 2.01 (2009-07-04)
+ - When reporting errors for bad escape sequences in uncolor, don't
+   include the leading \e[ or trailing m in the error message.
 
-    Add the new function colorstrip, which removes ANSI color codes from
-    strings.  Thanks, Paul Miller.
+ - Untaint $AUTOLOAD when generating constant subs, which is required by
+   Perl 5.10 and later running in taint mode.  Thanks, Tim Bellinghausen.
 
-    When reporting errors for bad escape sequences in uncolor, don't
-    include the leading \e[ or trailing m in the error message.
+2.00 - 2009-02-28
 
-    Untaint $AUTOLOAD when generating constant subs, which is required by
-    Perl 5.10 and later running in taint mode.  Thanks, Tim Bellinghausen.
+ - Add new functions PUSHCOLOR, POPCOLOR, and LOCALCOLOR, which maintain a
+   stack of colors using the constant syntax.  PUSHCOLOR stores the
+   attributes being set on its internal stack, POPCOLOR returns to the
+   previous attribute set, and LOCALCOLOR surrounds its argument in
+   PUSHCOLOR and POPCOLOR.  If $AUTOLOCAL is set, each sequence of color
+   constants will be implicitly preceded by LOCALCOLOR.  This support was
+   contributed by openmethods.com voice solutions.
 
-Term::ANSIColor 2.00 (2009-02-28)
+ - When AUTOLOAD is called to generate a constant sub and the environment
+   variable ANSI_COLORS_DISABLED is set, return the stringified arguments
+   rather than creating a sub.  This allows colors to work later if
+   ANSI_COLORS_DISABLED is unset rather than making its effects permanent.
+   It also avoids adding a reset escape sequence when $AUTORESET and
+   ANSI_COLORS_DISABLED are both set.
 
-    Add new functions PUSHCOLOR, POPCOLOR, and LOCALCOLOR, which maintain
-    a stack of colors using the constant syntax.  PUSHCOLOR stores the
-    attributes being set on its internal stack, POPCOLOR returns to the
-    previous attribute set, and LOCALCOLOR surrounds its argument in
-    PUSHCOLOR and POPCOLOR.  If $AUTOLOCAL is set, each sequence of color
-    constants will be implicitly preceded by LOCALCOLOR.  This support was
-    contributed by openmethods.com voice solutions.
+ - Add faint as a synonym for dark.
 
-    When AUTOLOAD is called to generate a constant sub and the environment
-    variable ANSI_COLORS_DISABLED is set, return the stringified arguments
-    rather than creating a sub.  This allows colors to work later if
-    ANSI_COLORS_DISABLED is unset rather than making its effects
-    permanent.  It also avoids adding a reset escape sequence when
-    $AUTORESET and ANSI_COLORS_DISABLED are both set.
+ - Fix spelling and markup errors in the documentation and improve the
+   documentation of text attributes.
 
-    Add faint as a synonym for dark.
+1.12 - 2007-04-22
 
-    Fix spelling and markup errors in the documentation and improve the
-    documentation of text attributes.
+ - Use the correct syntax for internal POD links in the documentation.
 
-Term::ANSIColor 1.12 (2007-04-22)
+ - Document cyan and white as supported attributes.
 
-    Use the correct syntax for internal POD links in the documentation.
+1.11 - 2006-06-22
 
-    Document cyan and white as supported attributes.
+ - Clarify in the documentation the behavior of terminals when background
+   colors are set across newlines, and rewrite some of the examples to
+   avoid doing things that confuse the terminal.
 
-Term::ANSIColor 1.11 (2006-06-22)
+1.10 - 2005-08-21
 
-    Clarify in the documentation the behavior of terminals when background
-    colors are set across newlines, and rewrite some of the examples to
-    avoid doing things that confuse the terminal.
+ - Fix $EACHLINE handling of lines consisting solely of "0".
 
-Term::ANSIColor 1.10 (2005-08-21)
+ - Add terminal test files from Joe Smith to the distribution.
 
-    Fix $EACHLINE handling of lines consisting solely of "0".
+1.09 - 2004-12-03
 
-    Add terminal test files from Joe Smith to the distribution.
+ - Add compatibility information for Mac OS X Terminal to the terminal
+   emulators table.  Thanks, Daniel Lindsley.
 
-Term::ANSIColor 1.09 (2004-12-03)
+1.08 - 2004-02-19
 
-    Add compatibility information for Mac OS X Terminal to the terminal
-    emulators table.  Thanks, Daniel Lindsley.
+ - Export DARK as a constant.  This was missed when dark was added as a
+   supported attribute.
 
-Term::ANSIColor 1.08 (2004-02-19)
+1.07 - 2003-03-25
 
-    Export DARK as a constant.  This was missed when dark was added as a
-    supported attribute.
+ - Document the behavior of PuTTY, Windows telnet, and Cygwin OpenSSH in
+   the terminal emulators table.
 
-Term::ANSIColor 1.07 (2003-03-25)
+ - Update the URL to the ECMA standard.
 
-    Document the behavior of PuTTY, Windows telnet, and Cygwin OpenSSH in
-    the terminal emulators table.
+1.06 - 2002-12-09
 
-    Update the URL to the ECMA standard.
+ - Fix a typo in an L<> link in the documentation.
 
-Term::ANSIColor 1.06 (2002-12-09)
+1.05 - 2002-06-28
 
-    Fix a typo in an L<> link in the documentation.
+ - Document the Windows consoles that don't work with this module.
 
-Term::ANSIColor 1.05 (2002-06-28)
+ - Update the documentation formatting style.
 
-    Document the Windows consoles that don't work with this module.
+1.04 - 2001-07-10
 
-    Update the documentation formatting style.
+ - Add a new uncolor function, which takes a set of escape sequences and
+   returns a list of attribute names set by those escape sequences.  This
+   is the opposite function as color.
 
-Term::ANSIColor 1.04 (2001-07-10)
+ - If ANSI_COLORS_DISABLED is set in the environment, all of the functions
+   and constants in this module become no-ops that pass through text
+   without coloring it.
 
-    Add a new uncolor function, which takes a set of escape sequences and
-    returns a list of attribute names set by those escape sequences.  This
-    is the opposite function as color.
+ - Add information about the relevant standards to the documentation.
 
-    If ANSI_COLORS_DISABLED is set in the environment, all of the
-    functions and constants in this module become no-ops that pass through
-    text without coloring it.
+1.03 - 2000-08-06
 
-    Add information about the relevant standards to the documentation.
+ - In the colored function, allow the attributes to be passed as an
+   initial array reference as well as a trailing list.  When called with
+   that syntax, all subsequent arguments are taken as text to be colored.
 
-Term::ANSIColor 1.03 (2000-08-06)
+ - Add the dark attribute.
 
-    In the colored function, allow the attributes to be passed as an
-    initial array reference as well as a trailing list.  When called with
-    that syntax, all subsequent arguments are taken as text to be colored.
+ - Improve the documentation by including a table of supported attributes
+   on different terminal emulators in the documentation and documenting
+   whether diagnostics are fatal errors or warnings.
 
-    Add the dark attribute.
+ - Install into the Perl library directory for Perl 5.6.0 or later, since
+   this module is now part of core.
 
-    Improve the documentation by including a table of supported attributes
-    on different terminal emulators in the documentation and documenting
-    whether diagnostics are fatal errors or warnings.
+1.02 - 1998-11-27
 
-    Install into the Perl library directory for Perl 5.6.0 or later, since
-    this module is now part of core.
+ - Call croak instead of die if the AUTOLOAD function to synthesize
+   constants fails.
 
-Term::ANSIColor 1.02 (1998-11-27)
+ - Set ABSTRACT and AUTHOR in Makefile.PL to support PPD generation for
+   binary distributions or the Perl Resource Kits.
 
-    Call croak instead of die if the AUTOLOAD function to synthesize
-    constants fails.
+1.01 - 1997-12-10
 
-    Set ABSTRACT and AUTHOR in Makefile.PL to support PPD generation for
-    binary distributions or the Perl Resource Kits.
+ - Fix the call to carp when running under Perl versions later than
+   5.004_04, which no longer import Carp in strict.pm and thereby declare
+   the function at compile time.
 
-Term::ANSIColor 1.01 (1997-12-10)
+1.00 - 1997-11-29
 
-    Fix the call to carp when running under Perl versions later than
-    5.004_04, which no longer import Carp in strict.pm and thereby declare
-    the function at compile time.
+ - Correctly handle trailing delimiters when $EACHLINE is set.
 
-Term::ANSIColor 1.00 (1997-11-29)
+ - Call croak instead of die if a caller uses an invalid attribute name,
+   since the error is really at the call site.
 
-    Correctly handle trailing delimiters when $EACHLINE is set.
+ - Add the correct rules to Makefile.PL to build a distribution.
 
-    Call croak instead of die if a caller uses an invalid attribute name,
-    since the error is really at the call site.
+0.09 - 1997-02-17
 
-    Add the correct rules to Makefile.PL to build a distribution.
-
-Term::ANSIColor 0.09 (1997-02-17)
-
-    Initial public release.  (Possibly.  It's the oldest version available
-    on BackPan and dates back to when the "package" version was based on
-    the RCS revision of the ANSIColor.pm file.)
+ - Initial public release.  (Possibly.  It's the oldest version available
+   on BackPan and dates back to when the "package" version was based on
+   the RCS revision of the ANSIColor.pm file.)
