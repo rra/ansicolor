@@ -24,14 +24,11 @@ use warnings;
 
 # Also uses Carp but loads it on demand to reduce memory usage.
 
-use Exporter;
-
-# use Exporter plus @ISA instead of use base to reduce memory usage.
-## no critic (ClassHierarchies::ProhibitExplicitISA)
+use Exporter qw(import);
 
 # Declare variables that should be set in BEGIN for robustness.
 ## no critic (Modules::ProhibitAutomaticExportation)
-our (@EXPORT, @EXPORT_OK, %EXPORT_TAGS, @ISA);
+our (@EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
 # We use autoloading, which sets this variable to the name of the called sub.
 our $AUTOLOAD;
@@ -69,7 +66,6 @@ BEGIN {
     }
 
     # Exported symbol configuration.
-    @ISA = qw(Exporter);
     @EXPORT = qw(color colored);
     @EXPORT_OK = qw(uncolor colorstrip colorvalid coloralias);
     %EXPORT_TAGS = (
