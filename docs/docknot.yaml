@@ -21,7 +21,8 @@ synopsis: simple ANSI text attribute control module
 license:
   name: Perl
   notices: |
-    PUSH/POP support submitted 2007 by openmethods.com voice solutions
+    PUSH/POP support, by David Nicol, contributed in 2007 by openmethods.com
+    voice solutions
 copyrights:
   - holder: Russ Allbery <rra@cpan.org>
     years: 1996-1998, 2000-2002, 2005-2006, 2008-2020, 2024

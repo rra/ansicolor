@@ -632,10 +632,10 @@ Term::ANSIColor - Color screen output using ANSI escape sequences
 =for stopwords
 cyan colorize namespace runtime TMTOWTDI cmd.exe cmd.exe. 4nt.exe. 4nt.exe
 command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
-Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com
-openmethods.com. grey ATTR urxvt mistyped prepending Bareword filehandle
-Cygwin Starsinic aterm rxvt CPAN RGB Solarized Whitespace alphanumerics
-undef CLICOLOR NNN GGG RRR strikethrough truecolor
+Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com grey
+ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic aterm rxvt
+CPAN RGB Solarized Whitespace alphanumerics undef CLICOLOR NNN GGG RRR
+strikethrough truecolor
 
 =head1 SYNOPSIS
 
@@ -1358,8 +1358,8 @@ Allbery <rra@cpan.org>, and then combined with the original idea by
 Russ with input from Zenin.  256-color support is based on work by Kurt
 Starsinic.  Russ Allbery now maintains this module.
 
-PUSHCOLOR, POPCOLOR, and LOCALCOLOR were contributed by openmethods.com
-voice solutions.
+PUSHCOLOR, POPCOLOR, and LOCALCOLOR, by David Nicol, were contributed by
+openmethods.com voice solutions.
 
 =head1 COPYRIGHT AND LICENSE
 

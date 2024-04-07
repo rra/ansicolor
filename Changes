@@ -222,7 +222,8 @@ v6.0.0 - Not Released
    previous attribute set, and LOCALCOLOR surrounds its argument in
    PUSHCOLOR and POPCOLOR.  If $AUTOLOCAL is set, each sequence of color
    constants will be implicitly preceded by LOCALCOLOR.  This support was
-   contributed by openmethods.com voice solutions.
+   written by David Nicol and contributed by openmethods.com voice
+   solutions.
 
  - When AUTOLOAD is called to generate a constant sub and the environment
    variable ANSI_COLORS_DISABLED is set, return the stringified arguments

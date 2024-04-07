@@ -161,7 +161,8 @@ copyright statement and license:
 > Artistic License.  Please see your Perl distribution for the details and
 > copies of the licenses.
 >
-> PUSH/POP support submitted 2007 by openmethods.com voice solutions
+> PUSH/POP support, by David Nicol, contributed in 2007 by openmethods.com
+> voice solutions
 
 Some files in this distribution are individually released under different
 licenses, all of which are compatible with the above general package

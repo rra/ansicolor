@@ -191,7 +191,7 @@ is((POPCOLOR 'text'), "\e[0mtext\e[0m", 'POPCOLOR with empty stack');
 $Term::ANSIColor::AUTORESET = 0;
 
 # Test push and pop support with the syntax from the original openmethods.com
-# submission, which uses a different coding style.
+# submission by David Nicol, which uses a different coding style.
 is(
     PUSHCOLOR(RED ON_GREEN),
     "\e[31m\e[42m",
