@@ -635,7 +635,7 @@ command.com NT ESC Delvare SSH OpenSSH aixterm ECMA-048 Fraktur overlining
 Zenin reimplemented Allbery PUSHCOLOR POPCOLOR LOCALCOLOR openmethods.com grey
 ATTR urxvt mistyped prepending Bareword filehandle Cygwin Starsinic aterm rxvt
 CPAN RGB Solarized Whitespace alphanumerics undef CLICOLOR NNN GGG RRR
-strikethrough truecolor
+strikethrough truecolor Nicol
 
 =head1 SYNOPSIS
 
