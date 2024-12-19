@@ -114,10 +114,10 @@ is(
 );
 is((BLUE 'testing'), 'testing', 'Constant support for NO_COLOR');
 local $ENV{NO_COLOR} = q{};
-is(color('blue'), q{}, 'color support for NO_COLOR with empty string');
+is(color('blue'), qq{\e[34m}, 'color support for NO_COLOR with empty string');
 is(
     (RED 'testing'),
-    'testing',
+    "\e[31mtesting",
     'Constant support for NO_COLOR with empty string',
 );
 delete $ENV{NO_COLOR};

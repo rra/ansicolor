@@ -270,7 +270,7 @@ sub AUTOLOAD {
 
     # If colors are disabled, just return the input.  Do this without
     # installing a sub for (marginal, unbenchmarked) speed.
-    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
+    if ($ENV{ANSI_COLORS_DISABLED} || length($ENV{NO_COLOR})) {
         return join(q{}, @_);
     }
 
@@ -292,7 +292,7 @@ sub AUTOLOAD {
     ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
     my $eval_result = eval qq{
         sub $AUTOLOAD {
-            if (\$ENV{ANSI_COLORS_DISABLED} || defined(\$ENV{NO_COLOR})) {
+            if (\$ENV{ANSI_COLORS_DISABLED} || length(\$ENV{NO_COLOR})) {
                 return join(q{}, \@_);
             } elsif (\$AUTOLOCAL && \@_) {
                 return PUSHCOLOR('$escape') . join(q{}, \@_) . POPCOLOR;
@@ -390,7 +390,7 @@ sub color {
     my (@codes) = @_;
 
     # Return the empty string if colors are disabled.
-    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
+    if ($ENV{ANSI_COLORS_DISABLED} || length($ENV{NO_COLOR})) {
         return q{};
     }
 
@@ -515,7 +515,7 @@ sub colored {
     }
 
     # Return the string unmolested if colors are disabled.
-    if ($ENV{ANSI_COLORS_DISABLED} || defined($ENV{NO_COLOR})) {
+    if ($ENV{ANSI_COLORS_DISABLED} || length($ENV{NO_COLOR})) {
         return $string;
     }
 
@@ -1203,12 +1203,12 @@ escape sequences.
 
 =item NO_COLOR
 
-If this environment variable is set to any value, it suppresses generation of
-escape sequences the same as if ANSI_COLORS_DISABLED is set to a true value.
-This implements the L<https://no-color.org/> informal standard.  Programs that
-want to enable color despite NO_COLOR being set will need to unset that
-environment variable before any constant or function provided by this module
-is used.
+If this environment variable is set to any value (other than the empty string),
+it suppresses generation of escape sequences the same as if
+ANSI_COLORS_DISABLED is set to a true value.  This implements the
+L<https://no-color.org/> informal standard.  Programs that want to enable color
+despite NO_COLOR being set will need to unset that environment variable before
+any constant or function provided by this module is used.
 
 =back
 
