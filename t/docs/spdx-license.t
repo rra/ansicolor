@@ -119,7 +119,7 @@ sub check_file {
     close($file);
 
     # If there is a legacy license notice, report a failure regardless of file
-    # size.  Otherwise, skip files under 1KB.  They can be rolled up into the
+    # size.  Otherwise, skip files under 1KiB.  They can be rolled up into the
     # overall project license and the license notice may be a substantial
     # portion of the file size.
     if ($saw_legacy_notice) {

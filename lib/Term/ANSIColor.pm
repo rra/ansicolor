@@ -38,6 +38,7 @@ our $AUTOLOAD;
 # consistency is good).
 BEGIN {
     # All of the basic supported constants, used in %EXPORT_TAGS.
+    #<<<
     my @colorlist = qw(
         CLEAR           RESET             BOLD            DARK
         FAINT           ITALIC            UNDERLINE       UNDERSCORE
@@ -53,6 +54,7 @@ BEGIN {
         ON_BRIGHT_BLACK ON_BRIGHT_RED     ON_BRIGHT_GREEN ON_BRIGHT_YELLOW
         ON_BRIGHT_BLUE  ON_BRIGHT_MAGENTA ON_BRIGHT_CYAN  ON_BRIGHT_WHITE
     );
+    #>>>
 
     # 256-color constants, used in %EXPORT_TAGS.
     my @colorlist256 = (
@@ -314,7 +316,7 @@ sub AUTOLOAD {
     $@ = $eval_err;
 
     # Dispatch to the newly-created sub.
-    goto &$AUTOLOAD;
+    goto &{$AUTOLOAD};
 }
 ## use critic
 

@@ -19,8 +19,6 @@
 
 # Avoid generated build files.
 \bblib/
-^scripts/pod2man$
-^scripts/pod2text$
 
 # Avoid ExtUtils::MakeMaker generated files.
 \bMakefile$
