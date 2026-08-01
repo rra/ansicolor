@@ -32,7 +32,7 @@ To Daniel Lindsley for the information about what Mac OS X Terminal
 supports.
 
 To Joe Smith for the original test files that exercise a wide variety of
-VT100 escape sequences including the ECMA-48 color control codes.  These
+VT100 escape sequences including the ECMA-48 color control codes. These
 have been replaced by an example script, but they were very useful.
 Thanks also for pointing out an error in the module SYNOPSIS.
 
