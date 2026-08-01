@@ -3,14 +3,14 @@
 # Tests for 256-color support.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012-2013, 2016, 2020, 2024 Russ Allbery <rra@cpan.org>
+# Copyright 2012-2013, 2016, 2020, 2024, 2026 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 use 5.012;
 use warnings;
 
-use Test::More tests => 100;
+use Test::More tests => 106;
 
 # Load the module.
 BEGIN {
@@ -98,59 +98,65 @@ is((GREY23 't'),  "\e[38;5;255mt", '...and for GREY23');
 # Do the same for disabled colors.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
 #<<<
-is(ANSI0,  q{}, 'ANSI_COLORS_DISABLED works for ANSI0');
-is(ANSI15, q{}, '...and for ANSI15');
-is(RGB000, q{}, '...and for RGB000');
-is(RGB555, q{}, '...and for RGB555');
-is(GREY0,  q{}, '...and for GREY0');
-is(GREY23, q{}, '...and for GREY23');
+is(ANSI0,   q{}, 'ANSI_COLORS_DISABLED works for ANSI0');
+is(ANSI15,  q{}, '...and for ANSI15');
+is(ANSI255, q{}, '...and for ANSI255');
+is(RGB000,  q{}, '...and for RGB000');
+is(RGB555,  q{}, '...and for RGB555');
+is(GREY0,   q{}, '...and for GREY0');
+is(GREY23,  q{}, '...and for GREY23');
 #>>>
 delete $ENV{ANSI_COLORS_DISABLED};
 
 # Do the same with NO_COLOR.
 local $ENV{NO_COLOR} = 0;
 #<<<
-is(ANSI0,  q{}, 'NO_COLOR works for ANSI0');
-is(ANSI15, q{}, '...and for ANSI15');
-is(RGB000, q{}, '...and for RGB000');
-is(RGB555, q{}, '...and for RGB555');
-is(GREY0,  q{}, '...and for GREY0');
-is(GREY23, q{}, '...and for GREY23');
+is(ANSI0,   q{}, 'NO_COLOR works for ANSI0');
+is(ANSI15,  q{}, '...and for ANSI15');
+is(ANSI255, q{}, '...and for ANSI255');
+is(RGB000,  q{}, '...and for RGB000');
+is(RGB555,  q{}, '...and for RGB555');
+is(GREY0,   q{}, '...and for GREY0');
+is(GREY23,  q{}, '...and for GREY23');
 #>>>
 delete $ENV{NO_COLOR};
 
 # Do the same for AUTORESET.
 $Term::ANSIColor::AUTORESET = 1;
 #<<<
-is((ANSI0 't'),  "\e[38;5;0mt\e[0m",   'AUTORESET works for ANSI0');
-is((ANSI15 't'), "\e[38;5;15mt\e[0m",  '...and for ANSI15');
-is((RGB000 't'), "\e[38;5;16mt\e[0m",  '...and for RGB000');
-is((RGB555 't'), "\e[38;5;231mt\e[0m", '...and for RGB555');
-is((GREY0 't'),  "\e[38;5;232mt\e[0m", '...and for GREY0');
-is((GREY23 't'), "\e[38;5;255mt\e[0m", '...and for GREY23');
-is((ANSI0),      "\e[38;5;0m",         'AUTORESET without text for ANSI0');
-is((ANSI15),     "\e[38;5;15m",        '...and for ANSI15');
-is((RGB000),     "\e[38;5;16m",        '...and for RGB000');
-is((RGB555),     "\e[38;5;231m",       '...and for RGB555');
-is((GREY0),      "\e[38;5;232m",       '...and for GREY0');
-is((GREY23),     "\e[38;5;255m",       '...and for GREY23');
+is((ANSI0 't'),   "\e[38;5;0mt\e[0m",   'AUTORESET works for ANSI0');
+is((ANSI15 't'),  "\e[38;5;15mt\e[0m",  '...and for ANSI15');
+is((ANSI255 't'), "\e[38;5;255mt\e[0m", '...and for ANSI255');
+is((RGB000 't'),  "\e[38;5;16mt\e[0m",  '...and for RGB000');
+is((RGB555 't'),  "\e[38;5;231mt\e[0m", '...and for RGB555');
+is((GREY0 't'),   "\e[38;5;232mt\e[0m", '...and for GREY0');
+is((GREY23 't'),  "\e[38;5;255mt\e[0m", '...and for GREY23');
+is((ANSI0),       "\e[38;5;0m",         'AUTORESET without text for ANSI0');
+is((ANSI15),      "\e[38;5;15m",        '...and for ANSI15');
+is((ANSI255),     "\e[38;5;255m",       '...and for ANSI15');
+is((RGB000),      "\e[38;5;16m",        '...and for RGB000');
+is((RGB555),      "\e[38;5;231m",       '...and for RGB555');
+is((GREY0),       "\e[38;5;232m",       '...and for GREY0');
+is((GREY23),      "\e[38;5;255m",       '...and for GREY23');
 #>>>
 $Term::ANSIColor::AUTORESET = 0;
 
 # Do the same for AUTOLOCAL.
 $Term::ANSIColor::AUTOLOCAL = 1;
 #<<<
-is((ANSI0 't'),  "\e[38;5;0mt\e[0m",   'AUTOLOCAL works for ANSI0');
-is((ANSI15 't'), "\e[38;5;15mt\e[0m",  '...and for ANSI15');
-is((RGB000 't'), "\e[38;5;16mt\e[0m",  '...and for RGB000');
-is((RGB555 't'), "\e[38;5;231mt\e[0m", '...and for RGB555');
-is((GREY0 't'),  "\e[38;5;232mt\e[0m", '...and for GREY0');
-is((GREY23 't'), "\e[38;5;255mt\e[0m", '...and for GREY23');
-is((ANSI0),      "\e[38;5;0m",         'AUTOLOCAL without text for ANSI0');
-is((ANSI15),     "\e[38;5;15m",        '...and for ANSI15');
-is((RGB000),     "\e[38;5;16m",        '...and for RGB000');
-is((RGB555),     "\e[38;5;231m",       '...and for RGB555');
-is((GREY0),      "\e[38;5;232m",       '...and for GREY0');
-is((GREY23),     "\e[38;5;255m",       '...and for GREY23');
+is((ANSI0 't'),   "\e[38;5;0mt\e[0m",   'AUTOLOCAL works for ANSI0');
+is((ANSI15 't'),  "\e[38;5;15mt\e[0m",  '...and for ANSI15');
+is((ANSI255 't'), "\e[38;5;255mt\e[0m", '...and for ANSI15');
+is((RGB000 't'),  "\e[38;5;16mt\e[0m",  '...and for RGB000');
+is((RGB555 't'),  "\e[38;5;231mt\e[0m", '...and for RGB555');
+is((GREY0 't'),   "\e[38;5;232mt\e[0m", '...and for GREY0');
+is((GREY23 't'),  "\e[38;5;255mt\e[0m", '...and for GREY23');
+is((ANSI0),       "\e[38;5;0m",         'AUTOLOCAL without text for ANSI0');
+is((ANSI15),      "\e[38;5;15m",        '...and for ANSI15');
+is((ANSI255),     "\e[38;5;255m",       '...and for ANSI15');
+is((RGB000),      "\e[38;5;16m",        '...and for RGB000');
+is((RGB555),      "\e[38;5;231m",       '...and for RGB555');
+is((GREY0),       "\e[38;5;232m",       '...and for GREY0');
+is((GREY23),      "\e[38;5;255m",       '...and for GREY23');
 #>>>
 $Term::ANSIColor::AUTOLOCAL = 0;
