@@ -11,11 +11,11 @@
 # module is.
 #
 # Copyright 2012 Kurt Starsinic <kstarsinic@gmail.com>
-# Copyright 2012, 2014, 2016, 2024 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2014, 2016, 2024, 2026 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
-use 5.008;
+use 5.012;
 use strict;
 use warnings;
 

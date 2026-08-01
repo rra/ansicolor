@@ -7,11 +7,11 @@
 # an environment variable).  Term::ANSIColor does the work to untaint it; be
 # sure that the taint flag is properly cleared.
 #
-# Copyright 2012, 2020 Russ Allbery <rra@cpan.org>
+# Copyright 2012, 2020, 2026 Russ Allbery <rra@cpan.org>
 #
 # SPDX-License-Identifier: GPL-1.0-or-later OR Artistic-1.0-Perl
 
-use 5.008;
+use 5.012;
 use strict;
 use warnings;
 
