@@ -1203,12 +1203,12 @@ escape sequences.
 
 =item NO_COLOR
 
-If this environment variable is set to any value (other than the empty string),
+If this environment variable is set to any value other than the empty string,
 it suppresses generation of escape sequences the same as if
 ANSI_COLORS_DISABLED is set to a true value.  This implements the
-L<https://no-color.org/> informal standard.  Programs that want to enable color
-despite NO_COLOR being set will need to unset that environment variable before
-any constant or function provided by this module is used.
+L<https://no-color.org/> informal standard.  Programs that want to enable
+color despite NO_COLOR being set will need to unset that environment variable
+before any constant or function provided by this module is used.
 
 =back
 

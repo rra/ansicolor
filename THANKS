@@ -97,4 +97,7 @@ To Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 for initial true color (24-bit color) suppo
 
 To Andrea Telatin for the initial implementation of NO_COLOR.
 
+To Ricardo Signes for fixing NO_COLOR behavior when set to the empty
+string.
+
 To Larry Wall, as always, for Perl.

@@ -8,6 +8,10 @@ v6.0.0 - Not Released
  - Term::ANSIColor now uses semantic versioning for the package and module
    versions, with a v prefix to work with Perl's packaging system.
 
+ - Fix handling of the NO_COLOR environment variable so that it has no
+   effect when set to the empty string, as required by the specification.
+   Thanks, Ricardo Signes.
+
  - Update the NOTES discussion of supported ECMA-048 attributes to correct
    multiple inaccuracies and avoid making claims about which attributes
    are commonly supported.  Thanks to G. Branden Robinson for pointing out
