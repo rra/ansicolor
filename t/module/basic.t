@@ -10,7 +10,7 @@
 use 5.012;
 use warnings;
 
-use Test::More tests => 169;
+use Test::More tests => 171;
 
 # Load the module.
 BEGIN {
@@ -33,6 +33,10 @@ is(
     'Constants with commas',
 );
 is((BLUE 'test', 'ing'), "\e[34mtesting", 'Constants with multiple strings');
+
+# Test colored with no attributes.
+is(colored('testing'), 'testing', 'colored with no attributes');
+is(colored([], 'testing'), 'testing', '...empty array');
 
 # Test case variations on attributes.
 is(color('Blue BOLD', 'on_GReeN'), "\e[34;1;42m", 'Attribute case');

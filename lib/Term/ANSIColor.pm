@@ -519,6 +519,11 @@ sub colored {
         return $string;
     }
 
+    # Likewise if there are no codes.
+    if (!@codes) {
+        return $string;
+    }
+
     # Find the attribute string for our colors.
     my $attr = color(@codes);
 

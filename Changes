@@ -12,6 +12,9 @@ v6.0.0 - Not Released
    effect when set to the empty string, as required by the specification.
    Thanks, Ricardo Signes.
 
+ - Return the string with no changes if no attributes are passed to the
+   colored function instead of raising a warning.  Thanks, val.
+
  - Update the NOTES discussion of supported ECMA-048 attributes to correct
    multiple inaccuracies and avoid making claims about which attributes
    are commonly supported.  Thanks to G. Branden Robinson for pointing out
