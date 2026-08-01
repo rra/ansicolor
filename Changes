@@ -8,6 +8,10 @@ v6.0.0 - Not Released
  - Term::ANSIColor now uses semantic versioning for the package and module
    versions, with a v prefix to work with Perl's packaging system.
 
+ - uncolor called on \e[m or the empty string now returns "clear" rather
+   than nothing, since that escape sequence is a valid way to clear all
+   attributes. Thanks, johnsonea. (GitHub #9)
+
  - Fix handling of the NO_COLOR environment variable so that it has no
    effect when set to the empty string, as required by the specification.
    Thanks, Ricardo Signes.

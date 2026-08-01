@@ -427,10 +427,8 @@ sub color {
 
 # Return a list of named color attributes for a given set of escape codes.
 # Escape sequences can be given with or without enclosing "\e[" and "m".  The
-# empty escape sequence '' or "\e[m" gives an empty list of attrs.
-#
-# There is one special case.  256-color codes start with 38 or 48, followed by
-# a 5 and then the 256-color code.
+# empty escape sequence '' or "\e[m" returns reset.  256-color codes start
+# with 38 or 48, followed by a 5 and then the 256-color code.
 #
 # @escapes - A list of escape sequences or escape sequence numbers
 #
@@ -447,6 +445,12 @@ sub uncolor {
         my ($attrs) = $escape =~ m{ \A ((?:\d+;)* \d*) \z }xms;
         if (!defined($attrs)) {
             croak("Bad escape sequence $escape");
+        }
+
+        # Special-case the empty string, which is the same as 0 (clear).
+        if ($attrs eq q{}) {
+            push(@nums, '0');
+            next;
         }
 
         # Pull off 256-color codes (38;5;n or 48;5;n) and truecolor codes
