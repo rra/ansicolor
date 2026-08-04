@@ -1320,28 +1320,50 @@ Jean Delvare provided the following table of different common terminal
 emulators and their support for the various attributes and others have
 helped me flesh it out:
 
-              clear    bold     dark    under    blink   reverse  conceal
- ------------------------------------------------------------------------
- xterm         yes      yes      yes     yes      yes      yes      yes
- linux         yes      yes      yes    color   reverse    yes      no
- rxvt          yes      yes      no      yes  bold/black   yes      no
- dtterm        yes      yes      yes     yes    reverse    yes      yes
- teraterm      yes    reverse    no      yes    rev/red    yes      no
- aixterm      kinda   normal     no      yes      no       yes      yes
- PuTTY         yes     color     no      yes      no       yes      no
- Windows       yes      no       no      no       no       yes      no
- Cygwin SSH    yes      yes      no     color    color    color     yes
- Terminal.app  yes      yes      no      yes      yes      yes      yes
-
-Not shown is italic, which is supported by xterm and reportedly urxvt, and is
-shown as green in the Linux console.
+              clear   bold   dark  italic under   blink  reverse conceal strike
+ ------------------------------------------------------------------------------
+ aixterm      kinda  normal   no    ?      yes     no      yes     yes    ?
+ alacritty     yes     yes    yes   yes    yes     no      yes     yes    yes
+ blackbox-term yes     yes    yes   yes    yes     yes     yes     yes    yes
+ cool-retro    yes     no     no    yes    yes     yes     yes     no     no
+ deepin-term   yes     yes    no    yes    yes     no      yes     no     yes
+ dtterm        yes     yes    yes   ?      yes   reverse   yes     yes    ?
+ foot          yes     yes    yes   yes    yes     yes     yes     yes    yes
+ gnome-console yes     yes    yes   yes    yes     yes     yes     yes    yes
+ gnome-term    yes     yes    yes   yes    yes     yes     yes     yes    yes
+ kitty         yes     yes    yes   yes    yes     yes     yes     no     yes
+ konsole       yes     yes    yes   yes    yes     yes     yes     yes    yes
+ linux         yes     yes    yes  green  cyan     no      yes     no     no
+ lomiri-term   yes     yes    no    yes    yes     no      yes     no     no
+ mate-term     yes     yes    yes   yes    yes     yes     yes     yes    yes
+ mlterm        yes     yes    no    yes    yes     yes     yes     yes    yes
+ ptyxise       yes     yes    yes   yes    yes     yes     yes     yes    yes
+ qmlkonsole    yes     no     no    yes    yes     no      yes     no     no
+ qterminal     yes     yes    no    yes    yes     no      yes     no     no
+ rxvt          yes     yes    no    yes    yes     yes     yes     no     no
+ sakura        yes     yes    yes   yes    yes     yes     yes     yes    yes
+ stterm        yes     yes    yes   yes    yes     yes     yes     yes    yes
+ teraterm      yes   reverse  no    ?      yes   rev/red   yes     no     ?
+ terminator    yes     yes    yes   yes    yes     yes     yes     yes    yes
+ terminology   yes     yes    yes   yes    yes     no      yes     yes    yes
+ termit        yes     yes    yes   yes    yes     yes     yes     yes    yes
+ tilix         yes     yes    yes   yes    yes     yes     yes     yes    yes
+ xfce-term     yes     yes    yes   yes    yes     yes     yes     yes    yes
+ xterm         yes     yes    yes   yes    yes     yes     yes     yes    yes
+ zutty         yes     yes    no    no     yes     no      yes     no     no
+ Cygwin SSH    yes     yes    no    ?     color   color   color    yes    ?
+ Eterm         yes     yes    no    no     yes  rev/black  yes     no     no
+ PuTTY         yes     yes    yes   no     yes  rev/dark   yes     no     yes
+ Terminal.app  yes     yes    yes   no     yes     no      yes     no     no
+ Windows       yes     no     no    ?      no      no      yes     no     ?
 
 Windows is Windows telnet, Cygwin SSH is the OpenSSH implementation under
 Cygwin on Windows NT, and Mac Terminal is the Terminal application in Mac
-OS X.  Where the entry is other than yes or no, that emulator displays the
-given attribute as something else instead.  Note that on an aixterm, clear
-doesn't reset colors; you have to explicitly set the colors back to what
-you want.
+OS X.  All names that end in "-term" were abreviated from "-terminal" to
+fit the column width.  Where the entry is other than yes or no, that emulator
+displays the given attribute as something else instead.  Note that on an
+aixterm, clear doesn't reset colors; you have to explicitly set the colors
+back to what you want.
 
 More entries in this table are welcome.
 
@@ -1350,7 +1372,8 @@ to handle it identically to blink, and the Linux console does not implement
 it.  It is not supported by this module.
 
 Code 9 (crossed-out or strikethrough) and code 21 (double underline) are
-supported by at least xterm, but are not currently supported by this module.
+supported by at least xterm, but are not currently supported by this module,
+but is listed in the table above for convenience.
 
 ECMA-048 also specifies a large number of other attributes, including font
 changes, Fraktur characters, framing, circling, and overlining.  Currently,
